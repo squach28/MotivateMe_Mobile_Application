@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               alignment: Alignment.bottomCenter,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {Navigator.push(context, MaterialPageRoute(builder:(context) => SignUpPage()),);},
                 child: Text('Don\'t have an account? Sign up.'),
               ))
           ])),
