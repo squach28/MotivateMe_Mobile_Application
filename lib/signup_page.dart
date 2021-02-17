@@ -19,10 +19,14 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
           title: const Text('Signup Page'),
           automaticallyImplyLeading: false,
-          centerTitle: true),
+          centerTitle: true,
+          backgroundColor: Colors.green),
       body: SafeArea(
           minimum: EdgeInsets.symmetric(horizontal: 40),
           child: Stack(children: [
+            // Sign Up Form
+            _signUpForm(),
+
             // Sign Up Form
             _signUpForm(),
 
@@ -30,13 +34,19 @@ class _SignUpPageState extends State<SignUpPage> {
             Container(
               alignment: Alignment.bottomCenter,
               child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: Text('Already have an account? Login.')),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                child: Text(
+                  'Already have an account? Login.',
+                  style: TextStyle(
+                    fontSize: 17.0,
+                  ),
+                ),
+              ),
             )
           ])),
     );
@@ -81,12 +91,26 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Sign Up Button
-      TextButton(
-        onPressed: _signUp,
-        child: Text('Sign Up'),
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
-      )
+      Padding(
+        padding: EdgeInsets.all(16.0),
+      ),
+
+      // Login Button
+      ButtonTheme(
+        minWidth: 500.0,
+        height: 50.0,
+        child: RaisedButton(
+            child: const Text(
+              'Sign Up',
+              style: TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
+            onPressed: _signUp,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)),
+            color: Colors.green),
+      ),
     ]);
   }
 

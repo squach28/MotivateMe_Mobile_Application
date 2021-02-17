@@ -39,7 +39,10 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => SignUpPage()),
                     );
                   },
-                  child: Text('Don\'t have an account? Sign up.'),
+                  child: Text('Don\'t have an account? Sign up.',
+                      style: TextStyle(
+                        fontSize: 17.0,
+                      )),
                 ))
           ])),
     );
@@ -66,13 +69,32 @@ class _LoginPageState extends State<LoginPage> {
           keyboardType: TextInputType.visiblePassword,
         ),
 
+        Padding(
+          padding: EdgeInsets.all(16.0),
+        ),
+
         // Login Button
-        TextButton(
-            onPressed: _login,
-            child: Text('Login'),
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.teal))),
+        ButtonTheme(
+          minWidth: 500.0,
+          height: 50.0,
+          child: RaisedButton(
+              child: const Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 15.0,
+                ),
+              ),
+              onPressed: _login,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0)),
+              color: Colors.green),
+        ),
+        // TextButton(
+        //   onPressed: _login,
+        //   child: Text('Login'),
+        //   style: ButtonStyle(
+        //   backgroundColor: MaterialStateProperty.all<Color>(Colors.green))
+        // ),
       ],
     );
   }
