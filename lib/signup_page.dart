@@ -96,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
           height: 40.0,
           child: OutlinedButton(
             child: new Text(
-              'Login',
+              'Sign Up',
               style: new TextStyle(
                 fontSize: 17.0,
                 color: Colors.black
