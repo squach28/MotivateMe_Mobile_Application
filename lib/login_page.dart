@@ -39,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => SignUpPage()),
                     );
                   },
+// <<<<<<< Jasmit_Branch
                   child: new Text(
                     'Don\'t have an account? Sign up',
                     style: new TextStyle(
@@ -76,11 +77,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         Padding(
+// <<<<<<< Jasmit_Branch
           padding: const EdgeInsets.all(16.0),
         ),
 
         // Login Button
         ButtonTheme(
+// <<<<<<< Jasmit_Branch
           minWidth: 300.0,
           height: 40.0,
           buttonColor: Colors.green,

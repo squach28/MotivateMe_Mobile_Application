@@ -19,17 +19,22 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
           title: const Text('Signup Page'),
           automaticallyImplyLeading: false,
-          centerTitle: true),
+          centerTitle: true,
+          backgroundColor: Colors.green),
       body: SafeArea(
           minimum: EdgeInsets.symmetric(horizontal: 40),
           child: Stack(children: [
             // Sign Up Form
-            _signUpForm(),
-
-            // Login Button
-            Container(
+            SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50.0),
+              child: Column(
+                children: <Widget> [
+                  _signUpForm(),
+                  SizedBox(height: 40.0),
+                              Container(
               alignment: Alignment.bottomCenter,
               child: TextButton(
+// <<<<<<< Jasmit_Branch
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -91,6 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Sign Up Button
+// <<<<<<< Jasmit_Branch
       ButtonTheme(
           minWidth: 300.0,
           height: 40.0,
