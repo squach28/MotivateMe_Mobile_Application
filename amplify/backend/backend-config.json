@@ -1,0 +1,9 @@
+{
+	"auth": {
+		"motivatememobileapp0135cb940135cb94": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}
