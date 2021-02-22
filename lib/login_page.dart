@@ -39,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => SignUpPage()),
                     );
                   },
-// <<<<<<< Jasmit_Branch
                   child: new Text(
                     'Don\'t have an account? Sign up',
                     style: new TextStyle(
@@ -77,30 +76,36 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         Padding(
-// <<<<<<< Jasmit_Branch
           padding: const EdgeInsets.all(16.0),
         ),
 
         // Login Button
-        ButtonTheme(
-// <<<<<<< Jasmit_Branch
-          minWidth: 300.0,
+        SizedBox(
+          width: 300.0,
           height: 40.0,
-          buttonColor: Colors.green,
-          child: RaisedButton(
+          child: OutlinedButton(
             child: new Text(
               'Login',
               style: new TextStyle(
                 fontSize: 17.0,
+                color: Colors.black
               ),
             ),
             onPressed: _login,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              elevation: MaterialStateProperty.all<double>(10.0),
+              side: MaterialStateProperty.all<BorderSide>(BorderSide(width: 3.0, color: Colors.black),
+              ),
+              shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                  side: BorderSide(width: 3, color: Colors.black
+                  ),
+                ),
+              ),
+            ),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32.0),
-            side: BorderSide(width: 3.0, color: Colors.black),
-          ),
-        )
+        ),
       ],
     );
   }

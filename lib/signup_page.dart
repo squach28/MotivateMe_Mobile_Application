@@ -19,22 +19,17 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
           title: const Text('Signup Page'),
           automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: Colors.green),
+          centerTitle: true),
       body: SafeArea(
           minimum: EdgeInsets.symmetric(horizontal: 40),
           child: Stack(children: [
             // Sign Up Form
-            SingleChildScrollView(
-              padding: EdgeInsets.only(top: 50.0),
-              child: Column(
-                children: <Widget> [
-                  _signUpForm(),
-                  SizedBox(height: 40.0),
-                              Container(
+            _signUpForm(),
+
+            // Login Button
+            Container(
               alignment: Alignment.bottomCenter,
               child: TextButton(
-// <<<<<<< Jasmit_Branch
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -96,25 +91,32 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Sign Up Button
-// <<<<<<< Jasmit_Branch
-      ButtonTheme(
-          minWidth: 300.0,
+      SizedBox(
+          width: 300.0,
           height: 40.0,
-          buttonColor: Colors.blue,
-          child: RaisedButton(
+          child: OutlinedButton(
             child: new Text(
-              'Sign Up',
+              'Login',
               style: new TextStyle(
                 fontSize: 17.0,
+                color: Colors.black
               ),
             ),
             onPressed: _signUp,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              elevation: MaterialStateProperty.all<double>(10.0),
+              side: MaterialStateProperty.all<BorderSide>(BorderSide(width: 3.0, color: Colors.black),
+              ),
+              shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                  side: BorderSide(width: 3, color: Colors.black
+                  ),
+                ),
+              ),
+            ),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32.0),
-            side: BorderSide(width: 3.0, color: Colors.black),
-          ),
-        )
+        ),
     ]);
   }
 
