@@ -39,10 +39,13 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => SignUpPage()),
                     );
                   },
-                  child: Text('Don\'t have an account? Sign up.',
-                      style: TextStyle(
-                        fontSize: 17.0,
-                      )),
+// <<<<<<< Jasmit_Branch
+                  child: new Text(
+                    'Don\'t have an account? Sign up',
+                    style: new TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
                 ))
           ])),
     );
@@ -60,6 +63,10 @@ class _LoginPageState extends State<LoginPage> {
               InputDecoration(icon: Icon(Icons.mail), labelText: 'Username'),
         ),
 
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+        ),
+
         // Password TextField
         TextField(
           controller: _passwordController,
@@ -70,31 +77,30 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         Padding(
-          padding: EdgeInsets.all(16.0),
+// <<<<<<< Jasmit_Branch
+          padding: const EdgeInsets.all(16.0),
         ),
 
         // Login Button
         ButtonTheme(
-          minWidth: 500.0,
-          height: 50.0,
+// <<<<<<< Jasmit_Branch
+          minWidth: 300.0,
+          height: 40.0,
+          buttonColor: Colors.green,
           child: RaisedButton(
-              child: const Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
+            child: new Text(
+              'Login',
+              style: new TextStyle(
+                fontSize: 17.0,
               ),
-              onPressed: _login,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              color: Colors.green),
-        ),
-        // TextButton(
-        //   onPressed: _login,
-        //   child: Text('Login'),
-        //   style: ButtonStyle(
-        //   backgroundColor: MaterialStateProperty.all<Color>(Colors.green))
-        // ),
+            ),
+            onPressed: _login,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            side: BorderSide(width: 3.0, color: Colors.black),
+          ),
+        )
       ],
     );
   }

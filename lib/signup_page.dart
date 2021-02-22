@@ -34,27 +34,21 @@ class _SignUpPageState extends State<SignUpPage> {
                               Container(
               alignment: Alignment.bottomCenter,
               child: TextButton(
-                
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-                child: Text(
-                  'Already have an account? Login.',
-                  style: TextStyle(
-                    fontSize: 17.0,
+// <<<<<<< Jasmit_Branch
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  child: new Text(
+                    'Already have an account? Login',
+                    style: new TextStyle(
+                      fontSize: 16.0,
+                    ),
                   ),
-                ),
               ),
             ),
-          
-                  ]
-                ),
-            ),
-
-          
           ])),
     );
   }
@@ -97,27 +91,30 @@ class _SignUpPageState extends State<SignUpPage> {
         keyboardType: TextInputType.visiblePassword,
       ),
 
-      // Sign Up Button
       Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
       ),
 
-      // Login Button
+      // Sign Up Button
+// <<<<<<< Jasmit_Branch
       ButtonTheme(
-        minWidth: 500.0,
-        height: 50.0,
-        child: RaisedButton(
-            child: const Text(
+          minWidth: 300.0,
+          height: 40.0,
+          buttonColor: Colors.blue,
+          child: RaisedButton(
+            child: new Text(
               'Sign Up',
-              style: TextStyle(
-                fontSize: 15.0,
+              style: new TextStyle(
+                fontSize: 17.0,
               ),
             ),
             onPressed: _signUp,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)),
-            color: Colors.green),
-      ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            side: BorderSide(width: 3.0, color: Colors.black),
+          ),
+        )
     ]);
   }
 
