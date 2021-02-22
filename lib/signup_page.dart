@@ -36,8 +36,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
-                  child: Text('Already have an account? Login.')),
-            )
+                  child: new Text(
+                    'Already have an account? Login',
+                    style: new TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+              ),
+            ),
           ])),
     );
   }
@@ -80,13 +86,29 @@ class _SignUpPageState extends State<SignUpPage> {
         keyboardType: TextInputType.visiblePassword,
       ),
 
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+      ),
+
       // Sign Up Button
-      TextButton(
-        onPressed: _signUp,
-        child: Text('Sign Up'),
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
-      )
+      ButtonTheme(
+          minWidth: 300.0,
+          height: 40.0,
+          buttonColor: Colors.blue,
+          child: RaisedButton(
+            child: new Text(
+              'Sign Up',
+              style: new TextStyle(
+                fontSize: 17.0,
+              ),
+            ),
+            onPressed: _signUp,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            side: BorderSide(width: 3.0, color: Colors.black),
+          ),
+        )
     ]);
   }
 
