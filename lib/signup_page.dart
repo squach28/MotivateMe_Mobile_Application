@@ -26,32 +26,29 @@ class _SignUpPageState extends State<SignUpPage> {
             // Sign Up Form
             SingleChildScrollView(
               padding: EdgeInsets.only(top: 50.0),
-
-            child: Column(
-              children: <Widget> [
+              child: Column(children: <Widget>[
                 _signUpForm(),
                 SizedBox(height: 40.0),
 
-            // Login Button
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: new Text(
-                    'Already have an account? Login',
-                    style: new TextStyle(
-                      fontSize: 16.0,
+                // Login Button
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: new Text(
+                      'Already have an account? Login',
+                      style: new TextStyle(
+                        fontSize: 16.0,
+                      ),
                     ),
                   ),
-              ),
-            ),
-              ]
-            ),
+                ),
+              ]),
             ),
           ])),
     );
@@ -101,31 +98,29 @@ class _SignUpPageState extends State<SignUpPage> {
 
       // Sign Up Button
       SizedBox(
-          width: 300.0,
-          height: 40.0,
-          child: OutlinedButton(
-            child: new Text(
-              'Sign Up',
-              style: new TextStyle(
-                fontSize: 17.0,
-                color: Colors.black
-              ),
+        width: 300.0,
+        height: 40.0,
+        child: OutlinedButton(
+          child: new Text(
+            'Sign Up',
+            style: new TextStyle(fontSize: 17.0, color: Colors.black),
+          ),
+          onPressed: _signUp,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            elevation: MaterialStateProperty.all<double>(10.0),
+            side: MaterialStateProperty.all<BorderSide>(
+              BorderSide(width: 3.0, color: Colors.black),
             ),
-            onPressed: _signUp,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              elevation: MaterialStateProperty.all<double>(10.0),
-              side: MaterialStateProperty.all<BorderSide>(BorderSide(width: 3.0, color: Colors.black),
-              ),
-              shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32.0),
-                  side: BorderSide(width: 3, color: Colors.black
-                  ),
-                ),
+            shape: MaterialStateProperty.all<OutlinedBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                side: BorderSide(width: 3, color: Colors.black),
               ),
             ),
           ),
         ),
+      ),
     ]);
   }
 
