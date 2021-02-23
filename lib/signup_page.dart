@@ -24,7 +24,13 @@ class _SignUpPageState extends State<SignUpPage> {
           minimum: EdgeInsets.symmetric(horizontal: 40),
           child: Stack(children: [
             // Sign Up Form
-            _signUpForm(),
+            SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50.0),
+
+            child: Column(
+              children: <Widget> [
+                _signUpForm(),
+                SizedBox(height: 40.0),
 
             // Login Button
             Container(
@@ -43,6 +49,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
               ),
+            ),
+              ]
+            ),
             ),
           ])),
     );
