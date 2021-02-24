@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
+import 'service/auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class _LoginPageState extends State<LoginPage> {
   // 1
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {

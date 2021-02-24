@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,6 +17,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  @override 
+  void initState() {
+    super.initState();
+    _configureAmplify();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,10 +34,14 @@ class _MyAppState extends State<MyApp> {
         pages: [
           MaterialPage(child: LoginPage()),
           MaterialPage(child: SignUpPage()),  
-
         ],
         onPopPage: (route, result) => route.didPop(result),
       ),
     );
+  }
+
+  void _configureAmplify() async {
+    Amplify.addPlugin(AmplifyAuthCognito());
+    await Amplify.configure(amplifyconfig);
   }
 }
