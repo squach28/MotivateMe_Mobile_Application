@@ -1,8 +1,10 @@
 {
-    "resourceNameTruncated": "motiva0135cb94",
-    "userPoolName": "motivatememobileapp0135cb94_userpool_0135cb94",
+    "identityPoolName": "motivatememobileapplcb845a27_identitypool_cb845a27",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "motivacb845a27",
+    "userPoolName": "motivatememobileapplcb845a27_userpool_cb845a27",
     "autoVerifiedAttributes": [
-        "phone_number"
+        "email"
     ],
     "mfaConfiguration": "OFF",
     "mfaTypes": [
@@ -12,14 +14,10 @@
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code",
     "emailVerificationMessage": "Your verification code is {####}",
-    "defaultPasswordPolicy": true,
-    "passwordPolicyMinLength": "8",
-    "passwordPolicyCharacters": [
-        "Requires Numbers"
-    ],
-    "requiredAttributes": [
-        "name"
-    ],
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
@@ -28,16 +26,11 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "motiva0135cb94_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "motivacb845a27_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "useDefault": "manual",
-    "authSelections": "userPoolOnly",
-    "resourceName": "motivatememobileapp0135cb940135cb94",
-    "userPoolGroups": false,
-    "adminQueries": false,
-    "triggers": "{}",
-    "hostedUI": false,
-    "userPoolGroupList": [],
+    "sharedId": "cb845a27",
+    "resourceName": "motivatememobileapplcb845a27",
+    "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -50,6 +43,9 @@
             "Arn"
         ]
     },
+    "useDefault": "default",
+    "triggers": "{}",
+    "userPoolGroupList": [],
     "parentStack": {
         "Ref": "AWS::StackId"
     },

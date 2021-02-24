@@ -1,19 +1,19 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-motivatememobileapp-dev-105522-authRole",
-            "UnauthRoleArn": "arn:aws:iam::269798593032:role/amplify-motivatememobileapp-dev-105522-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::269798593032:role/amplify-motivatememobileapp-dev-105522-authRole",
+            "AuthRoleName": "amplify-motivatememobileappl-dev-230732-authRole",
+            "UnauthRoleArn": "arn:aws:iam::269798593032:role/amplify-motivatememobileappl-dev-230732-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::269798593032:role/amplify-motivatememobileappl-dev-230732-authRole",
             "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-motivatememobileapp-dev-105522-deployment",
-            "UnauthRoleName": "amplify-motivatememobileapp-dev-105522-unauthRole",
-            "StackName": "amplify-motivatememobileapp-dev-105522",
-            "StackId": "arn:aws:cloudformation:us-east-1:269798593032:stack/amplify-motivatememobileapp-dev-105522/87859480-753f-11eb-a889-12ad918e4e81",
-            "AmplifyAppId": "d3u3mv7oyjfhfc"
+            "DeploymentBucketName": "amplify-motivatememobileappl-dev-230732-deployment",
+            "UnauthRoleName": "amplify-motivatememobileappl-dev-230732-unauthRole",
+            "StackName": "amplify-motivatememobileappl-dev-230732",
+            "StackId": "arn:aws:cloudformation:us-east-1:269798593032:stack/amplify-motivatememobileappl-dev-230732/faeb0b00-766e-11eb-a3b4-0ea6aa6eaed9",
+            "AmplifyAppId": "d6l1c6247lwij"
         },
         "categories": {
             "auth": {
-                "motivatememobileapp0135cb940135cb94": {}
+                "motivatememobileapplcb845a27": {}
             }
         }
     }

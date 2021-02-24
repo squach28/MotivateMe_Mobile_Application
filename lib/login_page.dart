@@ -119,5 +119,7 @@ class _LoginPageState extends State<LoginPage> {
 
     print('username: $username');
     print('password: $password');
+
+    authService.login(username, password);
   }
 }

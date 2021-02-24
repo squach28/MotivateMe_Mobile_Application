@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
+import 'service/auth.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -136,5 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
     print('username: $username');
     print('email: $email');
     print('password: $password');
+
+    authService.signUp(username, password, firstName + ' ' + lastName);
   }
 }
