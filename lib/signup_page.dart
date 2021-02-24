@@ -15,42 +15,80 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Container(
+    //   decoration: BoxDecoration(
+    //     gradient: LinearGradient(
+    //       begin: Alignment.centerLeft,
+    //       end: Alignment
+    //           .centerRight, // 10% of the width, so there are ten blinds.
+    //       colors: [
+    //         const Color(0xffB7F8DB),
+    //         const Color(0xff50A7C2)
+    //       ], // red to yellow
+    //       tileMode: TileMode.repeated, // repeats the gradient over the canvas
+    //     ),
+    //   ),
+    // );
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Signup Page'),
-          automaticallyImplyLeading: false,
-          centerTitle: true),
+        title: const Text('Signup Page'),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [const Color(0xffB7F8DB), const Color(0xff50A7C2)],
+          )),
+        ),
+      ),
       body: SafeArea(
-          minimum: EdgeInsets.symmetric(horizontal: 40),
-          child: Stack(children: [
-            // Sign Up Form
-            SingleChildScrollView(
-              padding: EdgeInsets.only(top: 50.0),
-              child: Column(children: <Widget>[
-                _signUpForm(),
-                SizedBox(height: 40.0),
+        minimum: EdgeInsets.symmetric(horizontal: 40),
+        child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment
+                    .centerRight, // 10% of the width, so there are ten blinds.
+                colors: [
+                  const Color(0xffB7F8DB),
+                  const Color(0xff50A7C2)
+                ], // red to yellow
+                tileMode:
+                    TileMode.repeated, // repeats the gradient over the canvas
+              ),
+            ),
+            child: Stack(children: [
+              // Sign Up Form
+              SingleChildScrollView(
+                padding: EdgeInsets.only(top: 50.0),
+                child: Column(children: <Widget>[
+                  _signUpForm(),
+                  SizedBox(height: 40.0),
+                  // Login Button
 
-                // Login Button
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    child: new Text(
-                      'Already have an account? Login',
-                      style: new TextStyle(
-                        fontSize: 16.0,
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                      child: new Text(
+                        'Already have an account? Login',
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-            ),
-          ])),
+                ]),
+              ),
+            ])),
+      ),
     );
   }
 
