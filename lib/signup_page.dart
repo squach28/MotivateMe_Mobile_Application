@@ -15,20 +15,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Container(
-    //   decoration: BoxDecoration(
-    //     gradient: LinearGradient(
-    //       begin: Alignment.centerLeft,
-    //       end: Alignment
-    //           .centerRight, // 10% of the width, so there are ten blinds.
-    //       colors: [
-    //         const Color(0xffB7F8DB),
-    //         const Color(0xff50A7C2)
-    //       ], // red to yellow
-    //       tileMode: TileMode.repeated, // repeats the gradient over the canvas
-    //     ),
-    //   ),
-    // );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Signup Page'),
@@ -43,51 +29,50 @@ class _SignUpPageState extends State<SignUpPage> {
           )),
         ),
       ),
-      body: SafeArea(
-        minimum: EdgeInsets.symmetric(horizontal: 40),
-        child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment
-                    .centerRight, // 10% of the width, so there are ten blinds.
-                colors: [
-                  const Color(0xffB7F8DB),
-                  const Color(0xff50A7C2)
-                ], // red to yellow
-                tileMode:
-                    TileMode.repeated, // repeats the gradient over the canvas
-              ),
-            ),
-            child: Stack(children: [
-              // Sign Up Form
-              SingleChildScrollView(
-                padding: EdgeInsets.only(top: 50.0),
-                child: Column(children: <Widget>[
-                  _signUpForm(),
-                  SizedBox(height: 40.0),
-                  // Login Button
-
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      child: new Text(
-                        'Already have an account? Login',
-                        style: new TextStyle(
-                          fontSize: 16.0,
-                        ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment
+                .centerRight, // 10% of the width, so there are ten blinds.
+            colors: [
+              const Color(0xffB7F8DB),
+              const Color(0xff50A7C2)
+            ], // red to yellow
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        ),
+        child: Center(
+          child: Container(
+              child: Stack(children: [
+            // Sign Up Form
+            SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
+              child: Column(children: <Widget>[
+                _signUpForm(),
+                SizedBox(height: 40.0),
+                // Login Button
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: new Text(
+                      'Already have an account? Login',
+                      style: new TextStyle(
+                        fontSize: 16.0,
                       ),
                     ),
                   ),
-                ]),
-              ),
-            ])),
+                ),
+              ]),
+            ),
+          ])),
+        ),
       ),
     );
   }
@@ -97,35 +82,93 @@ class _SignUpPageState extends State<SignUpPage> {
       //FirstName TextField
       TextField(
         controller: _firstNameController,
-        decoration:
-            InputDecoration(icon: Icon(Icons.person), labelText: 'First Name'),
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: Icon(Icons.person),
+          hintText: 'First Name',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(width: 3.0, color: Colors.red),
+          ),
+        ),
+      ),
+
+      Padding(
+        padding: const EdgeInsets.all(10.0),
       ),
 
       //LastName TextField
       TextField(
         controller: _lastNameController,
-        decoration:
-            InputDecoration(icon: Icon(Icons.person), labelText: 'Last Name'),
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: Icon(Icons.person),
+          hintText: 'Last Name',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+        ),
+      ),
+
+      Padding(
+        padding: const EdgeInsets.all(10.0),
       ),
 
       // Username TextField
       TextField(
         controller: _usernameController,
-        decoration:
-            InputDecoration(icon: Icon(Icons.person), labelText: 'Username'),
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: Icon(Icons.person),
+          hintText: 'Username',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+        ),
+      ),
+
+      Padding(
+        padding: const EdgeInsets.all(10.0),
       ),
 
       // Email TextField
       TextField(
         controller: _emailController,
-        decoration: InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: Icon(Icons.email),
+          hintText: 'Email',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+        ),
+        // decoration: InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
+      ),
+
+      Padding(
+        padding: const EdgeInsets.all(10.0),
       ),
 
       // Password TextField
       TextField(
         controller: _passwordController,
-        decoration:
-            InputDecoration(icon: Icon(Icons.lock_open), labelText: 'Password'),
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: Icon(Icons.lock),
+          hintText: 'Password',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+        ),
         obscureText: true,
         keyboardType: TextInputType.visiblePassword,
       ),
@@ -145,7 +188,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           onPressed: _signUp,
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
             elevation: MaterialStateProperty.all<double>(10.0),
             side: MaterialStateProperty.all<BorderSide>(
               BorderSide(width: 3.0, color: Colors.black),
