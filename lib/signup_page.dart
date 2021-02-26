@@ -65,6 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       'Already have an account? Login',
                       style: new TextStyle(
                         fontSize: 16.0,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -117,6 +118,25 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: const EdgeInsets.all(10.0),
       ),
 
+      //Email TextField
+      TextField(
+        controller: _emailController,
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: Icon(Icons.email),
+          hintText: 'Email',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+        ),
+      ),
+
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+      ),
+
       // Username TextField
       TextField(
         controller: _usernameController,
@@ -130,26 +150,6 @@ class _SignUpPageState extends State<SignUpPage> {
             borderSide: BorderSide(color: Colors.grey),
           ),
         ),
-      ),
-
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-      ),
-
-      // Email TextField
-      TextField(
-        controller: _emailController,
-        decoration: InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          prefixIcon: Icon(Icons.email),
-          hintText: 'Email',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-        ),
-        // decoration: InputDecoration(icon: Icon(Icons.mail), labelText: 'Email'),
       ),
 
       Padding(
@@ -188,7 +188,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           onPressed: _signUp,
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.tealAccent),
             elevation: MaterialStateProperty.all<double>(10.0),
             side: MaterialStateProperty.all<BorderSide>(
               BorderSide(width: 3.0, color: Colors.black),
@@ -208,14 +208,14 @@ class _SignUpPageState extends State<SignUpPage> {
   void _signUp() {
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
-    final username = _usernameController.text.trim();
     final email = _emailController.text.trim();
+    final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
     print('firstName: $firstName');
     print('lastName: $lastName');
-    print('username: $username');
     print('email: $email');
+    print('username: $username');
     print('password: $password');
   }
 }
