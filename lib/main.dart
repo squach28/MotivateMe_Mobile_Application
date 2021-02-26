@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Photo Gallery App',
+      title: 'MotivateMe',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
       // 2

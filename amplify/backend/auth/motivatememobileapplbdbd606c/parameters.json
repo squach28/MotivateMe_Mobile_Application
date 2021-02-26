@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "motivatememobileapplcb845a27_identitypool_cb845a27",
+    "identityPoolName": "motivatememobileapplbdbd606c_identitypool_bdbd606c",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "motivacb845a27",
-    "userPoolName": "motivatememobileapplcb845a27_userpool_cb845a27",
+    "resourceNameTruncated": "motivabdbd606c",
+    "userPoolName": "motivatememobileapplbdbd606c_userpool_bdbd606c",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -17,7 +17,9 @@
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
-    "requiredAttributes": [],
+    "requiredAttributes": [
+        "email"
+    ],
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
@@ -26,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "motivacb845a27_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "motivabdbd606c_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "cb845a27",
-    "resourceName": "motivatememobileapplcb845a27",
+    "sharedId": "bdbd606c",
+    "resourceName": "motivatememobileapplbdbd606c",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [

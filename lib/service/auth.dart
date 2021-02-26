@@ -4,10 +4,10 @@ import 'package:amplify_flutter/amplify.dart';
 class AuthService {
 
   // creates an account for the user with params username, password, and name
-  void signUp(String username, String password, String name) async {
+  void signUp(String username, String password, String email) async {
 
     Map<String, String> userAttributes = {
-      
+      'email': email
     };
     
     try {

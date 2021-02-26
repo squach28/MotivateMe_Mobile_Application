@@ -139,6 +139,6 @@ class _SignUpPageState extends State<SignUpPage> {
     print('email: $email');
     print('password: $password');
 
-    authService.signUp(username, password, firstName + ' ' + lastName);
+    authService.signUp(username, password, email);
   }
 }
