@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
       home: Navigator(
         pages: [
           MaterialPage(child: LoginPage()),
-          MaterialPage(child: SignUpPage()),  
+          MaterialPage(child: SignUpPage()),
         ],
         onPopPage: (route, result) => route.didPop(result),
       ),
