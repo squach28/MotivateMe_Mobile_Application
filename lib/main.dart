@@ -13,17 +13,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Photo Gallery App',
-      theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+      theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
       // 2
       home: Navigator(
         pages: [
           MaterialPage(child: LoginPage()),
-          MaterialPage(child: SignUpPage()),  
+          MaterialPage(child: SignUpPage()),
         ],
         onPopPage: (route, result) => route.didPop(result),
       ),
