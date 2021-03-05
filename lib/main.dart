@@ -16,8 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  @override 
+  @override
   void initState() {
     super.initState();
     _configureAmplify();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'service/auth.dart';
+import 'model/sign_up_result.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -190,7 +191,8 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           onPressed: _signUp,
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.tealAccent),
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Colors.tealAccent),
             elevation: MaterialStateProperty.all<double>(10.0),
             side: MaterialStateProperty.all<BorderSide>(
               BorderSide(width: 3.0, color: Colors.black),
@@ -207,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
     ]);
   }
 
-  void _signUp() {
+  void _signUp() async {
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
     final email = _emailController.text.trim();
@@ -219,7 +221,5 @@ class _SignUpPageState extends State<SignUpPage> {
     print('email: $email');
     print('username: $username');
     print('password: $password');
-
-    authService.signUp(username, password, email);
   }
 }

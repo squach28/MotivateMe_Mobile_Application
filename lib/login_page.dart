@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
+import 'model/sign_up_result.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -149,13 +150,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // 7
-  void _login() {
+  void _login() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
     print('username: $username');
     print('password: $password');
 
-    authService.login(username, password);
   }
 }
