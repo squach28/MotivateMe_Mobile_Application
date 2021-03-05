@@ -1,6 +1,7 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:motivateme_mobile_app/model/sign_up_result.dart' as mm;
+import 'package:motivateme_mobile_app/model/sign_in_result.dart' as mm;
 
 // class that handles authentication for user login and signup
 class AuthService {
@@ -37,13 +38,15 @@ class AuthService {
 
   // log the user into his/her account with params username and password
   // authexception occurs if params are invalid
-  void login(String username, String password) async {
+  Future<mm.SignInResult> login(String username, String password) async {
     try {
       SignInResult res =
           await Amplify.Auth.signIn(username: username, password: password);
       print('log in!');
+
+      return mm.SignInResult.SUCCESS;
     } on AuthException catch (e) {
-      print(e.message);
+      print(e.runtimeType);
     }
   }
 
