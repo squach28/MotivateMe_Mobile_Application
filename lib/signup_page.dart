@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
+import 'package:validators/validators.dart';
 
 class SignUpPage extends StatefulWidget {
+  SignUpPage({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _formKey = GlobalKey<FormState>();
+  final bool _autoValidate = false;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -46,36 +50,40 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         child: Center(
-          child: Container(
-              child: Stack(children: [
-            // Sign Up Form
-            SingleChildScrollView(
-              padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
-              child: Column(children: <Widget>[
-                _signUpForm(),
-                SizedBox(height: 40.0),
-                // Login Button
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    child: new Text(
-                      'Already have an account? Login',
-                      style: new TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
+          child: new Form(
+            key: _formKey,
+            autovalidate: _autoValidate,
+            child: Container(
+                child: Stack(children: [
+              // Sign Up Form
+              SingleChildScrollView(
+                padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
+                child: Column(children: <Widget>[
+                  _signUpForm(),
+                  SizedBox(height: 40.0),
+                  // Login Button
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                      child: new Text(
+                        'Already have an account? Login',
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-            ),
-          ])),
+                ]),
+              ),
+            ])),
+          ),
         ),
       ),
     );
@@ -84,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _signUpForm() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       //FirstName TextField
-      TextField(
+      TextFormField(
         controller: _firstNameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -122,7 +130,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       //Email TextField
-      TextField(
+      TextFormField(
+        validator: validateEmail,
         controller: _emailController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -207,6 +216,16 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     ]);
+  }
+
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else
+      return null;
   }
 
   void _signUp() async {
