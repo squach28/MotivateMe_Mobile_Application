@@ -11,8 +11,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final _formKey = GlobalKey<FormState>();
-  final bool _autoValidate = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -50,19 +50,20 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         child: Center(
-          child: new Form(
-            key: _formKey,
-            autovalidate: _autoValidate,
             child: Container(
                 child: Stack(children: [
               // Sign Up Form
               SingleChildScrollView(
                 padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
                 child: Column(children: <Widget>[
-                  _signUpForm(),
+                  Form(
+                  key: _formKey,
+                  autovalidate: _autoValidate,  
+                  child: _signUpForm(),
+                  ),
                   SizedBox(height: 40.0),
                   // Login Button
-                  Container(
+                  new Container(
                     alignment: Alignment.bottomCenter,
                     child: TextButton(
                       onPressed: () {
@@ -85,7 +86,6 @@ class _SignUpPageState extends State<SignUpPage> {
             ])),
           ),
         ),
-      ),
     );
   }
 
@@ -194,11 +194,12 @@ class _SignUpPageState extends State<SignUpPage> {
         width: 300.0,
         height: 40.0,
         child: OutlinedButton(
+          onPressed: _validateInputs,
           child: new Text(
             'Sign Up',
             style: new TextStyle(fontSize: 17.0, color: Colors.black),
           ),
-          onPressed: _signUp,
+          // onPressed: _signUp,
           style: ButtonStyle(
             backgroundColor:
                 MaterialStateProperty.all<Color>(Colors.tealAccent),
@@ -217,6 +218,16 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     ]);
   }
+
+  void _validateInputs() {
+  if (_formKey.currentState.validate()) {
+    _signUp();
+  } else {
+    setState(() {
+      _autoValidate = true;
+    });
+  }
+}
 
   String validateEmail(String value) {
     Pattern pattern =
