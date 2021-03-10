@@ -283,6 +283,38 @@ class _SignUpPageState extends State<SignUpPage> {
     print('username: $username');
     print('password: $password');
 
-    authService.signUp(username, password, email);
+    SignUpResult result = await authService.signUp(username, password, email);
+    if (result == SignUpResult.SUCCESS) {
+      //home page
+    } else {
+      _showMyDialog();
+    }
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Username already exists'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
