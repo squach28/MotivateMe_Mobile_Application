@@ -50,42 +50,42 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         child: Center(
-            child: Container(
-                child: Stack(children: [
-              // Sign Up Form
-              SingleChildScrollView(
-                padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
-                child: Column(children: <Widget>[
-                  Form(
+          child: Container(
+              child: Stack(children: [
+            // Sign Up Form
+            SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
+              child: Column(children: <Widget>[
+                Form(
                   key: _formKey,
-                  autovalidate: _autoValidate,  
+                  autovalidate: _autoValidate,
                   child: _signUpForm(),
-                  ),
-                  SizedBox(height: 40.0),
-                  // Login Button
-                  new Container(
-                    alignment: Alignment.bottomCenter,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      child: new Text(
-                        'Already have an account? Login',
-                        style: new TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black,
-                        ),
+                ),
+                SizedBox(height: 40.0),
+                // Login Button
+                new Container(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: new Text(
+                      'Already have an account? Login',
+                      style: new TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                ]),
-              ),
-            ])),
-          ),
+                ),
+              ]),
+            ),
+          ])),
         ),
+      ),
     );
   }
 
@@ -93,6 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       //FirstName TextField
       TextFormField(
+        validator: validateFirstName,
         controller: _firstNameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -111,7 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       //LastName TextField
-      TextField(
+      TextFormField(
+        validator: validateLastName,
         controller: _lastNameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -150,7 +152,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Username TextField
-      TextField(
+      TextFormField(
+        validator: validateUsername,
         controller: _usernameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -169,7 +172,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Password TextField
-      TextField(
+      TextFormField(
+        validator: validatePassword,
         controller: _passwordController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -194,12 +198,11 @@ class _SignUpPageState extends State<SignUpPage> {
         width: 300.0,
         height: 40.0,
         child: OutlinedButton(
-          onPressed: _validateInputs,
           child: new Text(
             'Sign Up',
             style: new TextStyle(fontSize: 17.0, color: Colors.black),
           ),
-          // onPressed: _signUp,
+          onPressed: _validateInputs,
           style: ButtonStyle(
             backgroundColor:
                 MaterialStateProperty.all<Color>(Colors.tealAccent),
@@ -220,21 +223,49 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _validateInputs() {
-  if (_formKey.currentState.validate()) {
-    _signUp();
-  } else {
-    setState(() {
-      _autoValidate = true;
-    });
+    if (_formKey.currentState.validate()) {
+      _signUp();
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
-}
+
+  String validateFirstName(String value) {
+    if (value.length == 0)
+      return 'First name is required';
+    else
+      return null;
+  }
+
+  String validateLastName(String value) {
+    if (value.length == 0)
+      return 'Last name is required';
+    else
+      return null;
+  }
+
+  String validateUsername(String value) {
+    if (value.length == 0)
+      return 'Username is required';
+    else
+      return null;
+  }
 
   String validateEmail(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'Enter Valid Email';
+      return 'Enter a valid email';
+    else
+      return null;
+  }
+
+  String validatePassword(String value) {
+    if (value.length < 7)
+      return 'Password must have more than 8 characters';
     else
       return null;
   }
