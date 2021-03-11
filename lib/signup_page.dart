@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
+import 'package:validators/validators.dart';
 
 class SignUpPage extends StatefulWidget {
+  SignUpPage({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -52,10 +56,14 @@ class _SignUpPageState extends State<SignUpPage> {
             SingleChildScrollView(
               padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
               child: Column(children: <Widget>[
-                _signUpForm(),
+                Form(
+                  key: _formKey,
+                  autovalidate: _autoValidate,
+                  child: _signUpForm(),
+                ),
                 SizedBox(height: 40.0),
                 // Login Button
-                Container(
+                new Container(
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
                     onPressed: () {
@@ -84,7 +92,8 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _signUpForm() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       //FirstName TextField
-      TextField(
+      TextFormField(
+        validator: validateFirstName,
         controller: _firstNameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -103,7 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       //LastName TextField
-      TextField(
+      TextFormField(
+        validator: validateLastName,
         controller: _lastNameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -122,7 +132,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       //Email TextField
-      TextField(
+      TextFormField(
+        validator: validateEmail,
         controller: _emailController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -141,7 +152,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Username TextField
-      TextField(
+      TextFormField(
+        validator: validateUsername,
         controller: _usernameController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -160,7 +172,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
 
       // Password TextField
-      TextField(
+      TextFormField(
+        validator: validatePassword,
         controller: _passwordController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -189,7 +202,7 @@ class _SignUpPageState extends State<SignUpPage> {
             'Sign Up',
             style: new TextStyle(fontSize: 17.0, color: Colors.black),
           ),
-          onPressed: _signUp,
+          onPressed: _validateInputs,
           style: ButtonStyle(
             backgroundColor:
                 MaterialStateProperty.all<Color>(Colors.tealAccent),
@@ -209,6 +222,54 @@ class _SignUpPageState extends State<SignUpPage> {
     ]);
   }
 
+  void _validateInputs() {
+    if (_formKey.currentState.validate()) {
+      _signUp();
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
+  }
+
+  String validateFirstName(String value) {
+    if (value.length == 0)
+      return 'First name is required';
+    else
+      return null;
+  }
+
+  String validateLastName(String value) {
+    if (value.length == 0)
+      return 'Last name is required';
+    else
+      return null;
+  }
+
+  String validateUsername(String value) {
+    if (value.length == 0)
+      return 'Username is required';
+    else
+      return null;
+  }
+
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter a valid email';
+    else
+      return null;
+  }
+
+  String validatePassword(String value) {
+    if (value.length < 7)
+      return 'Password must have more than 8 characters';
+    else
+      return null;
+  }
+
   void _signUp() async {
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
@@ -222,6 +283,38 @@ class _SignUpPageState extends State<SignUpPage> {
     print('username: $username');
     print('password: $password');
 
-    authService.signUp(username, password, email);
+    SignUpResult result = await authService.signUp(username, password, email);
+    if (result == SignUpResult.SUCCESS) {
+      //home page
+    } else {
+      _showMyDialog();
+    }
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Username already exists'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
