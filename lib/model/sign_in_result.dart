@@ -1,5 +1,0 @@
-enum SignInResult {
-  
-  FAIL,
-  SUCCESS
-}
