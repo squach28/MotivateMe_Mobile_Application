@@ -131,7 +131,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             onPressed: _login,
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.tealAccent),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.tealAccent),
               elevation: MaterialStateProperty.all<double>(10.0),
               side: MaterialStateProperty.all<BorderSide>(
                 BorderSide(width: 3.0, color: Colors.black),
