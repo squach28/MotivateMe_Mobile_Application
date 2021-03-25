@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
+import 'service/inspire_me.dart'; 
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final AuthService authService = AuthService();
+  final InspireMeService inspireMeService =
+      InspireMeService(); 
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // 7
-  void _login() async {
+  Future<void> _login() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -159,5 +162,22 @@ class _LoginPageState extends State<LoginPage> {
     print('password: $password');
 
     authService.login(username, password);
+    /*var url = await inspireMeService.inspireMe(); // TODO delete this
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('AWS Test'),
+            content: SingleChildScrollView(child: Image.network(url)),
+            actions: [
+              TextButton(
+                  child: Text('Very Nice'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  })
+            ],
+          );
+        }); */
   }
 }

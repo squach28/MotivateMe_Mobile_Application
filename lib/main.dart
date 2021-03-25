@@ -1,3 +1,4 @@
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
@@ -40,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _configureAmplify() async {
-    Amplify.addPlugin(AmplifyAuthCognito());
+    Amplify.addPlugins([AmplifyAuthCognito(), AmplifyStorageS3()]);
     await Amplify.configure(amplifyconfig);
   }
 }
