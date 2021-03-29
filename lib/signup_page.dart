@@ -70,6 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
                       );
+                      
                     },
                     child: new Text(
                       'Already have an account? Login',

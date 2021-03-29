@@ -1,12 +1,21 @@
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final Future<Database> database = openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
+  onCreate: (db, version) { // create the database if it doesn't exist
+    return db.execute("CREATE TABLE Goals(id INTEGER PRIMARY KEY, title varchar(100), description varchar(100), is_complete INTEGER)");
+  },
+  version: 1
+  );
   runApp(MyApp());
 }
 
@@ -21,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _configureAmplify();
+
   }
 
   @override

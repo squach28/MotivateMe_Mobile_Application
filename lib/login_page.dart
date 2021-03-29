@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:motivateme_mobile_app/model/goal.dart';
+import 'package:motivateme_mobile_app/service/goal_manager.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
-import 'service/inspire_me.dart'; 
+import 'service/inspire_me.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,8 +16,9 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final AuthService authService = AuthService();
-  final InspireMeService inspireMeService =
-      InspireMeService(); 
+  final InspireMeService inspireMeService = InspireMeService();
+
+  final GoalManager goalManager = GoalManager();
 
   @override
   Widget build(BuildContext context) {
@@ -162,22 +165,5 @@ class _LoginPageState extends State<LoginPage> {
     print('password: $password');
 
     authService.login(username, password);
-    /*var url = await inspireMeService.inspireMe(); // TODO delete this
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('AWS Test'),
-            content: SingleChildScrollView(child: Image.network(url)),
-            actions: [
-              TextButton(
-                  child: Text('Very Nice'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  })
-            ],
-          );
-        }); */
   }
 }
