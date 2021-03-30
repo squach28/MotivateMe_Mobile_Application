@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
+import 'home_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
 import 'package:validators/validators.dart';
@@ -67,9 +68,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pop(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
                     child: new Text(
@@ -285,7 +285,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
     SignUpResult result = await authService.signUp(username, password, email);
     if (result == SignUpResult.SUCCESS) {
-      //home page
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     } else {
       _showMyDialog();
     }

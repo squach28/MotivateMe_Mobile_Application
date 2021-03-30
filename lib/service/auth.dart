@@ -50,6 +50,11 @@ class AuthService {
     }
   }
 
+  Future<bool> checkUserSession() async {
+    var authSession = await Amplify.Auth.fetchAuthSession();
+    return authSession.isSignedIn;
+  }
+
   // log the user out of the current session
   // local cache and keychain will be deleted
   void logout() {
