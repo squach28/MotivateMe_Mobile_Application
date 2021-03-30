@@ -12,7 +12,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -58,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(children: <Widget>[
                 Form(
                   key: _formKey,
-                  autovalidate: _autoValidate,
+                  autovalidateMode: _autoValidate,
                   child: _signUpForm(),
                 ),
                 SizedBox(height: 40.0),
@@ -70,6 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       Navigator.pop(
                         context,
                       );
+
                     },
                     child: new Text(
                       'Already have an account? Login',
@@ -226,7 +227,7 @@ class _SignUpPageState extends State<SignUpPage> {
       _signUp();
     } else {
       setState(() {
-        _autoValidate = true;
+        _autoValidate = AutovalidateMode.onUserInteraction;
       });
     }
   }
