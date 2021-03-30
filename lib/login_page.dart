@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:motivateme_mobile_app/model/goal.dart';
-import 'package:motivateme_mobile_app/service/goal_manager.dart';
+import 'package:motivateme_mobile_app/home_page.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
-import 'service/inspire_me.dart';
+import 'model/sign_in_result.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -70,9 +70,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUpPage()),
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SignUpPage()));
                   },
                   child: new Text(
                     'Don\'t have an account? Sign up',
@@ -195,7 +195,41 @@ class _LoginPageState extends State<LoginPage> {
 
     print('username: $username');
     print('password: $password');
+    SignInResult result = await authService.login(username, password);
+    if (result == SignInResult.SUCCESS) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      _showMyDialog();
+    }
+  }
 
-    authService.login(username, password);
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Incorect username or password'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
