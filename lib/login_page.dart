@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/home_page.dart';
+import 'service/goal_manager.dart';
+import 'service/inspire_me.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
-import 'model/sign_up_result.dart';
-import 'model/sign_in_result.dart';
+import 'model/log_in_result.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -195,8 +196,8 @@ class _LoginPageState extends State<LoginPage> {
 
     print('username: $username');
     print('password: $password');
-    SignInResult result = await authService.login(username, password);
-    if (result == SignInResult.SUCCESS) {
+    LogInResult result = await authService.login(username, password);
+    if (result == LogInResult.SUCCESS) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
