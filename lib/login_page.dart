@@ -17,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final AuthService authService = AuthService();
   final InspireMeService inspireMeService = InspireMeService();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
   final GoalManager goalManager = GoalManager();
 
@@ -56,7 +58,10 @@ class _LoginPageState extends State<LoginPage> {
               // 4
               child: Stack(children: [
             // Login form
-            _loginForm(),
+            Form(
+              key: _formKey,
+              autovalidateMode: _autoValidate,
+              child: _loginForm()),
             // 6
             // Sign Up Button
             Container(
@@ -86,8 +91,8 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // Username TextField
-        // Username TextField
-        TextField(
+        TextFormField(
+          validator: validateUsername,
           controller: _usernameController,
           decoration: InputDecoration(
             fillColor: Colors.white,
@@ -106,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         // Password TextField
-        TextField(
+        TextFormField(
+          validator: validatePassword,
           controller: _passwordController,
           decoration: InputDecoration(
             fillColor: Colors.white,
@@ -135,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               'Login',
               style: new TextStyle(fontSize: 17.0, color: Colors.black),
             ),
-            onPressed: _login,
+            onPressed: _validateInputs,
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.all<Color>(Colors.tealAccent),
@@ -154,6 +160,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ],
     );
+  }
+
+  String validateUsername(String value) {
+    if(value.length == 0) {
+      return 'Please enter your username';
+    } else {
+      return null;
+    }
+  }
+
+  String validatePassword(String value) {
+    if(value.length == 0) {
+      return 'Please enter your password';
+    } else {
+      return null;
+    }
+  }
+
+  void _validateInputs() {
+    if(_formKey.currentState.validate()) {
+      _login();
+    } else {
+      setState(() {
+        _autoValidate = AutovalidateMode.onUserInteraction;
+      });
+    }
   }
 
 // 7

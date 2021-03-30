@@ -1,4 +1,5 @@
 enum LogInResult {
+  USER_ALREADY_EXISTS,
   NO_USER_EXISTS,
   WRONG_PASSWORD,
   FAIL,
