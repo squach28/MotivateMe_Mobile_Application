@@ -3,7 +3,6 @@ import 'login_page.dart';
 import 'home_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
-import 'package:validators/validators.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key}) : super(key: key);

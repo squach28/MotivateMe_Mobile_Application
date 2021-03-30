@@ -1,11 +1,12 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:motivateme_mobile_app/model/sign_up_result.dart' as mm;
-import 'package:motivateme_mobile_app/model/sign_in_result.dart' as mm;
+import 'package:motivateme_mobile_app/model/log_in_result.dart' as mm;
 
 // class that handles authentication for user login and signup
 class AuthService {
   // creates an account for the user with params username, password, and email
+  // returns a SignUpResult
   Future<mm.SignUpResult> signUp(
       String username, String password, String email) async {
     Map<String, String> userAttributes = {
@@ -38,15 +39,25 @@ class AuthService {
 
   // log the user into his/her account with params username and password
   // authexception occurs if params are invalid
-  Future<mm.SignInResult> login(String username, String password) async {
+  // returns a LogInResult
+  Future<mm.LogInResult> login(String username, String password) async {
     try {
       SignInResult res =
           await Amplify.Auth.signIn(username: username, password: password);
       print('log in!');
 
-      return mm.SignInResult.SUCCESS;
+      return mm.LogInResult.SUCCESS;
     } on AuthException catch (e) {
-      print(e.runtimeType);
+      if (e.runtimeType == UserNotFoundException) {
+        // throw exception if username doesn't exist
+        return mm.LogInResult.NO_USER_EXISTS;
+      } else if (e.runtimeType == NotAuthorizedException) {
+        // throw exception if password is wrong
+        return mm.LogInResult.WRONG_PASSWORD;
+      } else {
+        // general case for other failures
+        return mm.LogInResult.FAIL;
+      }
     }
   }
 
@@ -61,7 +72,7 @@ class AuthService {
     try {
       Amplify.Auth.signOut();
     } on AuthException catch (e) {
-      print(e.message);
+      print(e.runtimeType);
     }
   }
 }
