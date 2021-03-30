@@ -6,7 +6,6 @@ import 'signup_page.dart';
 import 'service/auth.dart';
 import 'model/log_in_result.dart';
 
-
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _LoginPageState();
@@ -60,9 +59,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Stack(children: [
             // Login form
             Form(
-              key: _formKey,
-              autovalidateMode: _autoValidate,
-              child: _loginForm()),
+                key: _formKey,
+                autovalidateMode: _autoValidate,
+                child: _loginForm()),
             // 6
             // Sign Up Button
             Container(
@@ -164,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   String validateUsername(String value) {
-    if(value.length == 0) {
+    if (value.length == 0) {
       return 'Please enter your username';
     } else {
       return null;
@@ -172,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   String validatePassword(String value) {
-    if(value.length == 0) {
+    if (value.length == 0) {
       return 'Please enter your password';
     } else {
       return null;
@@ -180,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _validateInputs() {
-    if(_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate()) {
       _login();
     } else {
       setState(() {
@@ -203,34 +202,88 @@ class _LoginPageState extends State<LoginPage> {
         MaterialPageRoute(builder: (context) => HomePage()),
       );
     } else {
-      _showMyDialog();
+      _showMyDialog(result);
     }
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Incorect username or password'),
+  Future<void> _showMyDialog(LogInResult result) async {
+    switch (result) {
+      case LogInResult.NO_USER_EXISTS:
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('No user with that username exists'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+            );
+          },
         );
-      },
-    );
+
+      case LogInResult.WRONG_PASSWORD:
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('Incorect password was entered'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      default:
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('An error occurred, please try again later'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+    }
   }
 }
