@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthService authService = AuthService();
   final InspireMeService inspireMeService = InspireMeService();
+  List<int> items = List<int>.generate(20, (int index) => index);
+
   @override
   Widget build(BuildContext context) {
     // 2
@@ -42,8 +44,15 @@ class _HomePageState extends State<HomePage> {
           )),
         ),
       ),
-      // 3
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        child: const Icon(Icons.navigation),
+        backgroundColor: Colors.green,
+      ),
       body: Container(
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
@@ -56,42 +65,68 @@ class _HomePageState extends State<HomePage> {
             tileMode: TileMode.repeated, // repeats the gradient over the canvas
           ),
         ),
-        child: Center(
-          child: Container(
-              // 4
-              child: Stack(children: [
-            // Login form            // 6
-            // Sign Up Button
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Center(
+              child: Column(children: [
             Container(
-                padding: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
-                alignment: Alignment.bottomCenter,
-                child: TextButton(
-                  onPressed: () async {
-                    var url =
-                        await inspireMeService.inspireMe(); // TODO delete this
-                    return showDialog<void>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('AWS Test'),
-                            content: SingleChildScrollView(
-                                child: Image.network(url)),
-                            actions: [
-                              TextButton(
-                                  child: Text('Very Nice'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  })
-                            ],
-                          );
-                        });
-                  },
-                  child: new Text(
-                    'Inspire Me',
-                    style: new TextStyle(fontSize: 16.0, color: Colors.black),
+              padding: EdgeInsets.only(top: 10.0),
+              alignment: Alignment.topCenter,
+              child: TextButton(
+                onPressed: () async {
+                  var url =
+                      await inspireMeService.inspireMe(); // TODO delete this
+                  return showDialog<void>(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('AWS Test'),
+                          content:
+                              SingleChildScrollView(child: Image.network(url)),
+                          actions: [
+                            TextButton(
+                                child: Text('Very Nice'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                })
+                          ],
+                        );
+                      });
+                },
+                child: new Text(
+                  'Inspire Me',
+                  style: new TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+              ),
+            ),
+            ListView.builder(
+              // physics: const AlwaysScrollableScrollPhysics(),
+              physics: ClampingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: items.length,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemBuilder: (BuildContext context, int index) {
+                return Dismissible(
+                  child: ListTile(
+                    title: Text(
+                      'Item ${items[index]}',
+                    ),
                   ),
-                ))
+                  background:
+                      Container(color: Colors.green, child: Text("right")),
+                  secondaryBackground:
+                      Container(color: Colors.red, child: Text("left")),
+                  key: ValueKey<int>(items[index]),
+                  onDismissed: (DismissDirection direction) {
+                    setState(() {
+                      // items.remove(index);
+                      items.removeAt(index);
+                    });
+                  },
+                );
+              },
+            ),
           ])),
         ),
       ),

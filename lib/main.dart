@@ -12,12 +12,13 @@ import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Future<Database> database = openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
-  onCreate: (db, version) { // create the database if it doesn't exist
-    return db.execute("CREATE TABLE Goals(id INTEGER PRIMARY KEY, title varchar(100), description varchar(100), is_complete INTEGER)");
-  },
-  version: 1
-  );
+  final Future<Database> database =
+      openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
+          onCreate: (db, version) {
+    // create the database if it doesn't exist
+    return db.execute(
+        "CREATE TABLE Goals(id INTEGER PRIMARY KEY, title varchar(100), description varchar(100), is_complete INTEGER)");
+  }, version: 1);
   runApp(MyApp());
 }
 
@@ -33,7 +34,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _configureAmplify();
-
   }
 
   @override
@@ -66,7 +66,6 @@ class _MyAppState extends State<MyApp> {
         //   onPopPage: (route, result) => route.didPop(result),
         // ),
         );
-
   }
 
   void _configureAmplify() async {
