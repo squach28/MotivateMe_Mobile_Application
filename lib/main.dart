@@ -34,7 +34,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _configureAmplify();
-
   }
 
   @override
@@ -67,7 +66,6 @@ class _MyAppState extends State<MyApp> {
         //   onPopPage: (route, result) => route.didPop(result),
         // ),
         );
-
   }
 
   void _configureAmplify() async {
