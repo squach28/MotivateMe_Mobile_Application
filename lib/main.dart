@@ -14,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
   onCreate: (db, version) { // create the database if it doesn't exist
+  
     return db.execute("CREATE TABLE Goals(id INTEGER PRIMARY KEY, title varchar(100), description varchar(100), is_complete INTEGER)");
   },
   version: 1
