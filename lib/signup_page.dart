@@ -285,6 +285,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     SignUpResult result = await authService.signUp(username, password, email);
     if (result == SignUpResult.SUCCESS) {
+      await authService.login(username, password);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     } else {
