@@ -1,6 +1,8 @@
 import 'package:motivateme_mobile_app/model/goal.dart';
+import 'package:motivateme_mobile_app/model/goal_date_info.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:intl/intl.dart';
 
 // class that manages the user's goals
 // allows insertion, update, and deletion of goals on local sqlite database
@@ -11,9 +13,57 @@ class GoalManager {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
+  /*
+    String goalTableCreation = 'CREATE TABLE IF NOT EXISTS ' +
+        goal.title +
+        '(gid INTEGER PRIMARY KEY, id INTEGER, ' +
 
+        'start_time' +
+        ' DATETIME, ' +
+        'end_time' +
+        ' DATETIME, ' +
+        'start_week' +
+        ' DATETIME, ' +
+        'end_week' +
+        ' DATETIME)';
+    await db.execute(goalTableCreation); */
     await db.insert('Goals', goal.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> initializeGoalDates(Goal goal) async {
+    DateTime now = DateTime.now();
+    // monday = 1
+    // sunday = 7
+    // 3 % 1 = 0
+    // algorithm to get the start week and end week of a goal
+    for(var kvp in goal.goalDays.entries) {
+      if(kvp.value) {
+        if(kvp.key == DateFormat('E').format(DateTime.now())) {
+          DateTime goalDate = DateTime.now();
+          for(int i = 0; i < 52; i++) {
+            goalDate = goalDate.add(Duration(days: 7));
+            print(goalDate);
+          }
+        } else {
+
+        }
+      }
+    }
+    if (now.weekday != DateTime.monday) {
+      print(now.weekday);
+      int daysUntilMonday = DateTime.sunday + DateTime.monday - now.weekday;
+      print(daysUntilMonday);
+      DateTime startWeek = now.add(Duration(days: daysUntilMonday));
+      DateTime endWeek = now.add(Duration(days: daysUntilMonday + DateTime.saturday));
+      print(startWeek);
+      print(endWeek);
+    } else {
+      DateTime startWeek = now;
+      DateTime endWeek = now.add(Duration(days: DateTime.saturday));
+      print(startWeek);
+      print(endWeek);
+    }
   }
 
   // retrieves a list of the user's goals from the database
@@ -37,9 +87,40 @@ class GoalManager {
       return Goal(
         id: maps[i]['id'],
         title: maps[i]['title'],
+        goalDays: {'mon': maps[i]['mon'], 'tue': maps[i]['tue'], 'wed': maps[i]['wed'],'thu': maps[i]['thu'], 'fri': maps[i]['fri'], 'sat': maps[i]['sat'], 'sun': maps[i]['sun']},
         description: maps[i]['description'],
         isComplete: maps[i]['is_complete'] == 1 ? true : false,
       );
     });
+  }
+
+  Future<int> retrieveNumberOfGoals() async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+
+    final Database db = await database;
+    
+    
+    final String countQuery = 'SELECT COUNT(*) FROM Goals';
+
+    var tableCount = await db.rawQuery(countQuery);
+
+    print(tableCount.first['COUNT(*)'].runtimeType);
+
+    return tableCount.first['COUNT(*)']; 
+  }
+
+  Future<void> sampleQuery() async {
+        final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+
+    final Database db = await database;
+
+    //db.execute('CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, mon INTEGER, tue INTEGER, wed INTEGER, thu INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)');
+
+    var result = await db.query('Goals');
+    for(var row in result) {
+      print(row['fri']);
+    }
   }
 }

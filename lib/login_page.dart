@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/home_page.dart';
-import 'service/goal_manager.dart';
 import 'service/inspire_me.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
@@ -20,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
-  final GoalManager goalManager = GoalManager();
 
   @override
   Widget build(BuildContext context) {

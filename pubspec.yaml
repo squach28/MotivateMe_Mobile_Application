@@ -29,6 +29,7 @@ dependencies:
   amplify_storage_s3: '<1.0.0'
   sqflite:
   path:
+  intl: '^0.17.0'
   
 
 
