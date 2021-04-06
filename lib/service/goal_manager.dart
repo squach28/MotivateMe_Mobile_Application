@@ -115,12 +115,13 @@ class GoalManager {
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
 
     final Database db = await database;
-
-    //db.execute('CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, mon INTEGER, tue INTEGER, wed INTEGER, thu INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)');
-
+    
+    
     var result = await db.query('Goals');
     for(var row in result) {
-      print(row['fri']);
-    }
+      for(var entry in row.entries) {
+        print(entry);
+      }
+    } 
   }
 }
