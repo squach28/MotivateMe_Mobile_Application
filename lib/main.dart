@@ -4,7 +4,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'login_page.dart';
 import 'service/auth.dart';
-import 'signup_page.dart';
 import 'home_page.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
@@ -12,13 +11,13 @@ import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Future<Database> database =
-      openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
-          onCreate: (db, version) {
-    // create the database if it doesn't exist
-    return db.execute(
-        "CREATE TABLE Goals(id INTEGER PRIMARY KEY, title varchar(100), description varchar(100), is_complete INTEGER)");
-  }, version: 1);
+  final Future<Database> database = openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
+  onCreate: (db, version) { // create the database if it doesn't exist
+  
+    return db.execute("CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, mon INTEGER, tue INTEGER, wed INTEGER, thu INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
+  },
+  version: 1
+  );
   runApp(MyApp());
 }
 
