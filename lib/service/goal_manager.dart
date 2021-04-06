@@ -13,7 +13,7 @@ class GoalManager {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-  /*
+    /*
     String goalTableCreation = 'CREATE TABLE IF NOT EXISTS ' +
         goal.title +
         '(gid INTEGER PRIMARY KEY, id INTEGER, ' +
@@ -37,17 +37,15 @@ class GoalManager {
     // sunday = 7
     // 3 % 1 = 0
     // algorithm to get the start week and end week of a goal
-    for(var kvp in goal.goalDays.entries) {
-      if(kvp.value) {
-        if(kvp.key == DateFormat('E').format(DateTime.now())) {
+    for (var kvp in goal.goalDays.entries) {
+      if (kvp.value) {
+        if (kvp.key == DateFormat('E').format(DateTime.now())) {
           DateTime goalDate = DateTime.now();
-          for(int i = 0; i < 52; i++) {
+          for (int i = 0; i < 52; i++) {
             goalDate = goalDate.add(Duration(days: 7));
             print(goalDate);
           }
-        } else {
-
-        }
+        } else {}
       }
     }
     if (now.weekday != DateTime.monday) {
@@ -55,7 +53,8 @@ class GoalManager {
       int daysUntilMonday = DateTime.sunday + DateTime.monday - now.weekday;
       print(daysUntilMonday);
       DateTime startWeek = now.add(Duration(days: daysUntilMonday));
-      DateTime endWeek = now.add(Duration(days: daysUntilMonday + DateTime.saturday));
+      DateTime endWeek =
+          now.add(Duration(days: daysUntilMonday + DateTime.saturday));
       print(startWeek);
       print(endWeek);
     } else {
@@ -68,7 +67,7 @@ class GoalManager {
 
   // retrieves a list of the user's goals from the database
 
-  Future<void> retrieveGoals() async {
+  Future<List<Goal>> retrieveGoals() async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
 
@@ -76,19 +75,22 @@ class GoalManager {
 
     final List<Map<String, dynamic>> maps = await db.query('Goals');
 
-    for (var item in maps) {
-      print('id: ' + item['id'].toString());
-      print('title: ' + item['title']);
-      print('description: ' + item['description']);
-      print('isComplete: ' + item['is_complete'].toString());
-    }
-
     return List.generate(maps.length, (i) {
       return Goal(
         id: maps[i]['id'],
         title: maps[i]['title'],
-        goalDays: {'mon': maps[i]['mon'], 'tue': maps[i]['tue'], 'wed': maps[i]['wed'],'thu': maps[i]['thu'], 'fri': maps[i]['fri'], 'sat': maps[i]['sat'], 'sun': maps[i]['sun']},
         description: maps[i]['description'],
+        goalDays: {
+          'monday': maps[i]['monday'] == 1 ? true : false,
+          'tuesday': maps[i]['tuesday'] == 1 ? true : false,
+          'wednesday': maps[i]['wednesday'] == 1 ? true : false,
+          'thursday': maps[i]['thursday'] == 1 ? true : false,
+          'friday': maps[i]['friday'] == 1 ? true : false,
+          'saturday': maps[i]['saturday'] == 1 ? true : false,
+          'sunday': maps[i]['sunday'] == 1 ? true : false
+        },
+        startTime: DateTime.parse(maps[i]['start_time']),
+        endTime: DateTime.parse(maps[i]['end_time']),
         isComplete: maps[i]['is_complete'] == 1 ? true : false,
       );
     });
@@ -99,29 +101,27 @@ class GoalManager {
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
 
     final Database db = await database;
-    
-    
+
     final String countQuery = 'SELECT COUNT(*) FROM Goals';
 
     var tableCount = await db.rawQuery(countQuery);
 
     print(tableCount.first['COUNT(*)'].runtimeType);
 
-    return tableCount.first['COUNT(*)']; 
+    return tableCount.first['COUNT(*)'];
   }
 
   Future<void> sampleQuery() async {
-        final Future<Database> database =
+    final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
 
     final Database db = await database;
-    
-    
+
     var result = await db.query('Goals');
-    for(var row in result) {
-      for(var entry in row.entries) {
+    for (var row in result) {
+      for (var entry in row.entries) {
         print(entry);
       }
-    } 
+    }
   }
 }

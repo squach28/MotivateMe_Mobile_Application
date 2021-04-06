@@ -252,7 +252,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     print('goal: $goalTitle');
 
     int goalID = await goalManager.retrieveNumberOfGoals() + 1;    
-    
+
     Goal goal = Goal(
       id: goalID,
       title: goalTitle,
@@ -262,7 +262,9 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       goalDays: goalDays,
       isComplete: false,
     );
-    goalManager.sampleQuery();
+    await goalManager.insertGoal(goal);
+    await goalManager.sampleQuery(); // print the contents of the goals table
     print('success!');
+
   }
 }
