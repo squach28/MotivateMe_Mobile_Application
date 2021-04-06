@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motivateme_mobile_app/add_goals_page.dart';
 import 'package:motivateme_mobile_app/login_page.dart';
 import 'package:motivateme_mobile_app/service/inspire_me.dart';
 import 'model/goal.dart';
@@ -52,10 +53,13 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => AddGoalsPage()));
         },
-        child: const Icon(Icons.navigation),
-        backgroundColor: Colors.green,
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.lightGreen,
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
