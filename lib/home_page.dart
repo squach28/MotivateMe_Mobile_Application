@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
 import 'package:motivateme_mobile_app/login_page.dart';
 import 'package:motivateme_mobile_app/service/inspire_me.dart';
+import 'model/goal.dart';
+import 'service/goal_manager.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
+import 'package:intl/intl.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   final AuthService authService = AuthService();
   final InspireMeService inspireMeService = InspireMeService();
   List<int> items = List<int>.generate(20, (int index) => index);
+
+  final GoalManager goalManager = GoalManager();
 
   @override
   Widget build(BuildContext context) {
