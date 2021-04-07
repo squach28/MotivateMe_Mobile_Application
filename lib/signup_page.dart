@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
+import 'home_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
 
@@ -11,7 +12,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -57,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(children: <Widget>[
                 Form(
                   key: _formKey,
-                  autovalidate: _autoValidate,
+                  autovalidateMode: _autoValidate,
                   child: _signUpForm(),
                 ),
                 SizedBox(height: 40.0),
@@ -66,10 +67,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pop(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
+
                     },
                     child: new Text(
                       'Already have an account? Login',
@@ -226,7 +227,7 @@ class _SignUpPageState extends State<SignUpPage> {
       _signUp();
     } else {
       setState(() {
-        _autoValidate = true;
+        _autoValidate = AutovalidateMode.onUserInteraction;
       });
     }
   }
@@ -284,7 +285,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
     SignUpResult result = await authService.signUp(username, password, email);
     if (result == SignUpResult.SUCCESS) {
-      //home page
+      await authService.login(username, password);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
     } else {
       _showMyDialog();
     }

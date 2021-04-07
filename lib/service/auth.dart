@@ -20,6 +20,7 @@ class AuthService {
           options: CognitoSignUpOptions(
             userAttributes: userAttributes,
           ));
+        
 
       return mm.SignUpResult.SUCCESS;
     } on AuthException catch (e) {
@@ -59,6 +60,12 @@ class AuthService {
         return mm.LogInResult.FAIL;
       }
     }
+  }
+
+  // checks if there is a user signed in
+  Future<bool> checkUserSession() async {
+    var authSession = await Amplify.Auth.fetchAuthSession();
+    return authSession.isSignedIn;
   }
 
   // log the user out of the current session
