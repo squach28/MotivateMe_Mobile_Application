@@ -109,12 +109,35 @@ class _HomePageState extends State<HomePage> {
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemCount: items.length,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 30),
               itemBuilder: (BuildContext context, int index) {
                 return Dismissible(
-                  child: ListTile(
-                    title: Text(
-                      'Item ${items[index]}',
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const ListTile(
+                          leading: Icon(Icons.album),
+                          title: Text('The Enchanted Nightingale'),
+                          subtitle: Text(
+                              'Music by Julie Gable. Lyrics by Sidney Stein.'),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            TextButton(
+                              child: const Text('BUY TICKETS'),
+                              onPressed: () {/* ... */},
+                            ),
+                            const SizedBox(width: 8),
+                            TextButton(
+                              child: const Text('LISTEN'),
+                              onPressed: () {/* ... */},
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                   background:
@@ -129,6 +152,24 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 );
+                // return Dismissible(
+                //   child: ListTile(
+                //     title: Text(
+                //       'Item ${items[index]}',
+                //     ),
+                //   ),
+                //   background:
+                //       Container(color: Colors.green, child: Text("right")),
+                //   secondaryBackground:
+                //       Container(color: Colors.red, child: Text("left")),
+                //   key: ValueKey<int>(items[index]),
+                //   onDismissed: (DismissDirection direction) {
+                //     setState(() {
+                //       // items.remove(index);
+                //       items.removeAt(index);
+                //     });
+                //   },
+                // );
               },
             ),
           ])),
