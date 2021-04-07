@@ -20,6 +20,7 @@ class AuthService {
           options: CognitoSignUpOptions(
             userAttributes: userAttributes,
           ));
+        
 
       return mm.SignUpResult.SUCCESS;
     } on AuthException catch (e) {

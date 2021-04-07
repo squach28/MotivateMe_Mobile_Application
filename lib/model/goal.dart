@@ -15,8 +15,8 @@ class Goal {
       'id': this.id,
       'title': this.title,
       'description': this.description,
-      'start_time': this.startTime,
-      'end_time': this.endTime,
+      'start_time': this.startTime.toIso8601String(),
+      'end_time': this.endTime.toIso8601String(),
       'is_complete': this.isComplete,
     };
 

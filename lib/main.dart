@@ -14,7 +14,7 @@ void main() async {
   final Future<Database> database = openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
   onCreate: (db, version) { // create the database if it doesn't exist
   
-    return db.execute("CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, mon INTEGER, tue INTEGER, wed INTEGER, thu INTEGER, fri INTEGER, sat INTEGER, sun INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
+    return db.execute("CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, monday INTEGER, tuesday INTEGER, wednesday INTEGER, thursday INTEGER, friday INTEGER, saturday INTEGER, sunday INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
   },
   version: 1
   );

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:motivateme_mobile_app/model/goal.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'service/goal_manager.dart';
 
 class AddGoalsPage extends StatefulWidget {
   AddGoalsPage({Key key}) : super(key: key);
@@ -18,6 +20,20 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _goalTitleController = TextEditingController();
   final _goalDescriptionController = TextEditingController();
+  DateTime startTime;
+  DateTime endTime;
+
+  final goalManager = GoalManager();
+
+  Map<String, bool> goalDays = {
+    'Monday': false,
+    'Tuesday': false,
+    'Wednesday': false,
+    'Thursday': false,
+    'Friday': false,
+    'Saturday': false,
+    'Sunday': false,
+  };
   // final _usernameController = TextEditingController();
   // final _emailController = TextEditingController();
   // final _passwordController = TextEditingController();
@@ -61,7 +77,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                 Form(
                   key: _formKey,
                   autovalidateMode: _autoValidate,
-                  child: _signUpForm(),
+                  child: _addGoalForm(),
                 ),
                 SizedBox(height: 40.0),
                 SizedBox(
@@ -97,7 +113,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     );
   }
 
-  Widget _signUpForm() {
+  Widget _addGoalForm() {
     final format = DateFormat("HH:mm");
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       TextFormField(
@@ -133,6 +149,12 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
           onSelect: (values) {
             // <== Callback to handle the selected days
             print(values);
+            for (var entry in goalDays.entries) {
+              goalDays[entry.key] = values.contains(entry.key);
+            }
+            for (var entry in goalDays.entries) {
+              print(entry);
+            }
           },
         ),
       ),
@@ -151,6 +173,10 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                   initialTime:
                       TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                 );
+                setState(() {
+                  startTime = DateTimeField.convert(time);
+                });
+                print(startTime);
                 return DateTimeField.convert(time);
               },
             ),
@@ -165,6 +191,12 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                   initialTime:
                       TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                 );
+
+                setState(() {
+                  endTime = DateTimeField.convert(time);
+                });
+                print(endTime);
+
                 return DateTimeField.convert(time);
               },
             ),
@@ -194,12 +226,12 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
 
   void handleOnSelect(List<String> value) {
     //TODO: Manipulate the List of days selected
-    print(value);
+    print('value: $value');
   }
 
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
-      _signUp();
+      _addGoal();
     } else {
       setState(() {
         _autoValidate = AutovalidateMode.onUserInteraction;
@@ -214,52 +246,25 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       return null;
   }
 
-  void _signUp() async {
+  void _addGoal() async {
     final goalTitle = _goalTitleController.text.trim();
-    // final lastName = _lastNameController.text.trim();
-    // final email = _emailController.text.trim();
-    // final username = _usernameController.text.trim();
-    // final password = _passwordController.text.trim();
-
+    final goalDescription = _goalDescriptionController.text.trim();
     print('goal: $goalTitle');
-    // print('lastName: $lastName');
-    // print('email: $email');
-    // print('username: $username');
-    // print('password: $password');
 
-    // SignUpResult result = await authService.signUp(username, password, email);
-    // if (result == SignUpResult.SUCCESS) {
-    //   Navigator.pushReplacement(context,
-    //       MaterialPageRoute(builder: (BuildContext context) => HomePage()));
-    // } else {
-    //   _showMyDialog();
-    // }
+    int goalID = await goalManager.retrieveNumberOfGoals() + 1;    
+
+    Goal goal = Goal(
+      id: goalID,
+      title: goalTitle,
+      description: goalDescription,
+      startTime: startTime,
+      endTime: endTime, 
+      goalDays: goalDays,
+      isComplete: false,
+    );
+    await goalManager.insertGoal(goal);
+    await goalManager.sampleQuery(); // print the contents of the goals table
+    print('success!');
+
   }
-
-  // Future<void> _showMyDialog() async {
-  //   return showDialog<void>(
-  //     context: context,
-  //     barrierDismissible: false, // user must tap button!
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Error'),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: <Widget>[
-  //               Text('Username already exists'),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: Text('OK'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 }
