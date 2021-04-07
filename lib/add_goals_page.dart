@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:motivateme_mobile_app/model/goal.dart';
 import 'login_page.dart';
@@ -133,34 +134,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       Padding(
         padding: const EdgeInsets.all(10.0),
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SelectWeekDays(
-          border: false,
-          boxDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30.0),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              colors: [const Color(0xFFE55CE4), const Color(0xFFBB75FB)],
-              tileMode:
-                  TileMode.repeated, // repeats the gradient over the canvas
-            ),
-          ),
-          onSelect: (values) {
-            // <== Callback to handle the selected days
-            print(values);
-            for (var entry in goalDays.entries) {
-              goalDays[entry.key] = values.contains(entry.key);
-            }
-            for (var entry in goalDays.entries) {
-              print(entry);
-            }
-          },
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-      ),
       Row(
         children: [
           Flexible(child: Text("Start Time: ")),
@@ -206,8 +179,41 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       Padding(
         padding: const EdgeInsets.all(10.0),
       ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SelectWeekDays(
+          border: false,
+          boxDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              colors: [const Color(0xFFE55CE4), const Color(0xFFBB75FB)],
+              tileMode:
+                  TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          ),
+          onSelect: (values) {
+            // <== Callback to handle the selected days
+            print(values);
+            for (var entry in goalDays.entries) {
+              goalDays[entry.key] = values.contains(entry.key);
+            }
+            for (var entry in goalDays.entries) {
+              print(entry);
+            }
+          },
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+      ),
       TextFormField(
-        //validator: validateFirstName,
+        validator: validateDescription,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+        inputFormatters: [
+          new LengthLimitingTextInputFormatter(200),
+        ],
         controller: _goalDescriptionController,
         decoration: InputDecoration(
           fillColor: Colors.white,
@@ -232,6 +238,9 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
       _addGoal();
+      Navigator.pop(
+        context,
+      );
     } else {
       setState(() {
         _autoValidate = AutovalidateMode.onUserInteraction;
@@ -246,25 +255,31 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       return null;
   }
 
+  String validateDescription(String value) {
+    if (value.length == 0)
+      return 'Description is required';
+    else
+      return null;
+  }
+
   void _addGoal() async {
     final goalTitle = _goalTitleController.text.trim();
     final goalDescription = _goalDescriptionController.text.trim();
     print('goal: $goalTitle');
 
-    int goalID = await goalManager.retrieveNumberOfGoals() + 1;    
+    int goalID = await goalManager.retrieveNumberOfGoals() + 1;
 
     Goal goal = Goal(
       id: goalID,
       title: goalTitle,
       description: goalDescription,
       startTime: startTime,
-      endTime: endTime, 
+      endTime: endTime,
       goalDays: goalDays,
       isComplete: false,
     );
     await goalManager.insertGoal(goal);
     await goalManager.sampleQuery(); // print the contents of the goals table
     print('success!');
-
   }
 }

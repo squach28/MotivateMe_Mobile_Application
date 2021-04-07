@@ -9,7 +9,6 @@ import 'service/auth.dart';
 import 'model/sign_up_result.dart';
 import 'package:intl/intl.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -115,7 +114,7 @@ class _HomePageState extends State<HomePage> {
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemCount: items.length,
-              padding: const EdgeInsets.symmetric(vertical: 30),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               itemBuilder: (BuildContext context, int index) {
                 return Dismissible(
                   child: Card(
@@ -146,8 +145,11 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  background:
-                      Container(color: Colors.green, child: Text("right")),
+                  background: Container(
+                      padding: EdgeInsets.only(left: 60.0),
+                      alignment: Alignment.centerLeft,
+                      color: Colors.green,
+                      child: Icon(Icons.check)),
                   secondaryBackground:
                       Container(color: Colors.red, child: Text("left")),
                   key: ValueKey<int>(items[index]),
