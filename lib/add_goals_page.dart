@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -35,10 +37,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     'Saturday': false,
     'Sunday': false,
   };
-  // final _usernameController = TextEditingController();
-  // final _emailController = TextEditingController();
-  // final _passwordController = TextEditingController();
-  // final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
         child: Center(
           child: Container(
               child: Stack(children: [
-            // Sign Up Form
             SingleChildScrollView(
               padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
               child: Column(children: <Widget>[
@@ -198,6 +195,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
             for (var entry in goalDays.entries) {
               goalDays[entry.key] = values.contains(entry.key);
             }
+
             for (var entry in goalDays.entries) {
               print(entry);
             }
@@ -230,17 +228,19 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     ]);
   }
 
-  void handleOnSelect(List<String> value) {
-    //TODO: Manipulate the List of days selected
-    print('value: $value');
-  }
-
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
-      _addGoal();
-      Navigator.pop(
-        context,
-      );
+      for (var entry in goalDays.entries) {
+        if (entry.value == true) {
+          _addGoal();
+          goalManager.sampleQuery();
+          Navigator.pop(
+            context,
+          );
+          return;
+        }
+      }
+      _showMyDialog();
     } else {
       setState(() {
         _autoValidate = AutovalidateMode.onUserInteraction;
@@ -281,5 +281,32 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     await goalManager.insertGoal(goal);
     await goalManager.sampleQuery(); // print the contents of the goals table
     print('success!');
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No days are selected'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Please select a day'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
