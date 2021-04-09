@@ -11,13 +11,14 @@ import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Future<Database> database = openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
-  onCreate: (db, version) { // create the database if it doesn't exist
-  
-    return db.execute("CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, monday INTEGER, tuesday INTEGER, wednesday INTEGER, thursday INTEGER, friday INTEGER, saturday INTEGER, sunday INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
-  },
-  version: 1
-  );
+  final Future<Database> database =
+      openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
+          onCreate: (db, version) {
+    // create the database if it doesn't exist
+
+    return db.execute(
+        "CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, monday INTEGER, tuesday INTEGER, wednesday INTEGER, thursday INTEGER, friday INTEGER, saturday INTEGER, sunday INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
+  }, version: 1);
   runApp(MyApp());
 }
 
