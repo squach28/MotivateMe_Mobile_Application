@@ -9,7 +9,6 @@ import 'service/auth.dart';
 import 'model/sign_up_result.dart';
 import 'package:intl/intl.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -110,33 +109,73 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            ListView.builder(
-              // physics: const AlwaysScrollableScrollPhysics(),
-              physics: ClampingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: items.length,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  child: ListTile(
-                    title: Text(
-                      'Item ${items[index]}',
-                    ),
-                  ),
-                  background:
-                      Container(color: Colors.green, child: Text("right")),
-                  secondaryBackground:
-                      Container(color: Colors.red, child: Text("left")),
-                  key: ValueKey<int>(items[index]),
-                  onDismissed: (DismissDirection direction) {
-                    setState(() {
-                      // items.remove(index);
-                      items.removeAt(index);
-                    });
-                  },
-                );
-              },
-            ),
+            FutureBuilder<List<Goal>>(
+                future: goalManager.retrieveGoals(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<List<Goal>> snapshot) {
+                  if (snapshot.hasData) {
+                    List<Goal> goals = snapshot.data;
+                    return ListView.builder(
+                      // physics: const AlwaysScrollableScrollPhysics(),
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: goals.length,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Dismissible(
+                          child: Card(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: Icon(Icons.album),
+                                  title: Text(goals.elementAt(index).title),
+                                  subtitle:
+                                      Text(goals.elementAt(index).description),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    TextButton(
+                                      child: const Text('BUY TICKETS'),
+                                      onPressed: () {/* ... */},
+                                    ),
+                                    const SizedBox(width: 8),
+                                    TextButton(
+                                      child: const Text('LISTEN'),
+                                      onPressed: () {/* ... */},
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          background: Container(
+                              padding: EdgeInsets.only(left: 60.0),
+                              alignment: Alignment.centerLeft,
+                              color: Colors.green,
+                              child: Icon(Icons.check)),
+                          secondaryBackground:
+                              Container(color: Colors.red, child: Text("left")),
+                          key: ValueKey<int>(goals.elementAt(index).hashCode),
+                          onDismissed: (DismissDirection direction) {
+                            // TODO Index error when removing
+                            goals.removeAt(index);
+                            // setState(() {
+                            //   goals.removeAt(index);
+                            // });
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(
+                          backgroundColor: Colors.green),
+                    );
+                  }
+                })
           ])),
         ),
       ),
