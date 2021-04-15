@@ -17,7 +17,7 @@ void main() async {
     // create the database if it doesn't exist
 
     return db.execute(
-        "CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, monday INTEGER, tuesday INTEGER, wednesday INTEGER, thursday INTEGER, friday INTEGER, saturday INTEGER, sunday INTEGER, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
+        "CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, monday INTEGER, tuesday INTEGER, wednesday INTEGER, thursday INTEGER, friday INTEGER, saturday INTEGER, sunday INTEGER, start_date DATETIME, end_date DATETIME, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
   }, version: 1);
   runApp(MyApp());
 }

@@ -89,6 +89,8 @@ class GoalManager {
           'saturday': maps[i]['saturday'] == 1 ? true : false,
           'sunday': maps[i]['sunday'] == 1 ? true : false
         },
+        startDate: DateTime.parse(maps[i]['start_date']),
+        endDate: DateTime.parse(maps[i]['end_date']),
         startTime: DateTime.parse(maps[i]['start_time']),
         endTime: DateTime.parse(maps[i]['end_time']),
         isComplete: maps[i]['is_complete'] == 1 ? true : false,

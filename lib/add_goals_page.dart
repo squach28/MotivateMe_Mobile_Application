@@ -23,6 +23,8 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _goalTitleController = TextEditingController();
   final _goalDescriptionController = TextEditingController();
+  DateTime startDate;
+  DateTime endDate;
   DateTime startTime;
   DateTime endTime;
 
@@ -146,26 +148,37 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
           Flexible(
             child: DateTimeField(
               format: dateFormat,
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
+              onShowPicker: (context, currentValue) async {
+                final time = await showDatePicker(
                     context: context,
                     firstDate: DateTime(1900),
                     initialDate: currentValue ?? DateTime.now(),
                     lastDate: DateTime(2100));
+                setState(() {
+                  this.startDate = time;
+                });
+                return time;
               },
+              
             ),
           ),
           Flexible(child: Text("End Date: ")),
           Flexible(
             child: DateTimeField(
               format: dateFormat,
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
+              onShowPicker: (context, currentValue) async {
+                final time = await showDatePicker(
                     context: context,
                     firstDate: DateTime(1900),
                     initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
+                    lastDate: DateTime(2100)); 
+                setState(() {
+                  this.endDate = time;
+                });
+                return time;
               },
+
+
             ),
           )
         ],
@@ -188,7 +201,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                 setState(() {
                   startTime = DateTimeField.convert(time);
                 });
-                print(startTime);
                 return DateTimeField.convert(time);
               },
             ),
@@ -315,8 +327,10 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       id: goalID,
       title: goalTitle,
       description: goalDescription,
-      startTime: startTime,
-      endTime: endTime,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      startTime: this.startTime,
+      endTime: this.endTime,
       goalDays: goalDays,
       isComplete: false,
     );
