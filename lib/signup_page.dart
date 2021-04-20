@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'home_page.dart';
+import 'navigation_page.dart';
 import 'service/auth.dart';
 import 'model/sign_up_result.dart';
 
@@ -283,11 +284,11 @@ class _SignUpPageState extends State<SignUpPage> {
     print('username: $username');
     print('password: $password');
 
-    SignUpResult result = await authService.signUp(username, password, email);
+    SignUpResult result = await authService.signUp(username, password, email, firstName, lastName);
     if (result == SignUpResult.SUCCESS) {
       await authService.login(username, password);
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+          MaterialPageRoute(builder: (BuildContext context) => NavigationPage()));
     } else {
       _showMyDialog();
     }
