@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'login_page.dart';
 import 'service/auth.dart';
-import 'home_page.dart';
+import 'navigation_page.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data == true) {
-                return HomePage();
+                return NavigationPage();
               } else {
                 return LoginPage();
               }

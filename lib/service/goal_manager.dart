@@ -1,4 +1,5 @@
 import 'package:motivateme_mobile_app/model/goal.dart';
+import 'package:motivateme_mobile_app/model/subgoal.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
@@ -122,4 +123,20 @@ class GoalManager {
     var result = await db.query(goal.title);
     print(result.length);
   }
+
+  // function when goal is completed (success)
+  Future<void> completeGoal(SubGoal subgoal) async {
+        final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+
+    final Database db = await database;
+    String findGoalTitleQuery = 'SELECT title FROM Goals WHERE id = ' + subgoal.id.toString();
+    List<Map<String, Object>> title = await db.query(findGoalTitleQuery);
+    String formattedGoalTitle = title.first['title'].toString().replaceAll(' ', '_');
+    String completeGoalQuery = 'UPDATE ' + formattedGoalTitle + ' SET completed = 1 WHERE gid = ' + subgoal.gid.toString();
+    db.execute(completeGoalQuery);
+  }
+  // function when goal is uncompleted (fail)
+  // function when goal is deleted
+  
 }
