@@ -1,5 +1,4 @@
 import 'package:motivateme_mobile_app/model/goal.dart';
-import 'package:motivateme_mobile_app/model/goal_date_info.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
@@ -7,61 +6,62 @@ import 'package:intl/intl.dart';
 // class that manages the user's goals
 // allows insertion, update, and deletion of goals on local sqlite database
 class GoalManager {
+  Future<void> createGoalTable(Goal goal) async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    String formattedTitle = goal.title.replaceAll(' ', '_');
+    String goalTableCreation = 'CREATE TABLE IF NOT EXISTS ' +
+        formattedTitle +
+        '(gid INTEGER PRIMARY KEY, id INTEGER, ' +
+        'date' +
+        ' DATETIME, ' +
+        'completed' +
+        ' INTEGER, ' +
+        'comment' +
+        ' TEXT, ' +
+        'path_to_picture' +
+        ' TEXT)';
+    await db.execute(goalTableCreation);
+  }
+
   // inserts a goal into the sqlite database
   // param: goal   -   the goal to insert into the database
   Future<void> insertGoal(Goal goal) async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-    /*
-    String goalTableCreation = 'CREATE TABLE IF NOT EXISTS ' +
-        goal.title +
-        '(gid INTEGER PRIMARY KEY, id INTEGER, ' +
-
-        'start_time' +
-        ' DATETIME, ' +
-        'end_time' +
-        ' DATETIME, ' +
-        'start_week' +
-        ' DATETIME, ' +
-        'end_week' +
-        ' DATETIME)';
-    await db.execute(goalTableCreation); */
-    await db.insert('Goals', goal.toMap(),
+    for(var thing in goal.formatForDatabase().entries) {
+      print(thing.key + ' ' + thing.value.toString());
+    }
+    await db.insert('Goals', goal.formatForDatabase(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    createGoalTable(goal);
+    initializeGoalDates(goal);
   }
 
   Future<void> initializeGoalDates(Goal goal) async {
-    DateTime now = DateTime.now();
-    // monday = 1
-    // sunday = 7
-    // 3 % 1 = 0
-    // algorithm to get the start week and end week of a goal
-    for (var kvp in goal.goalDays.entries) {
-      if (kvp.value) {
-        if (kvp.key == DateFormat('E').format(DateTime.now())) {
-          DateTime goalDate = DateTime.now();
-          for (int i = 0; i < 52; i++) {
-            goalDate = goalDate.add(Duration(days: 7));
-            print(goalDate);
-          }
-        } else {}
-      }
-    }
-    if (now.weekday != DateTime.monday) {
-      print(now.weekday);
-      int daysUntilMonday = DateTime.sunday + DateTime.monday - now.weekday;
-      print(daysUntilMonday);
-      DateTime startWeek = now.add(Duration(days: daysUntilMonday));
-      DateTime endWeek =
-          now.add(Duration(days: daysUntilMonday + DateTime.saturday));
-      print(startWeek);
-      print(endWeek);
-    } else {
-      DateTime startWeek = now;
-      DateTime endWeek = now.add(Duration(days: DateTime.saturday));
-      print(startWeek);
-      print(endWeek);
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    int counter = 1;
+    DateTime currentDate = goal.startDate;
+    while (currentDate != goal.endDate) {
+      String day = DateFormat.EEEE().format(currentDate);
+      
+      if (goal.goalDays[day] == true) {
+        await db.insert(goal.title, {
+          'gid': counter,
+          'id': goal.id,
+          'date': currentDate.toIso8601String(),
+          'completed': null,
+          'comment': null,
+          'path_to_picture': null,
+        });
+        counter++;
+      } 
+      currentDate = currentDate.add(Duration(days: 1));
+      print(currentDate);
     }
   }
 
@@ -113,17 +113,13 @@ class GoalManager {
     return tableCount.first['COUNT(*)'];
   }
 
-  Future<void> sampleQuery() async {
+  Future<void> sampleQuery(Goal goal) async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
 
     final Database db = await database;
 
-    var result = await db.query('Goals');
-    for (var row in result) {
-      for (var entry in row.entries) {
-        print(entry);
-      }
-    }
+    var result = await db.query(goal.title);
+    print(result.length);
   }
 }

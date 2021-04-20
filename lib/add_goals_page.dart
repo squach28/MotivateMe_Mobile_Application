@@ -287,11 +287,11 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       for (var entry in goalDays.entries) {
         if (entry.value == true) {
           _addGoal();
-          goalManager.sampleQuery();
+          
           Navigator.pop(
             context,
-          );
-          return;
+          ); 
+          return; 
         }
       }
       _showMyDialog();
@@ -335,7 +335,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       isComplete: false,
     );
     await goalManager.insertGoal(goal);
-    await goalManager.sampleQuery(); // print the contents of the goals table
     print('success!');
   }
 
