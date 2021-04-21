@@ -9,7 +9,7 @@ class NavigationPage extends StatefulWidget {
 }
 
 class NavigationPageState extends State<NavigationPage> {
-  final List<Widget> pages = [HomePage()];
+  final List<Widget> pages = [HomePage()]; // contains the pages that user can navigate to 
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {

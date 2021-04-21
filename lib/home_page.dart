@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
 import 'package:motivateme_mobile_app/login_page.dart';
 import 'package:motivateme_mobile_app/service/inspire_me.dart';
+import 'package:motivateme_mobile_app/subgoal_widget.dart';
 import 'model/goal.dart';
+import 'model/subgoal.dart';
 import 'service/goal_manager.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
@@ -110,48 +112,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            FutureBuilder<List<Goal>>(
-                future: goalManager.retrieveGoals(),
+            FutureBuilder<List<SubGoal>>(
+                future: goalManager.retrieveSubGoalsForToday(),
                 builder:
-                    (BuildContext context, AsyncSnapshot<List<Goal>> snapshot) {
+                    (BuildContext context, AsyncSnapshot<List<SubGoal>> snapshot) {
                   if (snapshot.hasData) {
-                    List<Goal> goals = snapshot.data;
+                    List<SubGoal> subGoals = snapshot.data;
                     return ListView.builder(
                       // physics: const AlwaysScrollableScrollPhysics(),
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: goals.length,
+                      itemCount: subGoals.length,
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       itemBuilder: (BuildContext context, int index) {
                         return Dismissible(
-                          child: Card(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: Icon(Icons.album),
-                                  title: Text(goals.elementAt(index).title),
-                                  subtitle:
-                                      Text(goals.elementAt(index).description),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    TextButton(
-                                      child: const Text('BUY TICKETS'),
-                                      onPressed: () {/* ... */},
-                                    ),
-                                    const SizedBox(width: 8),
-                                    TextButton(
-                                      child: const Text('LISTEN'),
-                                      onPressed: () {/* ... */},
-                                    ),
-                                    const SizedBox(width: 8),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                          child: SubGoalWidget(subgoal: subGoals.elementAt(index),
+                          title: subGoals.elementAt(index).title,
+                          description: subGoals.elementAt(index).description),
                           background: Container(
                               padding: EdgeInsets.only(left: 60.0),
                               alignment: Alignment.centerLeft,
@@ -159,13 +136,11 @@ class _HomePageState extends State<HomePage> {
                               child: Icon(Icons.check)),
                           secondaryBackground:
                               Container(color: Colors.red, child: Text("left")),
-                          key: ValueKey<int>(goals.elementAt(index).hashCode),
+                          key: UniqueKey(),
                           onDismissed: (DismissDirection direction) {
-                            // TODO Index error when removing
-                            goals.removeAt(index);
-                            // setState(() {
-                            //   goals.removeAt(index);
-                            // });
+                            setState(() {
+                              goalManager.markGoalAsComplete(subGoals.elementAt(index));
+                            });
                           },
                         );
                       },

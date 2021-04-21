@@ -5,8 +5,11 @@ class SubGoal {
   final bool completed;
   final String comment;
   final String pathToPicture;
+  String title;
+  String description;
 
-  SubGoal({this.gid, this.id, this.date, this.completed, this.comment, this.pathToPicture});
+  SubGoal({this.gid, this.id, this.date, this.completed, this.comment, this.pathToPicture, this.title = '', this.description = ''});
+  
 
   Map<String, dynamic> toMap() {
     return {
@@ -18,6 +21,14 @@ class SubGoal {
       'pathToPicture': this.pathToPicture
     };
   }
+
+  SubGoal.fromJson(Map<String, dynamic> json)
+  : gid = json['gid'],
+    id = json['id'],
+    date = json['date'],
+    completed = json['completed'] == 1 ? true: false,
+    comment =  json['comment'],
+    pathToPicture = json['pathToPicture'];
 
   Map<String, dynamic> formattedMapForDatabase() {
     return {
