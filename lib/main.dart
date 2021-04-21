@@ -41,7 +41,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: 'MotivateMe',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryColor: Color(0xff5480c1)),
         // 2
         home: FutureBuilder(
           future: authService.checkUserSession(),

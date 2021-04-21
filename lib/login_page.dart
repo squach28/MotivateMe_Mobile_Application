@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/home_page.dart';
+import 'package:motivateme_mobile_app/navigation_page.dart';
 import 'service/inspire_me.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
@@ -197,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
     if (result == LogInResult.SUCCESS) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => NavigationPage()),
       );
     } else {
       _showMyDialog(result);
