@@ -1,17 +1,25 @@
 // class that represents a user's goal
-class Goal { 
+class Goal {
   final int id;
   final String title;
   final String description;
   final DateTime startTime;
   final DateTime endTime;
-  final Map<String, bool> goalDays; // map of the goal day and whether it is active on that day
+  final Map<String, bool>
+      goalDays; // map of the goal day and whether it is active on that day
   final bool isComplete;
 
-  Goal({this.id, this.title, this.description, this.startTime, this.endTime, this.goalDays, this.isComplete});
+  Goal(
+      {this.id,
+      this.title,
+      this.description,
+      this.startTime,
+      this.endTime,
+      this.goalDays,
+      this.isComplete});
 
   Map<String, dynamic> toMap() {
-    var basicGoalInfo =  {
+    var basicGoalInfo = {
       'id': this.id,
       'title': this.title,
       'description': this.description,
@@ -20,10 +28,23 @@ class Goal {
       'is_complete': this.isComplete,
     };
 
-    basicGoalInfo.addAll(this.goalDays); // combine the basicGoalInfo map and the goalDays map
+    basicGoalInfo.addAll(
+        this.goalDays); // combine the basicGoalInfo map and the goalDays map
 
     return basicGoalInfo;
+  }
 
-    
+  @override
+  int get hashCode =>
+      this.id.hashCode +
+      this.title.hashCode +
+      this.description.hashCode +
+      this.startTime.hashCode +
+      this.endTime.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    // TODO: implement ==
+    return identical(this, other) && runtimeType == other.runtimeType;
   }
 }

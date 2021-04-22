@@ -1,5 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
+import 'package:motivateme_mobile_app/calendar.dart';
+import 'package:motivateme_mobile_app/camera.dart';
 import 'package:motivateme_mobile_app/login_page.dart';
 import 'package:motivateme_mobile_app/service/inspire_me.dart';
 import 'model/goal.dart';
@@ -10,6 +13,12 @@ import 'model/sign_up_result.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
+  final CameraDescription camera;
+
+  HomePage({
+    Key key,
+    @required this.camera,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -17,6 +26,31 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthService authService = AuthService();
   final InspireMeService inspireMeService = InspireMeService();
+  CameraController _controller;
+  Future<void> _initializeControllerFuture;
+  @override
+  void initState() {
+    super.initState();
+    // To display the current output from the Camera,
+    // create a CameraController.
+    _controller = CameraController(
+      // Get a specific camera from the list of available cameras.
+      widget.camera,
+      // Define the resolution to use.
+      ResolutionPreset.medium,
+    );
+
+    // Next, initialize the controller. This returns a Future.
+    _initializeControllerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the controller when the widget is disposed.
+    _controller.dispose();
+    super.dispose();
+  }
+
   List<int> items = List<int>.generate(20, (int index) => index);
 
   final GoalManager goalManager = GoalManager();
@@ -37,6 +71,15 @@ class _HomePageState extends State<HomePage> {
                       builder: (BuildContext context) => LoginPage()));
             },
             child: Text('Sign Out'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => TableEventsExample()));
+            },
+            child: Text('Calendar'),
           ),
         ],
         automaticallyImplyLeading: false,
@@ -122,6 +165,9 @@ class _HomePageState extends State<HomePage> {
                       itemCount: goals.length,
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       itemBuilder: (BuildContext context, int index) {
+                        print(index.toString() +
+                            " " +
+                            goals.elementAt(index).hashCode.toString());
                         return Dismissible(
                           child: Card(
                             child: Column(
@@ -158,12 +204,23 @@ class _HomePageState extends State<HomePage> {
                               child: Icon(Icons.check)),
                           secondaryBackground:
                               Container(color: Colors.red, child: Text("left")),
-                          key: ValueKey<int>(goals.elementAt(index).hashCode),
+                          key: Key(goals.elementAt(index).hashCode.toString()),
                           onDismissed: (DismissDirection direction) {
                             // TODO Index error when removing
-                            goals.removeAt(index);
+                            if (direction == DismissDirection.startToEnd) {
+                              //goals.removeAt(index);
+                              snapshot.data.removeAt(index);
+                              print(index);
+                              print(goals.elementAt(index).hashCode);
+                              // activate camera
+                              _showMyDialog();
+
+                              print("start to end");
+                            }
+
                             // setState(() {
-                            //   goals.removeAt(index);
+                            //   snapshot.data
+                            //       .remove(snapshot.data.elementAt(index));
                             // });
                           },
                         );
@@ -179,6 +236,48 @@ class _HomePageState extends State<HomePage> {
           ])),
         ),
       ),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.camera_alt),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                TakePictureScreen(camera: widget.camera)));
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

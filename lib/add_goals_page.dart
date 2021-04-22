@@ -276,9 +276,9 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
         if (entry.value == true) {
           _addGoal();
           goalManager.sampleQuery();
-          Navigator.pop(
-            context,
-          );
+          Navigator.pop(context, () {
+            setState(() {});
+          });
           return;
         }
       }
