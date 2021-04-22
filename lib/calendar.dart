@@ -84,9 +84,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('TableCalendar - Events'),
-      ),
       body: Column(
         children: [
           TableCalendar<Event>(

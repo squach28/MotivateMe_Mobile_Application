@@ -59,6 +59,12 @@ class _HomePageState extends State<HomePage> {
 
   final GoalManager goalManager = GoalManager();
 
+  Future<void> removeSubGoal(List<SubGoal> subGoals, int index) async {
+    Future.delayed(Duration(milliseconds: 500)).then((_) {
+      goalManager.markGoalAsComplete(subGoals.elementAt(index));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // 2
@@ -186,11 +192,8 @@ class _HomePageState extends State<HomePage> {
                           secondaryBackground:
                               Container(color: Colors.red, child: Text("left")),
                           key: UniqueKey(),
-                          onDismissed: (DismissDirection direction) {
-                            setState(() {
-                              goalManager.markGoalAsComplete(
-                                  subGoals.elementAt(index));
-                            });
+                          onDismissed: (DismissDirection direction) async {
+                            await removeSubGoal(subGoals, index);
                           },
                         );
                       },

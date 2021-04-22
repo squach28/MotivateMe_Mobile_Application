@@ -40,12 +40,6 @@ class GoalManager {
         conflictAlgorithm: ConflictAlgorithm.replace);
     await createGoalTable(goal);
     await initializeGoalDates(goal);
-    var result = await db.query(goal.title);
-    for (var thing in result) {
-      for (var entries in thing.entries) {
-        print(entries.key + ' ' + entries.value.toString());
-      }
-    }
   }
 
   Future<void> initializeGoalDates(Goal goal) async {
@@ -54,11 +48,13 @@ class GoalManager {
     final Database db = await database;
     int counter = 1;
     DateTime currentDate = goal.startDate;
+    String formattedGoalTitle = goal.title.toString().replaceAll(' ', '_');
+
     while (currentDate != goal.endDate) {
       String day = DateFormat.EEEE().format(currentDate);
 
       if (goal.goalDays[day] == true) {
-        await db.insert(goal.title, {
+        await db.insert(formattedGoalTitle, {
           'gid': counter,
           'id': goal.id,
           'date': currentDate.toIso8601String(),
