@@ -1,5 +1,5 @@
 import 'package:motivateme_mobile_app/model/goal.dart';
-import 'package:motivateme_mobile_app/model/goal_date_info.dart';
+import 'package:motivateme_mobile_app/model/subgoal.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
@@ -7,62 +7,70 @@ import 'package:intl/intl.dart';
 // class that manages the user's goals
 // allows insertion, update, and deletion of goals on local sqlite database
 class GoalManager {
+  Future<void> createGoalTable(Goal goal) async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    String formattedTitle = goal.title.replaceAll(' ', '_');
+    String goalTableCreation = 'CREATE TABLE IF NOT EXISTS ' +
+        formattedTitle +
+        '(gid INTEGER PRIMARY KEY, id INTEGER, ' +
+        'date' +
+        ' DATETIME, ' +
+        'completed' +
+        ' INTEGER, ' +
+        'comment' +
+        ' TEXT, ' +
+        'path_to_picture' +
+        ' TEXT)';
+    await db.execute(goalTableCreation);
+    print('goal table created!');
+  }
+
   // inserts a goal into the sqlite database
   // param: goal   -   the goal to insert into the database
   Future<void> insertGoal(Goal goal) async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-    /*
-    String goalTableCreation = 'CREATE TABLE IF NOT EXISTS ' +
-        goal.title +
-        '(gid INTEGER PRIMARY KEY, id INTEGER, ' +
-
-        'start_time' +
-        ' DATETIME, ' +
-        'end_time' +
-        ' DATETIME, ' +
-        'start_week' +
-        ' DATETIME, ' +
-        'end_week' +
-        ' DATETIME)';
-    await db.execute(goalTableCreation); */
-    await db.insert('Goals', goal.toMap(),
+    for (var thing in goal.formatForDatabase().entries) {
+      print(thing.key + ' ' + thing.value.toString());
+    }
+    await db.insert('Goals', goal.formatForDatabase(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    await createGoalTable(goal);
+    await initializeGoalDates(goal);
+    var result = await db.query(goal.title);
+    for (var thing in result) {
+      for (var entries in thing.entries) {
+        print(entries.key + ' ' + entries.value.toString());
+      }
+    }
   }
 
   Future<void> initializeGoalDates(Goal goal) async {
-    DateTime now = DateTime.now();
-    // monday = 1
-    // sunday = 7
-    // 3 % 1 = 0
-    // algorithm to get the start week and end week of a goal
-    for (var kvp in goal.goalDays.entries) {
-      if (kvp.value) {
-        if (kvp.key == DateFormat('E').format(DateTime.now())) {
-          DateTime goalDate = DateTime.now();
-          for (int i = 0; i < 52; i++) {
-            goalDate = goalDate.add(Duration(days: 7));
-            print(goalDate);
-          }
-        } else {}
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    int counter = 1;
+    DateTime currentDate = goal.startDate;
+    while (currentDate != goal.endDate) {
+      String day = DateFormat.EEEE().format(currentDate);
+
+      if (goal.goalDays[day] == true) {
+        await db.insert(goal.title, {
+          'gid': counter,
+          'id': goal.id,
+          'date': currentDate.toIso8601String(),
+          'completed': null,
+          'comment': null,
+          'path_to_picture': null,
+        });
+        counter++;
       }
+      currentDate = currentDate.add(Duration(days: 1));
     }
-    if (now.weekday != DateTime.monday) {
-      print(now.weekday);
-      int daysUntilMonday = DateTime.sunday + DateTime.monday - now.weekday;
-      print(daysUntilMonday);
-      DateTime startWeek = now.add(Duration(days: daysUntilMonday));
-      DateTime endWeek =
-          now.add(Duration(days: daysUntilMonday + DateTime.saturday));
-      print(startWeek);
-      print(endWeek);
-    } else {
-      DateTime startWeek = now;
-      DateTime endWeek = now.add(Duration(days: DateTime.saturday));
-      print(startWeek);
-      print(endWeek);
-    }
+    print('goal table initialized!');
   }
 
   // retrieves a list of the user's goals from the database
@@ -89,11 +97,68 @@ class GoalManager {
           'saturday': maps[i]['saturday'] == 1 ? true : false,
           'sunday': maps[i]['sunday'] == 1 ? true : false
         },
+        startDate: DateTime.parse(maps[i]['start_date']),
+        endDate: DateTime.parse(maps[i]['end_date']),
         startTime: DateTime.parse(maps[i]['start_time']),
         endTime: DateTime.parse(maps[i]['end_time']),
         isComplete: maps[i]['is_complete'] == 1 ? true : false,
       );
     });
+  }
+  // retrieves the list of sub goals that the user hasn't completed
+  // returns a list of subgoals
+  Future<List<SubGoal>> retrieveSubGoalsForToday() async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+
+    final Database db = await database;
+    String today = DateFormat.EEEE().format(DateTime.now());
+    List<SubGoal> subGoals = [];
+    String retrieveGoalDetailsForTodayQuery =
+        'SELECT id, title, description FROM Goals WHERE ' + today + ' = 1'; // check the goals table for goals that occur on the current day
+    List<Map<String, Object>> result =
+        await db.rawQuery(retrieveGoalDetailsForTodayQuery);
+    for (var goal in result) { // look through the subgoals table for the goal that is supposed to occur today
+      String formattedGoalTitle = goal['title'].toString().replaceAll(' ', '_');
+      String currentMonth = DateTime.now().month.toString();
+      if (DateTime.now().month < 10) { // format month to be two digits if month is less than 10, ie '01', '02', etc.
+        currentMonth = '0' + DateTime.now().month.toString();
+      }
+      String currentDay = DateTime.now().year.toString() + 
+          '-' +
+          currentMonth +
+          '-' +
+          DateTime.now().day.toString() +
+          'T00:00:00.000'; // ISO8601 format string for the date 
+      String retrieveSubGoalsQuery = 'SELECT * FROM ' +
+          formattedGoalTitle +
+          ' WHERE date = ' +
+          '"' +
+          currentDay +
+          '"' + 
+          ' AND completed IS NULL'; // query to find the specific goal for today that isn't completed
+      print(retrieveSubGoalsQuery);
+      List<Map<String, Object>> subGoalResult =
+          await db.rawQuery(retrieveSubGoalsQuery);
+      if(subGoalResult.length == 0) { // ignore the subgoal if it is already completed
+        print('list has zero elements');
+        continue;
+      }
+      Map<String, Object> subGoal = subGoalResult.first;
+      
+      SubGoal subGoalToAdd = SubGoal(
+        gid: subGoal['gid'],
+        id: subGoal['id'],
+        date: DateTime.parse(subGoal['date']),
+        completed: subGoal['completed'] == 1 ? true : false,
+        comment: subGoal['comment'],
+        pathToPicture: subGoal['path_to_picture'],
+        title: goal['title'],
+        description: goal['description']
+      );
+      subGoals.add(subGoalToAdd);
+    }
+    return subGoals;
   }
 
   Future<int> retrieveNumberOfGoals() async {
@@ -106,22 +171,60 @@ class GoalManager {
 
     var tableCount = await db.rawQuery(countQuery);
 
-    print(tableCount.first['COUNT(*)'].runtimeType);
-
     return tableCount.first['COUNT(*)'];
   }
 
-  Future<void> sampleQuery() async {
+  // marks a goal as complete; changes the appropriate table and subgoal row
+  Future<void> markGoalAsComplete(SubGoal subgoal) async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
 
     final Database db = await database;
+    String findGoalTitleQuery =
+        'SELECT title FROM Goals WHERE id = ' + subgoal.id.toString();
+    print(findGoalTitleQuery);
+    List<Map<String, Object>> title = await db.rawQuery(findGoalTitleQuery);
+    String formattedGoalTitle =
+        title.first['title'].toString().replaceAll(' ', '_');
+    String completeGoalQuery = 'UPDATE ' +
+        formattedGoalTitle +
+        ' SET completed = 1 WHERE gid = ' +
+        subgoal.gid.toString();
+    db.execute(completeGoalQuery);
+  }
 
-    var result = await db.query('Goals');
-    for (var row in result) {
-      for (var entry in row.entries) {
-        print(entry);
-      }
-    }
+  // mark a goal as uncompleted; changes the appropriate table and subgoal row
+  Future<void> markGoalAsUncompleted(SubGoal subgoal) async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    String findGoalTitleQuery =
+        'SELECT title FROM Goals WHERE id = ' + subgoal.id.toString();
+    List<Map<String, Object>> title = await db.query(findGoalTitleQuery);
+    String formattedGoalTitle =
+        title.first['title'].toString().replaceAll(' ', '_');
+
+    String updateGoalQuery = 'UPDATE ' +
+        formattedGoalTitle +
+        ' SET completed = 0 WHERE gid = ' +
+        subgoal.gid.toString();
+    db.execute(updateGoalQuery);
+  }
+
+  // function when goal is deleted
+  Future<void> deleteGoal(SubGoal subgoal) async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    String findGoalTitleQuery =
+        'SELECT title FROM Goals WHERE id = ' + subgoal.id.toString();
+    List<Map<String, Object>> title = await db.query(findGoalTitleQuery);
+    String formattedGoalTitle =
+        title.first['title'].toString().replaceAll(' ', '_');
+    String deleteGoalTable = 'DROP TABLE ' + formattedGoalTitle;
+    String deleteGoalQuery =
+        'DELETE FROM Goals WHERE id = ' + subgoal.id.toString();
+    db.execute(deleteGoalQuery);
+    db.execute(deleteGoalTable);
   }
 }

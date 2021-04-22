@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +23,8 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _goalTitleController = TextEditingController();
   final _goalDescriptionController = TextEditingController();
+  DateTime startDate;
+  DateTime endDate;
   DateTime startTime;
   DateTime endTime;
 
@@ -35,10 +39,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     'Saturday': false,
     'Sunday': false,
   };
-  // final _usernameController = TextEditingController();
-  // final _emailController = TextEditingController();
-  // final _passwordController = TextEditingController();
-  // final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -55,67 +55,75 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
           )),
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment
-                .centerRight, // 10% of the width, so there are ten blinds.
-            colors: [
-              const Color(0xffB7F8DB),
-              const Color(0xff50A7C2)
-            ], // red to yellow
-            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+      body: new GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment
+                  .centerRight, // 10% of the width, so there are ten blinds.
+              colors: [
+                const Color(0xffB7F8DB),
+                const Color(0xff50A7C2)
+              ], // red to yellow
+              tileMode:
+                  TileMode.repeated, // repeats the gradient over the canvas
+            ),
           ),
-        ),
-        child: Center(
-          child: Container(
-              child: Stack(children: [
-            // Sign Up Form
-            SingleChildScrollView(
-              padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
-              child: Column(children: <Widget>[
-                Form(
-                  key: _formKey,
-                  autovalidateMode: _autoValidate,
-                  child: _addGoalForm(),
-                ),
-                SizedBox(height: 40.0),
-                SizedBox(
-                  width: 300.0,
-                  height: 40.0,
-                  child: OutlinedButton(
-                    child: new Text(
-                      'Add',
-                      style: new TextStyle(fontSize: 17.0, color: Colors.black),
-                    ),
-                    onPressed: _validateInputs,
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.tealAccent),
-                      elevation: MaterialStateProperty.all<double>(10.0),
-                      side: MaterialStateProperty.all<BorderSide>(
-                        BorderSide(width: 3.0, color: Colors.black),
+          child: Center(
+            child: Container(
+                child: Stack(children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
+                child: Column(children: <Widget>[
+                  Form(
+                    key: _formKey,
+                    autovalidateMode: _autoValidate,
+                    child: _addGoalForm(),
+                  ),
+                  SizedBox(height: 40.0),
+                  SizedBox(
+                    width: 300.0,
+                    height: 40.0,
+                    child: OutlinedButton(
+                      child: new Text(
+                        'Add',
+                        style:
+                            new TextStyle(fontSize: 17.0, color: Colors.black),
                       ),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32.0),
-                          side: BorderSide(width: 3, color: Colors.black),
+                      onPressed: _validateInputs,
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.tealAccent),
+                        elevation: MaterialStateProperty.all<double>(10.0),
+                        side: MaterialStateProperty.all<BorderSide>(
+                          BorderSide(width: 3.0, color: Colors.black),
+                        ),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
+                            side: BorderSide(width: 3, color: Colors.black),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-            ),
-          ])),
+                ]),
+              ),
+            ])),
+          ),
         ),
       ),
     );
   }
 
   Widget _addGoalForm() {
-    final format = DateFormat("HH:mm");
+    final timeFormat = DateFormat("HH:mm");
+    final dateFormat = DateFormat("MM/dd/yyyy");
+
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       TextFormField(
         validator: validateGoalTitle,
@@ -136,10 +144,54 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       ),
       Row(
         children: [
+          Flexible(child: Text("Start Date: ")),
+          Flexible(
+            child: DateTimeField(
+              format: dateFormat,
+              onShowPicker: (context, currentValue) async {
+                final time = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime(2100));
+                setState(() {
+                  this.startDate = time;
+                });
+                return time;
+              },
+              
+            ),
+          ),
+          Flexible(child: Text("End Date: ")),
+          Flexible(
+            child: DateTimeField(
+              format: dateFormat,
+              onShowPicker: (context, currentValue) async {
+                final time = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime(2100)); 
+                setState(() {
+                  this.endDate = time;
+                });
+                return time;
+              },
+
+
+            ),
+          )
+        ],
+      ),
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+      ),
+      Row(
+        children: [
           Flexible(child: Text("Start Time: ")),
           Flexible(
             child: DateTimeField(
-              format: format,
+              format: timeFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                   context: context,
@@ -149,7 +201,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                 setState(() {
                   startTime = DateTimeField.convert(time);
                 });
-                print(startTime);
                 return DateTimeField.convert(time);
               },
             ),
@@ -157,7 +208,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
           Flexible(child: Text("End Time: ")),
           Flexible(
             child: DateTimeField(
-              format: format,
+              format: timeFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                   context: context,
@@ -198,6 +249,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
             for (var entry in goalDays.entries) {
               goalDays[entry.key] = values.contains(entry.key);
             }
+
             for (var entry in goalDays.entries) {
               print(entry);
             }
@@ -230,17 +282,19 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     ]);
   }
 
-  void handleOnSelect(List<String> value) {
-    //TODO: Manipulate the List of days selected
-    print('value: $value');
-  }
-
   void _validateInputs() {
     if (_formKey.currentState.validate()) {
-      _addGoal();
-      Navigator.pop(
-        context,
-      );
+      for (var entry in goalDays.entries) {
+        if (entry.value == true) {
+          _addGoal();
+          
+          Navigator.pop(
+            context,
+          ); 
+          return; 
+        }
+      }
+      _showMyDialog();
     } else {
       setState(() {
         _autoValidate = AutovalidateMode.onUserInteraction;
@@ -273,13 +327,41 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       id: goalID,
       title: goalTitle,
       description: goalDescription,
-      startTime: startTime,
-      endTime: endTime,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      startTime: this.startTime,
+      endTime: this.endTime,
       goalDays: goalDays,
       isComplete: false,
     );
     await goalManager.insertGoal(goal);
-    await goalManager.sampleQuery(); // print the contents of the goals table
     print('success!');
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No days are selected'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Please select a day'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

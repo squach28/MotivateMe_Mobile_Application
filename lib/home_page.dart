@@ -1,8 +1,11 @@
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
 import 'package:motivateme_mobile_app/login_page.dart';
 import 'package:motivateme_mobile_app/service/inspire_me.dart';
+import 'package:motivateme_mobile_app/subgoal_widget.dart';
 import 'model/goal.dart';
+import 'model/subgoal.dart';
 import 'service/goal_manager.dart';
 import 'signup_page.dart';
 import 'service/auth.dart';
@@ -109,77 +112,46 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            ListView.builder(
-              // physics: const AlwaysScrollableScrollPhysics(),
-              physics: ClampingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: items.length,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const ListTile(
-                          leading: Icon(Icons.album),
-                          title: Text('The Enchanted Nightingale'),
-                          subtitle: Text(
-                              'Music by Julie Gable. Lyrics by Sidney Stein.'),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            TextButton(
-                              child: const Text('BUY TICKETS'),
-                              onPressed: () {/* ... */},
-                            ),
-                            const SizedBox(width: 8),
-                            TextButton(
-                              child: const Text('LISTEN'),
-                              onPressed: () {/* ... */},
-                            ),
-                            const SizedBox(width: 8),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  background: Container(
-                      padding: EdgeInsets.only(left: 60.0),
-                      alignment: Alignment.centerLeft,
-                      color: Colors.green,
-                      child: Icon(Icons.check)),
-                  secondaryBackground:
-                      Container(color: Colors.red, child: Text("left")),
-                  key: ValueKey<int>(items[index]),
-                  onDismissed: (DismissDirection direction) {
-                    setState(() {
-                      // items.remove(index);
-                      items.removeAt(index);
-                    });
-                  },
-                );
-                // return Dismissible(
-                //   child: ListTile(
-                //     title: Text(
-                //       'Item ${items[index]}',
-                //     ),
-                //   ),
-                //   background:
-                //       Container(color: Colors.green, child: Text("right")),
-                //   secondaryBackground:
-                //       Container(color: Colors.red, child: Text("left")),
-                //   key: ValueKey<int>(items[index]),
-                //   onDismissed: (DismissDirection direction) {
-                //     setState(() {
-                //       // items.remove(index);
-                //       items.removeAt(index);
-                //     });
-                //   },
-                // );
-              },
-            ),
+            FutureBuilder<List<SubGoal>>(
+                future: goalManager.retrieveSubGoalsForToday(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<List<SubGoal>> snapshot) {
+                  if (snapshot.hasData) {
+                    List<SubGoal> subGoals = snapshot.data;
+                    return ListView.builder(
+                      // physics: const AlwaysScrollableScrollPhysics(),
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: subGoals.length,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Dismissible(
+                          child: SubGoalWidget(subgoal: subGoals.elementAt(index),
+                          title: subGoals.elementAt(index).title,
+                          description: subGoals.elementAt(index).description),
+                          background: Container(
+                              padding: EdgeInsets.only(left: 60.0),
+                              alignment: Alignment.centerLeft,
+                              color: Colors.green,
+                              child: Icon(Icons.check)),
+                          secondaryBackground:
+                              Container(color: Colors.red, child: Text("left")),
+                          key: UniqueKey(),
+                          onDismissed: (DismissDirection direction) {
+                            setState(() {
+                              goalManager.markGoalAsComplete(subGoals.elementAt(index));
+                            });
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(
+                          backgroundColor: Colors.green),
+                    );
+                  }
+                })
           ])),
         ),
       ),

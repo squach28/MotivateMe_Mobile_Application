@@ -8,9 +8,11 @@ class AuthService {
   // creates an account for the user with params username, password, and email
   // returns a SignUpResult
   Future<mm.SignUpResult> signUp(
-      String username, String password, String email) async {
+      String username, String password, String email, String firstName, String lastName) async {
     Map<String, String> userAttributes = {
-      'email': email // email is a required attribute for successful sign up
+      'email': email, // email is a required attribute for successful sign up
+      'first_name': firstName,
+      'last_name': lastName,
     };
 
     try {
