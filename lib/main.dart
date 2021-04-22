@@ -1,4 +1,5 @@
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -11,6 +12,11 @@ import 'package:motivateme_mobile_app/amplifyconfiguration.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
   final Future<Database> database =
       openDatabase(join(await getDatabasesPath(), 'motivate_me.db'),
           onCreate: (db, version) {
@@ -19,11 +25,19 @@ void main() async {
     return db.execute(
         "CREATE TABLE Goals(id INTEGER, title TEXT, description TEXT, monday INTEGER, tuesday INTEGER, wednesday INTEGER, thursday INTEGER, friday INTEGER, saturday INTEGER, sunday INTEGER, start_date DATETIME, end_date DATETIME, start_time DATETIME, end_time DATETIME, is_complete INTEGER)");
   }, version: 1);
-  runApp(MyApp());
+  runApp(MyApp(
+    camera: firstCamera,
+  ));
 }
 
 // 1
 class MyApp extends StatefulWidget {
+  final CameraDescription camera;
+
+  MyApp({
+    Key key,
+    @required this.camera,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MyAppState();
 }
