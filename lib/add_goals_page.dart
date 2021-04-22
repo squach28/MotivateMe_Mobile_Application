@@ -159,7 +159,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                 });
                 return time;
               },
-              
             ),
           ),
           Flexible(child: Text("End Date: ")),
@@ -171,14 +170,12 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                     context: context,
                     firstDate: DateTime(1900),
                     initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100)); 
+                    lastDate: DateTime(2100));
                 setState(() {
                   this.endDate = time;
                 });
                 return time;
               },
-
-
             ),
           )
         ],
@@ -287,11 +284,11 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       for (var entry in goalDays.entries) {
         if (entry.value == true) {
           _addGoal();
-          
+          //TODO refresh home page
           Navigator.pop(
             context,
-          ); 
-          return; 
+          );
+          return;
         }
       }
       _showMyDialog();

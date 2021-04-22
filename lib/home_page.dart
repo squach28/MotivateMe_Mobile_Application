@@ -1,4 +1,3 @@
-
 import 'package:amplify_flutter/amplify.dart';
 import 'package:camera/camera.dart';
 
@@ -18,11 +17,11 @@ import 'model/sign_up_result.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  final CameraDescription camera;
+  //final CameraDescription camera;
 
   HomePage({
     Key key,
-    @required this.camera,
+    //@required this.camera,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -31,30 +30,30 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthService authService = AuthService();
   final InspireMeService inspireMeService = InspireMeService();
-  CameraController _controller;
-  Future<void> _initializeControllerFuture;
-  @override
-  void initState() {
-    super.initState();
-    // To display the current output from the Camera,
-    // create a CameraController.
-    _controller = CameraController(
-      // Get a specific camera from the list of available cameras.
-      widget.camera,
-      // Define the resolution to use.
-      ResolutionPreset.medium,
-    );
+  // // CameraController _controller;
+  // // Future<void> _initializeControllerFuture;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // To display the current output from the Camera,
+  //   // create a CameraController.
+  //   // _controller = CameraController(
+  //   //     // Get a specific camera from the list of available cameras.
+  //   //     //widget.camera,
+  //   //     // Define the resolution to use.
+  //   //     //ResolutionPreset.medium,
+  //   //     );
 
-    // Next, initialize the controller. This returns a Future.
-    _initializeControllerFuture = _controller.initialize();
-  }
+  //   // Next, initialize the controller. This returns a Future.
+  //   _initializeControllerFuture = _controller.initialize();
+  // }
 
-  @override
-  void dispose() {
-    // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Dispose of the controller when the widget is disposed.
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 
   List<int> items = List<int>.generate(20, (int index) => index);
 
@@ -64,40 +63,40 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // 2
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              authService.logout();
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LoginPage()));
-            },
-            child: Text('Sign Out'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => TableEventsExample()));
-            },
-            child: Text('Calendar'),
-          ),
-        ],
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [const Color(0xffB7F8DB), const Color(0xff50A7C2)],
-          )),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Home Page'),
+      //   actions: <Widget>[
+      //     TextButton(
+      //       onPressed: () {
+      //         authService.logout();
+      //         Navigator.pushReplacement(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (BuildContext context) => LoginPage()));
+      //       },
+      //       child: Text('Sign Out'),
+      //     ),
+      //     TextButton(
+      //       onPressed: () {
+      //         Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (BuildContext context) => TableEventsExample()));
+      //       },
+      //       child: Text('Calendar'),
+      //     ),
+      //   ],
+      //   automaticallyImplyLeading: false,
+      //   centerTitle: true,
+      //   flexibleSpace: Container(
+      //     decoration: BoxDecoration(
+      //         gradient: LinearGradient(
+      //       begin: Alignment.topLeft,
+      //       end: Alignment.bottomRight,
+      //       colors: [const Color(0xffB7F8DB), const Color(0xff50A7C2)],
+      //     )),
+      //   ),
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -159,8 +158,8 @@ class _HomePageState extends State<HomePage> {
             ),
             FutureBuilder<List<SubGoal>>(
                 future: goalManager.retrieveSubGoalsForToday(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<List<SubGoal>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<SubGoal>> snapshot) {
                   if (snapshot.hasData) {
                     List<SubGoal> subGoals = snapshot.data;
                     return ListView.builder(
@@ -172,11 +171,13 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (BuildContext context, int index) {
                         print(index.toString() +
                             " " +
-                            goals.elementAt(index).hashCode.toString());
+                            subGoals.elementAt(index).hashCode.toString());
                         return Dismissible(
-                          child: SubGoalWidget(subgoal: subGoals.elementAt(index),
-                          title: subGoals.elementAt(index).title,
-                          description: subGoals.elementAt(index).description),
+                          child: SubGoalWidget(
+                              subgoal: subGoals.elementAt(index),
+                              title: subGoals.elementAt(index).title,
+                              description:
+                                  subGoals.elementAt(index).description),
                           background: Container(
                               padding: EdgeInsets.only(left: 60.0),
                               alignment: Alignment.centerLeft,
@@ -187,7 +188,8 @@ class _HomePageState extends State<HomePage> {
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) {
                             setState(() {
-                              goalManager.markGoalAsComplete(subGoals.elementAt(index));
+                              goalManager.markGoalAsComplete(
+                                  subGoals.elementAt(index));
                             });
                           },
                         );
@@ -219,11 +221,11 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                   icon: Icon(Icons.camera_alt),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                TakePictureScreen(camera: widget.camera)));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (BuildContext context) =>
+                    //             TakePictureScreen(camera: widget.camera)));
                   },
                 ),
               ],

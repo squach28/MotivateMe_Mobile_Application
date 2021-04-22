@@ -11,7 +11,16 @@ class Goal {
       goalDays; // map of the goal day and whether it is active on that day
   final bool isComplete;
 
-  Goal({this.id, this.title, this.description, this.startDate, this.endDate, this.startTime, this.endTime, this.goalDays, this.isComplete});
+  Goal(
+      {this.id,
+      this.title,
+      this.description,
+      this.startDate,
+      this.endDate,
+      this.startTime,
+      this.endTime,
+      this.goalDays,
+      this.isComplete});
 
   Map<String, dynamic> toMap() {
     var basicGoalInfo = {
@@ -55,7 +64,7 @@ class Goal {
 
     basicGoalInfo.addAll(formattedGoalDays);
     return basicGoalInfo;
-
+  }
 
   @override
   int get hashCode =>
@@ -69,6 +78,5 @@ class Goal {
   bool operator ==(Object other) {
     // TODO: implement ==
     return identical(this, other) && runtimeType == other.runtimeType;
-
   }
 }
