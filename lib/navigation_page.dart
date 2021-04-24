@@ -13,7 +13,7 @@ class NavigationPage extends StatefulWidget {
 }
 
 class NavigationPageState extends State<NavigationPage> {
-  final List<Widget> pages = [
+  final List<Widget> pages = [ 
     HomePage(),
     TableEventsExample(),
     ProfilePage()
