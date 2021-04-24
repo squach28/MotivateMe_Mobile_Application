@@ -1,27 +1,15 @@
-import 'package:amplify_flutter/amplify.dart';
-import 'package:camera/camera.dart';
-
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
-import 'package:motivateme_mobile_app/calendar.dart';
-import 'package:motivateme_mobile_app/camera.dart';
-import 'package:motivateme_mobile_app/login_page.dart';
+import 'package:motivateme_mobile_app/camera_page.dart';
 import 'package:motivateme_mobile_app/service/inspire_me.dart';
 import 'package:motivateme_mobile_app/subgoal_widget.dart';
-import 'model/goal.dart';
 import 'model/subgoal.dart';
 import 'service/goal_manager.dart';
-import 'signup_page.dart';
 import 'service/auth.dart';
-import 'model/sign_up_result.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  //final CameraDescription camera;
-
   HomePage({
     Key key,
-    //@required this.camera,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -30,30 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final AuthService authService = AuthService();
   final InspireMeService inspireMeService = InspireMeService();
-  // // CameraController _controller;
-  // // Future<void> _initializeControllerFuture;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // To display the current output from the Camera,
-  //   // create a CameraController.
-  //   // _controller = CameraController(
-  //   //     // Get a specific camera from the list of available cameras.
-  //   //     //widget.camera,
-  //   //     // Define the resolution to use.
-  //   //     //ResolutionPreset.medium,
-  //   //     );
-
-  //   // Next, initialize the controller. This returns a Future.
-  //   _initializeControllerFuture = _controller.initialize();
-  // }
-
-  // @override
-  // void dispose() {
-  //   // Dispose of the controller when the widget is disposed.
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
+  TextEditingController _textFieldController = TextEditingController();
 
   List<int> items = List<int>.generate(20, (int index) => index);
 
@@ -69,40 +34,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // 2
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Home Page'),
-      //   actions: <Widget>[
-      //     TextButton(
-      //       onPressed: () {
-      //         authService.logout();
-      //         Navigator.pushReplacement(
-      //             context,
-      //             MaterialPageRoute(
-      //                 builder: (BuildContext context) => LoginPage()));
-      //       },
-      //       child: Text('Sign Out'),
-      //     ),
-      //     TextButton(
-      //       onPressed: () {
-      //         Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //                 builder: (BuildContext context) => TableEventsExample()));
-      //       },
-      //       child: Text('Calendar'),
-      //     ),
-      //   ],
-      //   automaticallyImplyLeading: false,
-      //   centerTitle: true,
-      //   flexibleSpace: Container(
-      //     decoration: BoxDecoration(
-      //         gradient: LinearGradient(
-      //       begin: Alignment.topLeft,
-      //       end: Alignment.bottomRight,
-      //       colors: [const Color(0xffB7F8DB), const Color(0xff50A7C2)],
-      //     )),
-      //   ),
-      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -136,8 +67,7 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.topCenter,
               child: TextButton(
                 onPressed: () async {
-                  var url =
-                      await inspireMeService.inspireMe(); // TODO delete this
+                  var url = await inspireMeService.inspireMe();
                   return showDialog<void>(
                       context: context,
                       barrierDismissible: false,
@@ -194,6 +124,12 @@ class _HomePageState extends State<HomePage> {
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) async {
                             await removeSubGoal(subGoals, index);
+                            if (direction == DismissDirection.startToEnd) {
+                              completedGoals();
+                            }
+                            if (direction == DismissDirection.endToStart) {
+                              incompleteGoals();
+                            }
                           },
                         );
                       },
@@ -211,24 +147,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> completedGoals() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: Text('Congrats!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.camera_alt),
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (BuildContext context) =>
-                    //             TakePictureScreen(camera: widget.camera)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => CameraPage()));
                   },
                 ),
               ],
@@ -236,13 +171,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Cancel"),
+              child: Text('Skip'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -251,5 +180,64 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  String valueText;
+  String codeDialog;
+  Future<void> incompleteGoals() async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Incomplete Goals'),
+            content: TextFormField(
+              onChanged: (value) {
+                setState(() {
+                  valueText = value;
+                });
+              },
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: _textFieldController,
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                hintText: 'Reason for not completing goal',
+                contentPadding:
+                    new EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 5.0, color: Colors.red),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text("Skip"),
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green)),
+                onPressed: () {
+                  setState(() {
+                    codeDialog = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+                child: Text('Submit'),
+              ),
+            ],
+          );
+        });
   }
 }
