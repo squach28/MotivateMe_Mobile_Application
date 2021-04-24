@@ -63,8 +63,20 @@ class GoalManager {
           'path_to_picture': null,
         });
         counter++;
+        print('added the goal!');
       }
       currentDate = currentDate.add(Duration(days: 1));
+    }
+
+    if (currentDate == goal.endDate) {
+      await db.insert(formattedGoalTitle, {
+        'gid': counter,
+        'id': goal.id,
+        'date': currentDate.toIso8601String(),
+        'completed': null,
+        'comment': null,
+        'path_to_picture': null,
+      });
     }
     print('goal table initialized!');
   }
@@ -101,6 +113,7 @@ class GoalManager {
       );
     });
   }
+
   // retrieves the list of sub goals that the user hasn't completed
   // returns a list of subgoals
   Future<List<SubGoal>> retrieveSubGoalsForToday() async {
@@ -111,49 +124,95 @@ class GoalManager {
     String today = DateFormat.EEEE().format(DateTime.now());
     List<SubGoal> subGoals = [];
     String retrieveGoalDetailsForTodayQuery =
-        'SELECT id, title, description FROM Goals WHERE ' + today + ' = 1'; // check the goals table for goals that occur on the current day
+        'SELECT id, title, description FROM Goals WHERE ' +
+            today +
+            ' = 1'; // check the goals table for goals that occur on the current day
     List<Map<String, Object>> result =
         await db.rawQuery(retrieveGoalDetailsForTodayQuery);
-    for (var goal in result) { // look through the subgoals table for the goal that is supposed to occur today
+    for (var goal in result) {
+      // look through the subgoals table for the goal that is supposed to occur today
       String formattedGoalTitle = goal['title'].toString().replaceAll(' ', '_');
       String currentMonth = DateTime.now().month.toString();
-      if (DateTime.now().month < 10) { // format month to be two digits if month is less than 10, ie '01', '02', etc.
+      if (DateTime.now().month < 10) {
+        // format month to be two digits if month is less than 10, ie '01', '02', etc.
         currentMonth = '0' + DateTime.now().month.toString();
       }
-      String currentDay = DateTime.now().year.toString() + 
+      String currentDay = DateTime.now().year.toString() +
           '-' +
           currentMonth +
           '-' +
           DateTime.now().day.toString() +
-          'T00:00:00.000'; // ISO8601 format string for the date 
+          'T00:00:00.000'; // ISO8601 format string for the date
       String retrieveSubGoalsQuery = 'SELECT * FROM ' +
           formattedGoalTitle +
           ' WHERE date = ' +
           '"' +
           currentDay +
-          '"' + 
+          '"' +
           ' AND completed IS NULL'; // query to find the specific goal for today that isn't completed
       print(retrieveSubGoalsQuery);
       List<Map<String, Object>> subGoalResult =
           await db.rawQuery(retrieveSubGoalsQuery);
-      if(subGoalResult.length == 0) { // ignore the subgoal if it is already completed
+      if (subGoalResult.length == 0) {
+        // ignore the subgoal if it is already completed
         print('list has zero elements');
         continue;
       }
       Map<String, Object> subGoal = subGoalResult.first;
-      
+
       SubGoal subGoalToAdd = SubGoal(
-        gid: subGoal['gid'],
-        id: subGoal['id'],
-        date: DateTime.parse(subGoal['date']),
-        completed: subGoal['completed'] == 1 ? true : false,
-        comment: subGoal['comment'],
-        pathToPicture: subGoal['path_to_picture'],
-        title: goal['title'],
-        description: goal['description']
-      );
+          gid: subGoal['gid'],
+          id: subGoal['id'],
+          date: DateTime.parse(subGoal['date']),
+          completed: subGoal['completed'] == 1 ? true : false,
+          comment: subGoal['comment'],
+          pathToPicture: subGoal['path_to_picture'],
+          title: goal['title'],
+          description: goal['description']);
       subGoals.add(subGoalToAdd);
     }
+    return subGoals;
+  }
+
+  // retrieves all subgoals that the user currently has
+  Future<List<SubGoal>> retrieveSubGoals() async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+
+    final Database db = await database;
+    List<SubGoal> subGoals = [];
+    String retrieveGoalDetailsQuery =
+        'SELECT id, title, description FROM Goals'; // check the goals table for goals that occur on the current day
+    List<Map<String, Object>> result =
+        await db.rawQuery(retrieveGoalDetailsQuery);
+    for (var goal in result) {
+      // look through the subgoals table for the goal that is supposed to occur today
+      String formattedGoalTitle = goal['title'].toString().replaceAll(' ', '_');
+      String retrieveSubGoalsQuery = 'SELECT * FROM ' +
+          formattedGoalTitle; // query to find the specific goal for today that isn't completed
+      print(retrieveSubGoalsQuery);
+      List<Map<String, Object>> subGoalResult =
+          await db.rawQuery(retrieveSubGoalsQuery);
+      if (subGoalResult.length == 0) {
+        // ignore the subgoal if it is already completed
+        print('list has zero elements');
+        continue;
+      }
+
+      for (var subGoal in subGoalResult) {
+        SubGoal subGoalToAdd = SubGoal(
+            gid: subGoal['gid'],
+            id: subGoal['id'],
+            date: DateTime.parse(subGoal['date']),
+            completed: subGoal['completed'] == 1 ? true : false,
+            comment: subGoal['comment'],
+            pathToPicture: subGoal['path_to_picture'],
+            title: goal['title'],
+            description: goal['description']);
+        subGoals.add(subGoalToAdd);
+      }
+    }
+    print('length from goal manager: ' + subGoals.length.toString());
     return subGoals;
   }
 
