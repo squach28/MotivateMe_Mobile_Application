@@ -123,9 +123,10 @@ class _HomePageState extends State<HomePage> {
                               Container(color: Colors.red, child: Text("left")),
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) async {
+                            var markedSubGoal = subGoals.elementAt(index);
                             await removeSubGoal(subGoals, index);
                             if (direction == DismissDirection.startToEnd) {
-                              completedGoals();
+                              completedGoals(markedSubGoal);
                             }
                             if (direction == DismissDirection.endToStart) {
                               incompleteGoals();
@@ -147,7 +148,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> completedGoals() async {
+  Future<void> completedGoals(SubGoal subGoal) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -163,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => CameraPage()));
+                            builder: (BuildContext context) => CameraPage(subGoal: subGoal)));
                   },
                 ),
               ],

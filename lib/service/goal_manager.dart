@@ -282,4 +282,16 @@ class GoalManager {
     db.execute(deleteGoalQuery);
     db.execute(deleteGoalTable);
   }
+
+  // updates the subgoal's path to picture 
+  // params: subgoal - the subgoal to set the path to
+  //         imagePath - the path to set the subgoal's attribute to
+  Future<void> savePicturePath(SubGoal subgoal, String imagePath) async {
+        final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    String formattedGoalTitle = subgoal.title.replaceAll(' ', '_');
+    String setSubGoalPathQuery = 'UPDATE ' + formattedGoalTitle + ' SET path_to_picture = ' + "'" + imagePath + "'" + 'WHERE gid = ' + subgoal.gid.toString();
+    await db.execute(setSubGoalPathQuery);
+  }
 }
