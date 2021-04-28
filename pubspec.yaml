@@ -30,7 +30,7 @@ dependencies:
   amplify_flutter: '<1.0.0'
   amplify_auth_cognito: '<1.0.0'
   amplify_storage_s3: '<1.0.0'
-  table_calendar: ^3.0.0
+  table_calendar: ^2.2.3
   sqflite:
   path:
   intl: '^0.17.0'
