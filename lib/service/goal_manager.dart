@@ -49,10 +49,8 @@ class GoalManager {
     int counter = 1;
     DateTime currentDate = goal.startDate;
     String formattedGoalTitle = goal.title.toString().replaceAll(' ', '_');
-
+    String day = DateFormat.EEEE().format(currentDate);
     while (currentDate != goal.endDate) {
-      String day = DateFormat.EEEE().format(currentDate);
-
       if (goal.goalDays[day] == true) {
         await db.insert(formattedGoalTitle, {
           'gid': counter,
@@ -68,7 +66,7 @@ class GoalManager {
       currentDate = currentDate.add(Duration(days: 1));
     }
 
-    if (currentDate == goal.endDate) {
+    if (currentDate == goal.endDate && goal.goalDays[day] == true) {
       await db.insert(formattedGoalTitle, {
         'gid': counter,
         'id': goal.id,
@@ -283,15 +281,22 @@ class GoalManager {
     db.execute(deleteGoalTable);
   }
 
-  // updates the subgoal's path to picture 
+  // updates the subgoal's path to picture
   // params: subgoal - the subgoal to set the path to
   //         imagePath - the path to set the subgoal's attribute to
   Future<void> savePicturePath(SubGoal subgoal, String imagePath) async {
-        final Future<Database> database =
+    final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
     String formattedGoalTitle = subgoal.title.replaceAll(' ', '_');
-    String setSubGoalPathQuery = 'UPDATE ' + formattedGoalTitle + ' SET path_to_picture = ' + "'" + imagePath + "'" + 'WHERE gid = ' + subgoal.gid.toString();
+    String setSubGoalPathQuery = 'UPDATE ' +
+        formattedGoalTitle +
+        ' SET path_to_picture = ' +
+        "'" +
+        imagePath +
+        "'" +
+        'WHERE gid = ' +
+        subgoal.gid.toString();
     await db.execute(setSubGoalPathQuery);
   }
 }
