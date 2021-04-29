@@ -67,7 +67,7 @@ class CameraPageState extends State<CameraPage> {
             try {
               await _initializeControllerFuture;
               final image = await _controller.takePicture();
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => DisplayPictureScreen(
@@ -112,7 +112,12 @@ class DisplayPictureScreen extends StatelessWidget {
                       child:
                           Text('Retry', style: TextStyle(color: Colors.white)),
                       onPressed: () async {
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CameraPage(
+                                      subGoal: this.subGoal,
+                                    )));
                       })),
               Expanded(
                   child: TextButton(
@@ -141,7 +146,8 @@ class DisplayPictureScreen extends StatelessWidget {
                           goalManager.savePicturePath(
                               this.subGoal, subGoalPicturePath);
                         });
-                        Navigator.popUntil(context, ModalRoute.withName('/'));
+                        // Navigator.popUntil(context, ModalRoute.withName('/'));
+                        Navigator.pop(context, true);
                       })),
             ])),
           ]),
