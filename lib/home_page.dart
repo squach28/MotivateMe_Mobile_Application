@@ -127,11 +127,14 @@ class _HomePageState extends State<HomePage> {
                           secondaryBackground:
                               Container(color: Colors.red, child: Text("left")),
                           key: UniqueKey(),
-                          onDismissed: (DismissDirection direction) async {
+                          onDismissed: (DismissDirection direction) {
                             var markedSubGoal = subGoals.elementAt(index);
-                            await removeSubGoal(subGoals, index);
+                            removeSubGoal(subGoals, index);
 
                             if (direction == DismissDirection.startToEnd) {
+                              setState(() {
+                                removeSubGoal(subGoals, index);
+                              });
                               completedGoals(markedSubGoal);
                             }
                             if (direction == DismissDirection.endToStart) {
@@ -170,7 +173,12 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => CameraPage(subGoal: subGoal)));
+                            builder: (BuildContext context) =>
+                                CameraPage(subGoal: subGoal))).then((value) {
+                      print("value is true");
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    });
                   },
                 ),
               ],
