@@ -37,9 +37,14 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => AddGoalsPage()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => AddGoalsPage()))
+              .then((value) {
+            if (value == true) {
+              setState(() {});
+            }
+          });
         },
         child: const Icon(Icons.add),
         backgroundColor: Colors.lightGreen,
@@ -122,8 +127,8 @@ class _HomePageState extends State<HomePage> {
                           secondaryBackground:
                               Container(color: Colors.red, child: Text("left")),
                           key: UniqueKey(),
-                          onDismissed: (DismissDirection direction) async {
-                            await removeSubGoal(subGoals, index);
+                          onDismissed: (DismissDirection direction) {
+                            removeSubGoal(subGoals, index);
                             if (direction == DismissDirection.startToEnd) {
                               completedGoals();
                             }

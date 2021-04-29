@@ -285,9 +285,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
         if (entry.value == true) {
           _addGoal();
           //TODO refresh home page
-          Navigator.pop(
-            context,
-          );
+          Navigator.pop(context, true);
           return;
         }
       }
