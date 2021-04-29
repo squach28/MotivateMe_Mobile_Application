@@ -1,9 +1,15 @@
 import 'dart:io';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:motivateme_mobile_app/model/subgoal.dart';
+import 'package:motivateme_mobile_app/service/goal_manager.dart';
 
 class CameraPage extends StatefulWidget {
+  final SubGoal subGoal;
+
+  CameraPage({Key key, this.subGoal}) : super(key: key);
+
   CameraPageState createState() => CameraPageState();
 }
 
@@ -66,6 +72,7 @@ class CameraPageState extends State<CameraPage> {
                   MaterialPageRoute(
                       builder: (context) => DisplayPictureScreen(
                             imagePath: image?.path,
+                            subGoal: widget.subGoal,
                           )));
             } catch (e) {
               print(e);
@@ -77,19 +84,67 @@ class CameraPageState extends State<CameraPage> {
 
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final goalManager = GoalManager();
+  final SubGoal subGoal;
 
-  const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+  DisplayPictureScreen({Key key, this.imagePath, this.subGoal})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        Image.file(File(imagePath)),
-        Expanded(child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Expanded(child: TextButton(child: Text('Discard'), onPressed: () {})),
-          Expanded(child: TextButton(child: Text('Submit'), onPressed: () {})),
-        ])),
-      ]),
-    );
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          child: Column(children: [
+            Container(
+                color: Colors.black,
+                child: Image.file(File(imagePath), scale: 0.25)),
+            //  height: MediaQuery.of(context).size.height / 2,
+            //  width: MediaQuery.of(context).size.width / 2)),
+            Expanded(
+                child:
+                    Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              Expanded(
+                  child: TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red)),
+                      child:
+                          Text('Retry', style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      })),
+              Expanded(
+                  child: TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.green)),
+                      child:
+                          Text('Submit', style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        Directory appDocDirectory =
+                            await getApplicationDocumentsDirectory();
+                        String formattedGoalTitle =
+                            this.subGoal.title.replaceAll(' ', '_');
+                        Directory(
+                                appDocDirectory.path + '/' + formattedGoalTitle)
+                            .create(recursive: true)
+                            .then((Directory directory) async {
+                          File subGoalPicture = new File(imagePath);
+                          String subGoalPicturePath = directory.path +
+                              '/' +
+                              formattedGoalTitle +
+                              this.subGoal.gid.toString() +
+                              '.jpg';
+                          subGoalPicture.copy(subGoalPicturePath);
+                          print('Path of new dir: ' + directory.path);
+                          goalManager.savePicturePath(
+                              this.subGoal, subGoalPicturePath);
+                        });
+                        Navigator.popUntil(context, ModalRoute.withName('/'));
+                      })),
+            ])),
+          ]),
+        ));
   }
 }
