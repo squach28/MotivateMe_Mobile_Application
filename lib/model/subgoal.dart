@@ -7,8 +7,9 @@ class SubGoal {
   final String pathToPicture;
   String title;
   String description;
+  String timeFrame;
 
-  SubGoal({this.gid, this.id, this.date, this.completed, this.comment, this.pathToPicture, this.title = '', this.description = ''});
+  SubGoal({this.gid, this.id, this.date, this.completed, this.comment, this.pathToPicture, this.title = '', this.description = '', this.timeFrame=''});
   
 
   Map<String, dynamic> toMap() {

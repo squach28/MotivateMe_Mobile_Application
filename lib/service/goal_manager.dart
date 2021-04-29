@@ -180,7 +180,7 @@ class GoalManager {
     final Database db = await database;
     List<SubGoal> subGoals = [];
     String retrieveGoalDetailsQuery =
-        'SELECT id, title, description FROM Goals'; // check the goals table for goals that occur on the current day
+        'SELECT id, title, description, start_time, end_time FROM Goals'; // check the goals table for goals that occur on the current day
     List<Map<String, Object>> result =
         await db.rawQuery(retrieveGoalDetailsQuery);
     for (var goal in result) {
@@ -198,6 +198,10 @@ class GoalManager {
       }
 
       for (var subGoal in subGoalResult) {
+        String startTime = DateFormat('h:mma').format(DateTime.parse(goal['start_time']));
+        String endTime = DateFormat('h:mma').format(DateTime.parse(goal['end_time']));
+        String timeFrame = startTime + ' to ' + endTime;
+        print(timeFrame);
         SubGoal subGoalToAdd = SubGoal(
             gid: subGoal['gid'],
             id: subGoal['id'],
@@ -206,7 +210,8 @@ class GoalManager {
             comment: subGoal['comment'],
             pathToPicture: subGoal['path_to_picture'],
             title: goal['title'],
-            description: goal['description']);
+            description: goal['description'],
+            timeFrame: timeFrame);
         subGoals.add(subGoalToAdd);
       }
     }

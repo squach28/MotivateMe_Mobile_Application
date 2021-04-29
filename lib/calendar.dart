@@ -96,11 +96,9 @@ class _TableEventsExampleState extends State<TableEventsExample> {
                         itemBuilder: (context, index) {
                           return ListTile(
                             title: Text(_selectedEvents.elementAt(index).title),
-                            //TODO fetch time from goals table
                             trailing: Text(_selectedEvents
                                 .elementAt(index)
-                                .date
-                                .toString()),
+                                .timeFrame),
                           );
                         }))
               ]);
