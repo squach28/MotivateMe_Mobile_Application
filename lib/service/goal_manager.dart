@@ -246,8 +246,8 @@ class GoalManager {
     db.execute(completeGoalQuery);
   }
 
-  // mark a goal as uncompleted; changes the appropriate table and subgoal row
-  Future<void> markGoalAsUncompleted(SubGoal subgoal) async {
+  // mark a goal as incompleted; changes the appropriate table and subgoal row
+  Future<void> markGoalAsIncomplete(SubGoal subgoal) async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;

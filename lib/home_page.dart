@@ -175,9 +175,14 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 CameraPage(subGoal: subGoal))).then((value) {
-                      print("value is true");
-                      Navigator.of(context).pop();
-                      setState(() {});
+                      print('value: ' + value.toString());
+                      if (value == true) {
+                        print("value is true");
+                        Navigator.of(context).pop();
+                        setState(() {});
+                      } else {
+
+                      }
                     });
                   },
                 ),
@@ -189,6 +194,9 @@ class _HomePageState extends State<HomePage> {
               child: Text('Skip'),
               onPressed: () {
                 Navigator.of(context).pop();
+                setState(() {
+
+                });
               },
             ),
           ],

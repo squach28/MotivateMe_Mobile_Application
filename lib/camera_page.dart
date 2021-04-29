@@ -67,13 +67,18 @@ class CameraPageState extends State<CameraPage> {
             try {
               await _initializeControllerFuture;
               final image = await _controller.takePicture();
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => DisplayPictureScreen(
                             imagePath: image?.path,
                             subGoal: widget.subGoal,
-                          )));
+                          ))).then((value) {
+                            print('camera page value: ' + value.toString());
+                            if(value == true) {
+                              Navigator.pop(context, true);
+                            }
+                          });
             } catch (e) {
               print(e);
             }
@@ -112,12 +117,7 @@ class DisplayPictureScreen extends StatelessWidget {
                       child:
                           Text('Retry', style: TextStyle(color: Colors.white)),
                       onPressed: () async {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CameraPage(
-                                      subGoal: this.subGoal,
-                                    )));
+                        Navigator.pop(context, false);
                       })),
               Expanded(
                   child: TextButton(
