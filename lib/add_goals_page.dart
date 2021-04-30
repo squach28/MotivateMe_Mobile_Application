@@ -1,13 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:motivateme_mobile_app/model/goal.dart';
-import 'login_page.dart';
-import 'home_page.dart';
-import 'service/auth.dart';
-import 'model/sign_up_result.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'service/goal_manager.dart';
@@ -151,7 +145,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
                     context: context,
-                    firstDate: DateTime(1900),
+                    firstDate: DateTime.now(),
                     initialDate: currentValue ?? DateTime.now(),
                     lastDate: DateTime(2100));
                 setState(() {
@@ -168,8 +162,9 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
                     context: context,
-                    firstDate: DateTime(1900),
-                    initialDate: currentValue ?? DateTime.now(),
+                    firstDate: DateTime.now(),
+                    initialDate: currentValue ??
+                        DateTime.now().add(const Duration(days: 7)),
                     lastDate: DateTime(2100));
                 setState(() {
                   this.endDate = time;
