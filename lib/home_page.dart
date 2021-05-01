@@ -78,12 +78,12 @@ class _HomePageState extends State<HomePage> {
                       barrierDismissible: false,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('AWS Test'),
+                          title: Text('You are now... inspired'),
                           content:
                               SingleChildScrollView(child: Image.network(url)),
                           actions: [
                             TextButton(
-                                child: Text('Very Nice'),
+                                child: Text('Very Good'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 })
