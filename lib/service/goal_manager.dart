@@ -131,29 +131,32 @@ class GoalManager {
       // look through the subgoals table for the goal that is supposed to occur today
       String formattedGoalTitle = goal['title'].toString().replaceAll(' ', '_');
       String currentMonth = DateTime.now().month.toString();
+      String currentDay = DateTime.now().day.toString();
       if (DateTime.now().month < 10) {
         // format month to be two digits if month is less than 10, ie '01', '02', etc.
         currentMonth = '0' + DateTime.now().month.toString();
       }
-      String currentDay = DateTime.now().year.toString() +
+      if(DateTime.now().day < 10) {
+        currentDay = '0' + DateTime.now().day.toString();
+      }
+      String today = DateTime.now().year.toString() +
           '-' +
           currentMonth +
           '-' +
-          DateTime.now().day.toString() +
+          currentDay +
           'T00:00:00.000'; // ISO8601 format string for the date
       String retrieveSubGoalsQuery = 'SELECT * FROM ' +
           formattedGoalTitle +
           ' WHERE date = ' +
           '"' +
-          currentDay +
-          '"' +
+          today +
+          '"' + 
           ' AND completed IS NULL'; // query to find the specific goal for today that isn't completed
       print(retrieveSubGoalsQuery);
       List<Map<String, Object>> subGoalResult =
           await db.rawQuery(retrieveSubGoalsQuery);
       if (subGoalResult.length == 0) {
         // ignore the subgoal if it is already completed
-        print('list has zero elements');
         continue;
       }
       Map<String, Object> subGoal = subGoalResult.first;
@@ -169,6 +172,7 @@ class GoalManager {
           description: goal['description']);
       subGoals.add(subGoalToAdd);
     }
+    print('length of subgoals for today!!!' + subGoals.length.toString());
     return subGoals;
   }
 
@@ -242,7 +246,6 @@ class GoalManager {
     final Database db = await database;
     String findGoalTitleQuery =
         'SELECT title FROM Goals WHERE id = ' + subgoal.id.toString();
-    print(findGoalTitleQuery);
     List<Map<String, Object>> title = await db.rawQuery(findGoalTitleQuery);
     String formattedGoalTitle =
         title.first['title'].toString().replaceAll(' ', '_');
@@ -260,7 +263,7 @@ class GoalManager {
     final Database db = await database;
     String findGoalTitleQuery =
         'SELECT title FROM Goals WHERE id = ' + subgoal.id.toString();
-    List<Map<String, Object>> title = await db.query(findGoalTitleQuery);
+    List<Map<String, Object>> title = await db.rawQuery(findGoalTitleQuery);
     String formattedGoalTitle =
         title.first['title'].toString().replaceAll(' ', '_');
 
@@ -269,6 +272,20 @@ class GoalManager {
         ' SET completed = 0 WHERE gid = ' +
         subgoal.gid.toString();
     db.execute(updateGoalQuery);
+  }
+
+  Future<void> setCommentForSubGoal(SubGoal subGoal, String comment) async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+        String findGoalTitleQuery =
+        'SELECT title FROM Goals WHERE id = ' + subGoal.id.toString();
+    List<Map<String, Object>> title = await db.rawQuery(findGoalTitleQuery);
+    String formattedGoalTitle =
+        title.first['title'].toString().replaceAll(' ', '_');
+    String setCommentQuery = 'UPDATE ' + formattedGoalTitle + ' SET comment = ' +
+    '"' + comment + '"'+ ' WHERE gid = ' + subGoal.gid.toString(); 
+    db.execute(setCommentQuery);
   }
 
   // function when goal is deleted
@@ -357,9 +374,9 @@ class GoalManager {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-    var subGoals = await db.query('hi');
+    var subGoals = await db.query('tt');
     for (var subGoal in subGoals) {
-      print(subGoal['path_to_picture'].toString());
+      print(subGoal['date'].toString());
     }
   }
 }

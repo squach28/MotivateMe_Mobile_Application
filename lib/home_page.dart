@@ -1,3 +1,4 @@
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
 import 'package:motivateme_mobile_app/camera_page.dart';
@@ -24,9 +25,14 @@ class _HomePageState extends State<HomePage> {
 
   final GoalManager goalManager = GoalManager();
 
-  Future<void> removeSubGoal(List<SubGoal> subGoals, int index) async {
+  Future<void> removeSubGoal(
+      List<SubGoal> subGoals, int index, bool completed) async {
     Future.delayed(Duration(milliseconds: 500)).then((_) {
-      goalManager.markGoalAsComplete(subGoals.elementAt(index));
+      if (completed) {
+        goalManager.markGoalAsComplete(subGoals.elementAt(index));
+      } else {
+        goalManager.markGoalAsIncomplete(subGoals.elementAt(index));
+      }
     });
   }
 
@@ -67,6 +73,19 @@ class _HomePageState extends State<HomePage> {
           physics: BouncingScrollPhysics(),
           child: Center(
               child: Column(children: [
+            /*
+              FutureBuilder(
+                future: Amplify.Auth.fetchUserAttributes(),
+                builder: (context, snapshot) { // TODO display good morning, afternoon, or night
+                  if(snapshot.hasData) {
+                    DateTime now = DateTime.now();
+                    DateTime morning = DateTime.
+                    if(now.isAfter(runtimeType)) {
+
+                    }
+                  }
+                }
+              ), */
             Container(
               padding: EdgeInsets.only(top: 10.0),
               alignment: Alignment.topCenter,
@@ -102,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<SubGoal>> snapshot) {
                   if (snapshot.hasData) {
+                    goalManager.sampleQuery();
                     List<SubGoal> subGoals = snapshot.data;
                     return ListView.builder(
                       // physics: const AlwaysScrollableScrollPhysics(),
@@ -129,16 +149,20 @@ class _HomePageState extends State<HomePage> {
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) {
                             var markedSubGoal = subGoals.elementAt(index);
-                            removeSubGoal(subGoals, index);
 
                             if (direction == DismissDirection.startToEnd) {
+                              removeSubGoal(subGoals, index, true);
                               setState(() {
-                                removeSubGoal(subGoals, index);
+                                removeSubGoal(subGoals, index, true);
                               });
                               completedGoals(markedSubGoal);
                             }
                             if (direction == DismissDirection.endToStart) {
-                              incompleteGoals();
+                              removeSubGoal(subGoals, index, false);
+                              setState(() {
+                                removeSubGoal(subGoals, index, false);
+                              });
+                              incompleteGoals(markedSubGoal);
                             }
                           },
                         );
@@ -180,9 +204,7 @@ class _HomePageState extends State<HomePage> {
                         print("value is true");
                         Navigator.of(context).pop();
                         setState(() {});
-                      } else {
-
-                      }
+                      } else {}
                     });
                   },
                 ),
@@ -194,9 +216,7 @@ class _HomePageState extends State<HomePage> {
               child: Text('Skip'),
               onPressed: () {
                 Navigator.of(context).pop();
-                setState(() {
-
-                });
+                setState(() {});
               },
             ),
           ],
@@ -207,7 +227,7 @@ class _HomePageState extends State<HomePage> {
 
   String valueText;
   String codeDialog;
-  Future<void> incompleteGoals() async {
+  Future<void> incompleteGoals(SubGoal subGoal) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -254,6 +274,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   setState(() {
                     codeDialog = valueText;
+                    goalManager.setCommentForSubGoal(subGoal, codeDialog);
                     Navigator.pop(context);
                   });
                 },

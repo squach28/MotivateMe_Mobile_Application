@@ -23,20 +23,32 @@ class CollagePageState extends State<CollagePage> {
             if (snapshot.hasData) {
               for (var subGoal in listOfSubgoals.entries) {
                 List<Widget> images = [];
+
                 for (var goal in subGoal.value) {
-                  if (goal.completed && goal.pathToPicture != null) {
+                  print('goal completed: ' + goal.completed.toString());
+                  if(goal.completed == null) {
+                    continue;
+                  } else if (goal.completed && goal.pathToPicture != null) {
                     images.add(Image.file(File(goal.pathToPicture)));
                     images.add(
                         Text('You completed ' + subGoal.key + ' this week!'));
                     completedGoalsToDisplay.add(Column(
                       children: images,
                     ));
-                  } else if(goal.completed) {
-                    completedGoalsToDisplay.add(Text('You completed ' + goal.title + ' this week!'));
-                  } else if(!goal.completed && goal.comment != null) {
-                    incompleteGoalsToDisplay.add(Text("You didn't complete " + goal.title +' due to ' + goal.comment + ' this week.'));
+                  } else if (goal.completed) {
+                    completedGoalsToDisplay.add(
+                        Text('You completed ' + goal.title + ' this week!'));
+                  } else if (!goal.completed && goal.comment != null) {
+                    incompleteGoalsToDisplay.add(Text("You didn't complete " +
+                        goal.title +
+                        ' due to ' +
+                        goal.comment +
+                        ' this week.'));
                   } else {
-                    incompleteGoalsToDisplay.add(Text("You weren't able to complete " + goal.title + ' this week.'));
+                    incompleteGoalsToDisplay.add(Text(
+                        "You weren't able to complete " +
+                            goal.title +
+                            ' this week.'));
                   }
                 }
               }
