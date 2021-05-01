@@ -198,8 +198,10 @@ class GoalManager {
       }
 
       for (var subGoal in subGoalResult) {
-        String startTime = DateFormat('h:mma').format(DateTime.parse(goal['start_time']));
-        String endTime = DateFormat('h:mma').format(DateTime.parse(goal['end_time']));
+        String startTime =
+            DateFormat('h:mma').format(DateTime.parse(goal['start_time']));
+        String endTime =
+            DateFormat('h:mma').format(DateTime.parse(goal['end_time']));
         String timeFrame = startTime + ' to ' + endTime;
         print(timeFrame);
         SubGoal subGoalToAdd = SubGoal(
@@ -294,14 +296,62 @@ class GoalManager {
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
     String formattedGoalTitle = subgoal.title.replaceAll(' ', '_');
+    print(imagePath);
     String setSubGoalPathQuery = 'UPDATE ' +
         formattedGoalTitle +
         ' SET path_to_picture = ' +
         "'" +
         imagePath +
         "'" +
-        'WHERE gid = ' +
+        ' WHERE gid = ' +
         subgoal.gid.toString();
+    print(setSubGoalPathQuery);
     await db.execute(setSubGoalPathQuery);
+  }
+
+  Future<List<SubGoal>> retrieveSubGoalsForWeek(DateTime date) async {
+    print('getting the goals for the week!');
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+
+    int daysUntilMonday = date.weekday - DateTime.monday;
+    int daysUntilSunday = DateTime.sunday - date.weekday;
+    DateTime startOfWeek = date.subtract(Duration(days: daysUntilMonday));
+    DateTime endOfWeek = date.add(Duration(days: daysUntilSunday));
+    List<SubGoal> subGoalsForWeek = [];
+    var goals = await db.query('Goals');
+    for (var goal in goals) {
+      String formattedTitle = goal['title'].toString().replaceAll(' ', '_');
+      var subGoals = await db.query(formattedTitle);
+      for (var subGoal in subGoals) {
+        DateTime subGoalDate = DateTime.parse(subGoal['date']);
+        if(subGoalDate.isBefore(endOfWeek) && subGoalDate.isAfter(startOfWeek)) {
+                  SubGoal sub = SubGoal(
+          gid: subGoal['gid'],
+          id: goal['id'],
+          date: DateTime.parse(subGoal['date']),
+          completed: subGoal['completed'] == null ? null: subGoal['completed'] == 1 ? true : false,
+          pathToPicture: subGoal['path_to_picture'],
+          title: goal['title'],
+        );
+        subGoalsForWeek.add(sub);
+        } else {
+          continue;
+        }
+      }
+    }
+    return subGoalsForWeek;
+  }
+
+  Future<void> sampleQuery() async {
+        final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    var subGoals = await db.query('hi');
+    for(var subGoal in subGoals) {
+      print(subGoal['path_to_picture'].toString());
+    }
+
   }
 }

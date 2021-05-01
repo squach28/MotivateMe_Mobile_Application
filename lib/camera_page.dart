@@ -146,6 +146,7 @@ class DisplayPictureScreen extends StatelessWidget {
                           goalManager.savePicturePath(
                               this.subGoal, subGoalPicturePath);
                         });
+                        print('picture saved!!!');
                         // Navigator.popUntil(context, ModalRoute.withName('/'));
                         Navigator.pop(context, true);
                       })),
