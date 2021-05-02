@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
                         .where((element) =>
                             element.userAttributeKey == 'custom:first_name')
                         .toList();
+
                     DateTime now = DateTime.now();
                     String currentMonth = DateTime.now().month.toString();
                     String currentDay = DateTime.now().day.toString();
@@ -104,15 +105,29 @@ class _HomePageState extends State<HomePage> {
                         DateTime.parse(currentDate + ' 12:00:00');
                     DateTime night = DateTime.parse(currentDate + ' 20:00:00');
 
+                    if (firstName.isEmpty) {
+                      if (now.isBefore(afternoon)) {
+                        return Text('Good Morning!');
+                      } else if (now.isAfter(afternoon) &&
+                          now.isBefore(night)) {
+                        return Text('Good Afternoon!');
+                      } else {
+                        return Text('Good Night!');
+                      }
+                    }
+
                     if (now.isBefore(afternoon)) {
-                      return Text(
-                          'Good Morning ' + firstName.first.value.toString() + '!');
+                      return Text('Good Morning ' +
+                          firstName.first.value.toString() +
+                          '!');
                     } else if (now.isAfter(afternoon) && now.isBefore(night)) {
-                      return Text(
-                          'Good Afternoon ' + firstName.first.value.toString() + '!');
+                      return Text('Good Afternoon ' +
+                          firstName.first.value.toString() +
+                          '!');
                     } else {
-                      return Text(
-                          'Good Night ' + firstName.first.value.toString() + '!');
+                      return Text('Good Night ' +
+                          firstName.first.value.toString() +
+                          '!');
                     }
                   } else {
                     DateTime now = DateTime.now();
