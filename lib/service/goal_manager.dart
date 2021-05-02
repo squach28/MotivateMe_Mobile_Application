@@ -354,6 +354,7 @@ class GoalManager {
                 : subGoal['completed'] == 1
                     ? true
                     : false,
+            comment: subGoal['comment'],
             pathToPicture: subGoal['path_to_picture'],
             title: goal['title'],
           );

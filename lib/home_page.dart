@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                               SingleChildScrollView(child: Image.network(url)),
                           actions: [
                             TextButton(
-                                child: Text('Very Good'),
+                                child: Text('Back to work!'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 })
