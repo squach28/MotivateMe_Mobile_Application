@@ -1,3 +1,4 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:motivateme_mobile_app/add_goals_page.dart';
@@ -73,19 +74,77 @@ class _HomePageState extends State<HomePage> {
           physics: BouncingScrollPhysics(),
           child: Center(
               child: Column(children: [
-            /*
-              FutureBuilder(
+            Padding(padding: EdgeInsets.only(top: 35.0)),
+            FutureBuilder(
                 future: Amplify.Auth.fetchUserAttributes(),
-                builder: (context, snapshot) { // TODO display good morning, afternoon, or night
-                  if(snapshot.hasData) {
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<AuthUserAttribute> firstName = snapshot.data
+                        .where((element) =>
+                            element.userAttributeKey == 'custom:first_name')
+                        .toList();
                     DateTime now = DateTime.now();
-                    DateTime morning = DateTime.
-                    if(now.isAfter(runtimeType)) {
+                    String currentMonth = DateTime.now().month.toString();
+                    String currentDay = DateTime.now().day.toString();
 
+                    if (int.parse(currentMonth) < 10) {
+                      currentMonth = '0' + DateTime.now().month.toString();
+                    }
+                    if (int.parse(currentDay) < 10) {
+                      currentDay = '0' + DateTime.now().day.toString();
+                    }
+
+                    String currentDate = DateTime.now().year.toString() +
+                        '-' +
+                        currentMonth +
+                        '-' +
+                        currentDay;
+
+                    DateTime afternoon =
+                        DateTime.parse(currentDate + ' 12:00:00');
+                    DateTime night = DateTime.parse(currentDate + ' 20:00:00');
+
+                    if (now.isBefore(afternoon)) {
+                      return Text(
+                          'Good Morning ' + firstName.first.value.toString() + '!');
+                    } else if (now.isAfter(afternoon) && now.isBefore(night)) {
+                      return Text(
+                          'Good Afternoon ' + firstName.first.value.toString() + '!');
+                    } else {
+                      return Text(
+                          'Good Night ' + firstName.first.value.toString() + '!');
+                    }
+                  } else {
+                    DateTime now = DateTime.now();
+                    String currentMonth = DateTime.now().month.toString();
+                    String currentDay = DateTime.now().day.toString();
+
+                    if (int.parse(currentMonth) < 10) {
+                      currentMonth = '0' + DateTime.now().month.toString();
+                    }
+                    if (int.parse(currentDay) < 10) {
+                      currentDay = '0' + DateTime.now().day.toString();
+                    }
+
+                    String currentDate = DateTime.now().year.toString() +
+                        '-' +
+                        currentMonth +
+                        '-' +
+                        currentDay;
+
+                    DateTime afternoon =
+                        DateTime.parse(currentDate + ' 12:00:00');
+                    DateTime night = DateTime.parse(currentDate + ' 20:00:00');
+
+                    if (now.isBefore(afternoon)) {
+                      return Text('Good Morning!');
+                    } else if (now.isAfter(afternoon) && now.isBefore(night)) {
+                      return Text('Good Afternoon!');
+                    } else {
+                      return Text('Good Night!');
                     }
                   }
-                }
-              ), */
+                }),
             Container(
               padding: EdgeInsets.only(top: 10.0),
               alignment: Alignment.topCenter,
@@ -121,7 +180,6 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<SubGoal>> snapshot) {
                   if (snapshot.hasData) {
-                    goalManager.sampleQuery();
                     List<SubGoal> subGoals = snapshot.data;
                     return ListView.builder(
                       // physics: const AlwaysScrollableScrollPhysics(),
@@ -275,6 +333,7 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     codeDialog = valueText;
                     goalManager.setCommentForSubGoal(subGoal, codeDialog);
+                    goalManager.sampleQuery(subGoal);
                     Navigator.pop(context);
                   });
                 },

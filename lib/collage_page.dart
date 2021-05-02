@@ -74,7 +74,26 @@ class CollagePageState extends State<CollagePage> {
                         );
                       },
                     ),
-                    Text("You weren't able to complete these goals")
+                    Text("You weren't able to complete these goals"),
+                                        ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: incompleteGoalsToDisplay.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Column(
+                              children: [
+                                Padding(padding: EdgeInsets.only(top: 50.0)),
+                                incompleteGoalsToDisplay.elementAt(index),
+                                Padding(padding: EdgeInsets.only(bottom: 50.0)),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    
                   ]));
             } else {
               return Center(child: CircularProgressIndicator());
