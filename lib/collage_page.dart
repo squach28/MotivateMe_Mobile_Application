@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:motivateme_mobile_app/service/goal_manager.dart';
@@ -44,14 +43,24 @@ class CollagePageState extends State<CollagePage> {
                       if (goal.completed == null) {
                         continue;
                       } else if (goal.completed && goal.pathToPicture != null) {
-                        images.add(Image.file(File(goal.pathToPicture)));
-                        images.add(Text(
-                            'You completed ' + subGoal.key + ' this week!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18.0)));
-                        completedGoalsToDisplay.add(Column(
-                          children: images,
-                        ));
+                        File(goal.pathToPicture).exists().then((value) {
+                          if (value) {
+                            images.add(Image.file(File(goal
+                                .pathToPicture))); // TODO fix if path is broken
+                            images.add(Text(
+                                'You completed ' + subGoal.key + ' this week!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18.0)));
+                            completedGoalsToDisplay.add(Column(
+                              children: images,
+                            ));
+                          } else {
+                            completedGoalsToDisplay.add(Text(
+                                'You completed ' + goal.title + ' this week!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18.0)));
+                          }
+                        });
                       } else if (goal.completed) {
                         completedGoalsToDisplay.add(Text(
                             'You completed ' + goal.title + ' this week!',
