@@ -34,7 +34,8 @@ class _TableEventsExampleState extends State<TableEventsExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
+        body: SafeArea(
+      child: FutureBuilder(
           future: calendarUtils.fetchSubGoals(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -96,9 +97,8 @@ class _TableEventsExampleState extends State<TableEventsExample> {
                         itemBuilder: (context, index) {
                           return ListTile(
                             title: Text(_selectedEvents.elementAt(index).title),
-                            trailing: Text(_selectedEvents
-                                .elementAt(index)
-                                .timeFrame),
+                            trailing: Text(
+                                _selectedEvents.elementAt(index).timeFrame),
                           );
                         }))
               ]);
@@ -108,6 +108,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
               );
             }
           }),
-    );
+    ));
   }
 }

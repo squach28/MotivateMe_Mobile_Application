@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
           physics: BouncingScrollPhysics(),
           child: Center(
               child: Column(children: [
-            Padding(padding: EdgeInsets.only(top: 35.0)),
+            Padding(padding: EdgeInsets.only(top: 55.0)),
             FutureBuilder(
                 future: Amplify.Auth.fetchUserAttributes(),
                 builder: (context, snapshot) {
@@ -113,47 +113,69 @@ class _HomePageState extends State<HomePage> {
                     if (firstName.isEmpty) {
                       if (now.isBefore(afternoon)) {
                         return Text('Good Morning!',
-                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ));
                       } else if (now.isAfter(afternoon) &&
                           now.isBefore(evening)) {
                         return Text('Good Afternoon!',
-                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ));
                       } else if (now.isAfter(evening) && now.isBefore(night)) {
                         return Text('Good Evening!',
-                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ));
                       } else {
                         return Text('Good Night!',
-                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ));
                       }
                     }
 
                     if (now.isBefore(afternoon)) {
-
                       return Text(
                           'Good Morning ' +
                               firstName.first.value.toString() +
                               '!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     } else if (now.isAfter(afternoon) &&
                         now.isBefore(evening)) {
                       return Text(
                           'Good Afternoon ' +
                               firstName.first.value.toString() +
                               '!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     } else if (now.isAfter(evening) && now.isBefore(night)) {
                       return Text(
                           'Good Evening ' +
                               firstName.first.value.toString() +
                               '!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     } else {
                       return Text(
                           'Good Night ' +
                               firstName.first.value.toString() +
                               '!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
-
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     }
                   } else {
                     DateTime now = DateTime.now();
@@ -181,18 +203,30 @@ class _HomePageState extends State<HomePage> {
 
                     if (now.isBefore(afternoon)) {
                       return Text('Good Morning!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     } else if (now.isAfter(afternoon) && now.isBefore(night)) {
                       return Text('Good Afternoon!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     } else if (now.isAfter(evening) && now.isBefore(night)) {
                       return Text(
                         'Good Evening!',
-                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,),
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       );
                     } else {
                       return Text('Good Night!',
-                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ));
                     }
                   }
                 }),
@@ -212,7 +246,10 @@ class _HomePageState extends State<HomePage> {
                                 child: Image.network(url)),
                             actions: [
                               TextButton(
-                                  child: Text('Back to work!', style: TextStyle(color: Theme.of(context).primaryColor)),
+                                  child: Text('Back to work!',
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor)),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   })
