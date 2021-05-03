@@ -32,7 +32,7 @@ class ProfilePage extends StatelessWidget {
                           firstName.first.value + ' ' + lastName.first.value;
 
                       return Column(children: [
-                        Text(fullName,
+                        Text(fullName == null ? 'Profile Page' : fullName,
                             style: TextStyle(
                               fontSize: 30,
                               color: Theme.of(context).primaryColor,
@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
                         Padding(
                             padding: EdgeInsets.only(top: 25.0, bottom: 25.0)),
                         OutlinedButton(
-                            child: Text('Show Collage', style: TextStyle(fontSize: 18.0,color: Colors.white)),
+                            child: Text('View Collage', style: TextStyle(fontSize: 18.0,color: Colors.white)),
                             onPressed: () {
                               Navigator.push(
                                   context,

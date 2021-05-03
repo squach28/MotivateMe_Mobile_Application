@@ -103,31 +103,52 @@ class _HomePageState extends State<HomePage> {
 
                     DateTime afternoon =
                         DateTime.parse(currentDate + ' 12:00:00');
+                    DateTime evening =
+                        DateTime.parse(currentDate + ' 17:00:00');
                     DateTime night = DateTime.parse(currentDate + ' 20:00:00');
 
                     if (firstName.isEmpty) {
                       if (now.isBefore(afternoon)) {
-                        return Text('Good Morning!');
+                        return Text('Good Morning!',
+                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                       } else if (now.isAfter(afternoon) &&
-                          now.isBefore(night)) {
-                        return Text('Good Afternoon!');
+                          now.isBefore(evening)) {
+                        return Text('Good Afternoon!',
+                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                      } else if (now.isAfter(evening) && now.isBefore(night)) {
+                        return Text('Good Evening!',
+                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                       } else {
-                        return Text('Good Night!');
+                        return Text('Good Night!',
+                            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                       }
                     }
 
                     if (now.isBefore(afternoon)) {
-                      return Text('Good Morning ' +
-                          firstName.first.value.toString() +
-                          '!');
-                    } else if (now.isAfter(afternoon) && now.isBefore(night)) {
-                      return Text('Good Afternoon ' +
-                          firstName.first.value.toString() +
-                          '!');
+                      return Text(
+                          'Good Morning ' +
+                              firstName.first.value.toString() +
+                              '!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                    } else if (now.isAfter(afternoon) &&
+                        now.isBefore(evening)) {
+                      return Text(
+                          'Good Afternoon ' +
+                              firstName.first.value.toString() +
+                              '!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                    } else if (now.isAfter(evening) && now.isBefore(night)) {
+                      return Text(
+                          'Good Evening ' +
+                              firstName.first.value.toString() +
+                              '!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                     } else {
-                      return Text('Good Night ' +
-                          firstName.first.value.toString() +
-                          '!');
+                      return Text(
+                          'Good Night ' +
+                              firstName.first.value.toString() +
+                              '!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                     }
                   } else {
                     DateTime now = DateTime.now();
@@ -149,46 +170,65 @@ class _HomePageState extends State<HomePage> {
 
                     DateTime afternoon =
                         DateTime.parse(currentDate + ' 12:00:00');
+                    DateTime evening =
+                        DateTime.parse(currentDate + ' 17:00:00');
                     DateTime night = DateTime.parse(currentDate + ' 20:00:00');
 
                     if (now.isBefore(afternoon)) {
-                      return Text('Good Morning!');
+                      return Text('Good Morning!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                     } else if (now.isAfter(afternoon) && now.isBefore(night)) {
-                      return Text('Good Afternoon!');
+                      return Text('Good Afternoon!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+                    } else if (now.isAfter(evening) && now.isBefore(night)) {
+                      return Text(
+                        'Good Evening!',
+                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,),
+                      );
                     } else {
-                      return Text('Good Night!');
+                      return Text('Good Night!',
+                          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
                     }
                   }
                 }),
             Container(
               padding: EdgeInsets.only(top: 10.0),
               alignment: Alignment.topCenter,
-              child: TextButton(
-                onPressed: () async {
-                  var url = await inspireMeService.inspireMe();
-                  return showDialog<void>(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('You are now... inspired'),
-                          content:
-                              SingleChildScrollView(child: Image.network(url)),
-                          actions: [
-                            TextButton(
-                                child: Text('Back to work!'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                })
-                          ],
-                        );
-                      });
-                },
-                child: new Text(
-                  'Inspire Me',
-                  style: new TextStyle(fontSize: 16.0, color: Colors.black),
-                ),
-              ),
+              child: OutlinedButton(
+                  onPressed: () async {
+                    var url = await inspireMeService.inspireMe();
+                    return showDialog<void>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('You are now... inspired'),
+                            content: SingleChildScrollView(
+                                child: Image.network(url)),
+                            actions: [
+                              TextButton(
+                                  child: Text('Back to work!', style: TextStyle(color: Theme.of(context).primaryColor)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  })
+                            ],
+                          );
+                        });
+                  },
+                  child: new Text(
+                    'Inspire Me',
+                    style: new TextStyle(fontSize: 16.0, color: Colors.black),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Color(0xfff5855b)),
+                    elevation: MaterialStateProperty.all<double>(10.0),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                      ),
+                    ),
+                  )),
             ),
             FutureBuilder<List<SubGoal>>(
                 future: goalManager.retrieveSubGoalsForToday(),
