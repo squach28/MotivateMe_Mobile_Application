@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:motivateme_mobile_app/home_page.dart';
 import 'package:motivateme_mobile_app/navigation_page.dart';
 import 'service/inspire_me.dart';
 import 'signup_page.dart';
@@ -67,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Sign Up Button
                 Container(
                     padding: EdgeInsets.only(
-                        top: 50.0, left: 10.0, right: 10.0, bottom: 10.0),
+                        top: 50.0, left: 10.0, right: 10.0, bottom: 50.0),
                     alignment: Alignment.bottomCenter,
                     child: TextButton(
                       onPressed: () {
