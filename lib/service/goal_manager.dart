@@ -51,7 +51,7 @@ class GoalManager {
     String formattedGoalTitle = goal.title.toString().replaceAll(' ', '_');
     String day = DateFormat.EEEE().format(currentDate);
     while (currentDate != goal.endDate) {
-      if (goal.goalDays[day] == true) {
+      if (goal.goalDays[DateFormat.EEEE().format(currentDate)] == true) {
         await db.insert(formattedGoalTitle, {
           'gid': counter,
           'id': goal.id,
@@ -136,7 +136,7 @@ class GoalManager {
         // format month to be two digits if month is less than 10, ie '01', '02', etc.
         currentMonth = '0' + DateTime.now().month.toString();
       }
-      if(DateTime.now().day < 10) {
+      if (DateTime.now().day < 10) {
         currentDay = '0' + DateTime.now().day.toString();
       }
       String today = DateTime.now().year.toString() +
@@ -150,7 +150,7 @@ class GoalManager {
           ' WHERE date = ' +
           '"' +
           today +
-          '"' + 
+          '"' +
           ' AND completed IS NULL'; // query to find the specific goal for today that isn't completed
       print(retrieveSubGoalsQuery);
       List<Map<String, Object>> subGoalResult =
@@ -278,13 +278,19 @@ class GoalManager {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-        String findGoalTitleQuery =
+    String findGoalTitleQuery =
         'SELECT title FROM Goals WHERE id = ' + subGoal.id.toString();
     List<Map<String, Object>> title = await db.rawQuery(findGoalTitleQuery);
     String formattedGoalTitle =
         title.first['title'].toString().replaceAll(' ', '_');
-    String setCommentQuery = 'UPDATE ' + formattedGoalTitle + ' SET comment = ' +
-    '"' + comment + '"'+ ' WHERE gid = ' + subGoal.gid.toString(); 
+    String setCommentQuery = 'UPDATE ' +
+        formattedGoalTitle +
+        ' SET comment = ' +
+        '"' +
+        comment +
+        '"' +
+        ' WHERE gid = ' +
+        subGoal.gid.toString();
     db.execute(setCommentQuery);
   }
 
@@ -326,7 +332,8 @@ class GoalManager {
     await db.execute(setSubGoalPathQuery);
   }
 
-  Future<Map<String,List<SubGoal>>> retrieveSubGoalsForWeek(DateTime date) async {
+  Future<Map<String, List<SubGoal>>> retrieveSubGoalsForWeek(
+      DateTime date) async {
     print('getting the goals for the week!');
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
@@ -375,11 +382,11 @@ class GoalManager {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-        String formattedGoalTitle = subGoal.title.replaceAll(' ', '_');
+    String formattedGoalTitle = subGoal.title.replaceAll(' ', '_');
     var subGoals = await db.query(formattedGoalTitle);
     for (var subGoal in subGoals) {
-        print('completed?');
-        print(subGoal['completed'].toString());
+      print('completed?');
+      print(subGoal['completed'].toString());
     }
   }
 }

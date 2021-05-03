@@ -223,7 +223,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
         padding: const EdgeInsets.all(10.0),
       ),
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: SelectWeekDays(
           border: false,
           boxDecoration: BoxDecoration(
