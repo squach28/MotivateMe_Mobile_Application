@@ -49,7 +49,10 @@ class _HomePageState extends State<HomePage> {
                       builder: (BuildContext context) => AddGoalsPage()))
               .then((value) {
             if (value == true) {
-              setState(() {});
+              print("value is true");
+              setState(() {
+                print("set state");
+              });
             }
           });
         },
@@ -105,14 +108,17 @@ class _HomePageState extends State<HomePage> {
                     DateTime night = DateTime.parse(currentDate + ' 20:00:00');
 
                     if (now.isBefore(afternoon)) {
-                      return Text(
-                          'Good Morning ' + firstName.first.value.toString() + '!');
+                      return Text('Good Morning ' +
+                          firstName.first.value.toString() +
+                          '!');
                     } else if (now.isAfter(afternoon) && now.isBefore(night)) {
-                      return Text(
-                          'Good Afternoon ' + firstName.first.value.toString() + '!');
+                      return Text('Good Afternoon ' +
+                          firstName.first.value.toString() +
+                          '!');
                     } else {
-                      return Text(
-                          'Good Night ' + firstName.first.value.toString() + '!');
+                      return Text('Good Night ' +
+                          firstName.first.value.toString() +
+                          '!');
                     }
                   } else {
                     DateTime now = DateTime.now();
@@ -176,7 +182,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             FutureBuilder<List<SubGoal>>(
-                future: goalManager.retrieveSubGoalsForToday(),
+                future: Future.delayed(Duration(milliseconds: 500),
+                    goalManager.retrieveSubGoalsForToday),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<SubGoal>> snapshot) {
                   if (snapshot.hasData) {

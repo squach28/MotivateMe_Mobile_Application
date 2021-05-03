@@ -1,5 +1,4 @@
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
