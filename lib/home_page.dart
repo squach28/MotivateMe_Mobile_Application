@@ -296,12 +296,22 @@ class _HomePageState extends State<HomePage> {
                               description:
                                   subGoals.elementAt(index).description),
                           background: Container(
+                              height: 50,
+                              width: 50,
                               padding: EdgeInsets.only(left: 60.0),
                               alignment: Alignment.centerLeft,
                               color: Colors.green,
-                              child: Icon(Icons.check)),
-                          secondaryBackground:
-                              Container(color: Colors.red, child: Text("X", style: TextStyle(fontSize: 20.0)), alignment: Alignment.centerRight, padding: EdgeInsets.only(right: 60.0)),
+
+                              child: Icon(Icons.check,
+                                  color: Colors.white, size: 50)),
+                          secondaryBackground: Container(
+                              height: 50,
+                              width: 50,
+                              padding: EdgeInsets.only(right: 60.0),
+                              alignment: Alignment.centerRight,
+                              color: Colors.red,
+                              child: Icon(Icons.clear,
+                                  color: Colors.white, size: 50)),
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) {
                             var markedSubGoal = subGoals.elementAt(index);
