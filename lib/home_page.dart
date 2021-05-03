@@ -301,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.green,
                               child: Icon(Icons.check)),
                           secondaryBackground:
-                              Container(color: Colors.red, child: Text("left")),
+                              Container(color: Colors.red, child: Text("X", style: TextStyle(fontSize: 20.0)), alignment: Alignment.centerRight, padding: EdgeInsets.only(right: 60.0)),
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) {
                             var markedSubGoal = subGoals.elementAt(index);
