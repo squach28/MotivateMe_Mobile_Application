@@ -49,7 +49,10 @@ class _HomePageState extends State<HomePage> {
                       builder: (BuildContext context) => AddGoalsPage()))
               .then((value) {
             if (value == true) {
-              setState(() {});
+              print("value is true");
+              setState(() {
+                print("set state");
+              });
             }
           });
         },
@@ -125,6 +128,7 @@ class _HomePageState extends State<HomePage> {
                     }
 
                     if (now.isBefore(afternoon)) {
+
                       return Text(
                           'Good Morning ' +
                               firstName.first.value.toString() +
@@ -149,6 +153,7 @@ class _HomePageState extends State<HomePage> {
                               firstName.first.value.toString() +
                               '!',
                           style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold,));
+
                     }
                   } else {
                     DateTime now = DateTime.now();
@@ -231,7 +236,8 @@ class _HomePageState extends State<HomePage> {
                   )),
             ),
             FutureBuilder<List<SubGoal>>(
-                future: goalManager.retrieveSubGoalsForToday(),
+                future: Future.delayed(Duration(milliseconds: 500),
+                    goalManager.retrieveSubGoalsForToday),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<SubGoal>> snapshot) {
                   if (snapshot.hasData) {
