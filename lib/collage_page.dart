@@ -45,8 +45,7 @@ class CollagePageState extends State<CollagePage> {
                       } else if (goal.completed && goal.pathToPicture != null) {
                         File(goal.pathToPicture).exists().then((value) {
                           if (value) {
-                            images.add(Image.file(File(goal
-                                .pathToPicture))); // TODO fix if path is broken
+                            images.add(Image.file(File(goal.pathToPicture)));
                             images.add(Text(
                                 'You completed ' + subGoal.key + ' this week!',
                                 textAlign: TextAlign.center,
@@ -94,11 +93,25 @@ class CollagePageState extends State<CollagePage> {
                                 fontSize: 25.0, fontWeight: FontWeight.bold)),
                         Padding(
                             padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
-                        Text(
-                          'You completed the following!',
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
-                        ),
+                        completedGoalsToDisplay.length == 0 &&
+                                incompleteGoalsToDisplay.length == 0
+                            ? Text(
+                                'Nothing to see here 	╮(￣ω￣;)╭',
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              )
+                            : Container(height: 0, width: 0),
+                        completedGoalsToDisplay.length == 0
+                            ? Container(height: 0, width: 0)
+                            : Text(
+                                'You completed the following!',
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
                         ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,

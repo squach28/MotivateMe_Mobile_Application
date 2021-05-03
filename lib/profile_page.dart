@@ -12,6 +12,18 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+          decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment
+                .centerRight, // 10% of the width, so there are ten blinds.
+            colors: [
+              const Color(0xffB7F8DB),
+              const Color(0xff50A7C2)
+            ], // red to yellow
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        ),
             child: Center(
                 child: Padding(
               padding: EdgeInsets.only(top: 75.0),
@@ -35,13 +47,13 @@ class ProfilePage extends StatelessWidget {
                         Text(fullName == null ? 'Profile Page' : fullName,
                             style: TextStyle(
                               fontSize: 30,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             )),
                         Padding(
                             padding: EdgeInsets.only(top: 25.0, bottom: 25.0)),
                         OutlinedButton(
-                            child: Text('View Collage', style: TextStyle(fontSize: 18.0,color: Colors.white)),
+                            child: Text('View Collage', style: TextStyle(fontSize: 18.0,color: Colors.black)),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -51,7 +63,7 @@ class ProfilePage extends StatelessWidget {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Theme.of(context).primaryColor),
+                                  Color(0xfff5855b)),
                               elevation:
                                   MaterialStateProperty.all<double>(10.0),
                               shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -63,7 +75,7 @@ class ProfilePage extends StatelessWidget {
                         Padding(
                             padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
                         OutlinedButton(
-                          child: Text('Sign Out', style: TextStyle(fontSize: 18.0,color: Colors.white)),
+                          child: Text('Sign Out', style: TextStyle(fontSize: 18.0,color: Colors.black)),
                           onPressed: () {
                             authService.logout();
                             Navigator.pushReplacement(
@@ -74,7 +86,7 @@ class ProfilePage extends StatelessWidget {
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                Theme.of(context).primaryColor),
+                                Color(0xfff5855b)),
                             elevation: MaterialStateProperty.all<double>(10.0),
                             shape: MaterialStateProperty.all<OutlinedBorder>(
                               RoundedRectangleBorder(
