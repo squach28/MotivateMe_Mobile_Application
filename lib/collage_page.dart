@@ -36,6 +36,8 @@ class CollagePageState extends State<CollagePage> {
                 List<Widget> incompleteGoalsToDisplay = [];
                 var listOfSubgoals = snapshot.data;
                 if (snapshot.hasData) {
+                  print('length of subgoals: ' +
+                      listOfSubgoals.length.toString());
                   for (var subGoal in listOfSubgoals.entries) {
                     List<Widget> images = [];
 
@@ -43,7 +45,9 @@ class CollagePageState extends State<CollagePage> {
                       if (goal.completed == null) {
                         continue;
                       } else if (goal.completed && goal.pathToPicture != null) {
+                        print('goal completed + path to picture not null');
                         File(goal.pathToPicture).exists().then((value) {
+                          print('value: ' + value.toString());
                           if (value) {
                             images.add(Image.file(File(goal.pathToPicture)));
                             images.add(Text(
@@ -84,92 +88,109 @@ class CollagePageState extends State<CollagePage> {
                       }
                     }
                   }
-                  return SingleChildScrollView(
-                      physics: ScrollPhysics(),
-                      child: Column(children: [
-                        Padding(padding: EdgeInsets.only(top: 25.0)),
-                        Text(retrieveDatesForCurrentWeek(),
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold)),
-                        Padding(
-                            padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
-                        completedGoalsToDisplay.length == 0 &&
-                                incompleteGoalsToDisplay.length == 0
-                            ? Text(
-                                'Nothing to see here 	╮(￣ω￣;)╭',
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              )
-                            : Container(height: 0, width: 0),
-                        completedGoalsToDisplay.length == 0
-                            ? Container(height: 0, width: 0)
-                            : Text(
-                                'You completed the following!',
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: completedGoalsToDisplay.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 50.0)),
-                                    completedGoalsToDisplay.elementAt(index),
-                                    Padding(
-                                        padding: EdgeInsets.only(bottom: 50.0)),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        incompleteGoalsToDisplay.length == 0
-                            ? Container(height: 0, width: 0)
-                            : Text("You weren't able to complete these goals",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold)),
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: incompleteGoalsToDisplay.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 50.0)),
-                                    incompleteGoalsToDisplay.elementAt(index),
-                                    Padding(
-                                        padding: EdgeInsets.only(bottom: 50.0)),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        incompleteGoalsToDisplay.length == 0
-                            ? Container(height: 0, width: 0)
-                            : Center(
-                                child: Text(
-                                    "Let's work hard to complete these goals! (* ^ ω ^)",
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.clip,
+                  return FutureBuilder(
+                      future: Future.delayed(Duration(milliseconds: 500)),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return SingleChildScrollView(
+                              physics: ScrollPhysics(),
+                              child: Column(children: [
+                                Padding(padding: EdgeInsets.only(top: 25.0)),
+                                Text(retrieveDatesForCurrentWeek(),
                                     style: TextStyle(
                                         fontSize: 25.0,
-                                        fontWeight: FontWeight.bold))),
-                      ]));
+                                        fontWeight: FontWeight.bold)),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 10.0, bottom: 10.0)),
+                                completedGoalsToDisplay.length == 0 &&
+                                        incompleteGoalsToDisplay.length == 0
+                                    ? Text(
+                                        'Nothing to see here 	╮(￣ω￣;)╭',
+                                        style: TextStyle(
+                                            fontSize: 25.0,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      )
+                                    : Container(height: 0, width: 0),
+                                completedGoalsToDisplay.length == 0
+                                    ? Container(height: 0, width: 0)
+                                    : Text(
+                                        'You completed the following!',
+                                        style: TextStyle(
+                                            fontSize: 25.0,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: completedGoalsToDisplay.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 50.0)),
+                                            completedGoalsToDisplay
+                                                .elementAt(index),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 50.0)),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                incompleteGoalsToDisplay.length == 0
+                                    ? Container(height: 0, width: 0)
+                                    : Text(
+                                        "You weren't able to complete these goals",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 25.0,
+                                            fontWeight: FontWeight.bold)),
+                                ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: incompleteGoalsToDisplay.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 50.0)),
+                                            incompleteGoalsToDisplay
+                                                .elementAt(index),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 50.0)),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                incompleteGoalsToDisplay.length == 0
+                                    ? Container(height: 0, width: 0)
+                                    : Center(
+                                        child: Text(
+                                            "Let's work hard to complete these goals! (* ^ ω ^)",
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                                fontSize: 25.0,
+                                                fontWeight: FontWeight.bold))),
+                              ]));
+                        } else if(snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      });
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }
