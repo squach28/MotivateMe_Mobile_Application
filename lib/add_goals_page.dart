@@ -191,7 +191,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
                       TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                 );
                 setState(() {
-                  startTime = DateTimeField.convert(time);
+                  this.startTime = DateTimeField.convert(time);
                 });
                 return DateTimeField.convert(time);
               },
@@ -312,7 +312,6 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     print('goal: $goalTitle');
 
     int goalID = await goalManager.retrieveNumberOfGoals() + 1;
-
     Goal goal = Goal(
       id: goalID,
       title: goalTitle,

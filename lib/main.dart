@@ -50,6 +50,11 @@ class _MyAppState extends State<MyApp> {
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data == true) {
+                Amplify.Auth.fetchUserAttributes().then((value) {
+                  for (var attribute in value) {
+                    print(attribute.userAttributeKey + ' ' + attribute.value);
+                  }
+                });
                 return NavigationPage();
               } else {
                 return LoginPage();
