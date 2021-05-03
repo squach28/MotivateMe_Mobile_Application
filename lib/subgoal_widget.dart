@@ -35,6 +35,12 @@ class SubGoalWidgetState extends State<SubGoalWidget> {
               Text(widget.description, style: TextStyle(fontSize: 15.0,)),
             ]),
             isThreeLine: true,
+            trailing: Container(
+              height: 50,
+              width: 50,
+              child: TextButton(child: Text('Edit'), onPressed: () {
+
+            })),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

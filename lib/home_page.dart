@@ -301,6 +301,7 @@ class _HomePageState extends State<HomePage> {
                               padding: EdgeInsets.only(left: 60.0),
                               alignment: Alignment.centerLeft,
                               color: Colors.green,
+
                               child: Icon(Icons.check,
                                   color: Colors.white, size: 50)),
                           secondaryBackground: Container(
