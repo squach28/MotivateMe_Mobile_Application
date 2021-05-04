@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (BuildContext context, int index) {
                         print(index.toString() +
                             " " +
-                            subGoals.elementAt(index).hashCode.toString());
+                            subGoals.elementAt(index).startDate.toString());
                         return Dismissible(
                           child: SubGoalWidget(
                               subgoal: subGoals.elementAt(index),

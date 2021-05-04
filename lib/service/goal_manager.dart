@@ -121,10 +121,9 @@ class GoalManager {
     final Database db = await database;
     String today = DateFormat.EEEE().format(DateTime.now());
     List<SubGoal> subGoals = [];
-    String retrieveGoalDetailsForTodayQuery =
-        'SELECT id, title, description, start_time, end_time FROM Goals WHERE ' +
-            today +
-            ' = 1'; // check the goals table for goals that occur on the current day
+    String retrieveGoalDetailsForTodayQuery = 'SELECT * FROM Goals WHERE ' +
+        today +
+        ' = 1'; // check the goals table for goals that occur on the current day
     List<Map<String, Object>> result =
         await db.rawQuery(retrieveGoalDetailsForTodayQuery);
     for (var goal in result) {
@@ -157,7 +156,8 @@ class GoalManager {
           DateFormat('h:mma').format(DateTime.parse(goal['start_time']));
       String endTime =
           DateFormat('h:mma').format(DateTime.parse(goal['end_time']));
-      String timeFrame = startTime + ' to ' + endTime; // store the time frame of the goal
+      String timeFrame =
+          startTime + ' to ' + endTime; // store the time frame of the goal
       List<Map<String, Object>> subGoalResult =
           await db.rawQuery(retrieveSubGoalsQuery);
       if (subGoalResult.length == 0) {
@@ -175,7 +175,48 @@ class GoalManager {
           pathToPicture: subGoal['path_to_picture'],
           title: goal['title'],
           description: goal['description'],
-          timeFrame: timeFrame,);
+          timeFrame: timeFrame,
+          startDate: DateTime.parse(goal['start_date']),
+          endDate: DateTime.parse(goal['end_date']),
+          startTime: DateTime.parse(goal['start_time']),
+          endTime: DateTime.parse(goal['end_time']),
+          goalDays: {
+            'monday': goal['monday'] == null
+                ? null
+                : goal['monday'] == 1
+                    ? true
+                    : false,
+            'tuesday': goal['tuesday'] == null
+                ? null
+                : goal['tuesday'] == 1
+                    ? true
+                    : false,
+            'wednesday': goal['wednesday'] == null
+                ? null
+                : goal['wednesday'] == 1
+                    ? true
+                    : false,
+            'thursday': goal['thursday'] == null
+                ? null
+                : goal['thursday'] == 1
+                    ? true
+                    : false,
+            'friday': goal['friday'] == null
+                ? null
+                : goal['friday'] == 1
+                    ? true
+                    : false,
+            'saturday': goal['saturday'] == null
+                ? null
+                : goal['saturday'] == 1
+                    ? true
+                    : false,
+            'sunday': goal['sunday'] == null
+                ? null
+                : goal['sunday'] == 1
+                    ? true
+                    : false,
+          });
       subGoals.add(subGoalToAdd);
     }
     print('length of subgoals for today!!!' + subGoals.length.toString());
@@ -348,7 +389,8 @@ class GoalManager {
     int daysUntilMonday = date.weekday - DateTime.monday;
     int daysUntilSunday = DateTime.sunday - date.weekday;
     DateTime startOfWeek = date.subtract(Duration(days: daysUntilMonday));
-    startOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day, 0, 0, 0, 0, 0);
+    startOfWeek = DateTime(
+        startOfWeek.year, startOfWeek.month, startOfWeek.day, 0, 0, 0, 0, 0);
     DateTime endOfWeek = date.add(Duration(days: daysUntilSunday));
     Map<String, List<SubGoal>> subGoalsForWeek = {};
     print('start: ' + startOfWeek.toString());
@@ -359,8 +401,9 @@ class GoalManager {
       var subGoals = await db.query(formattedTitle);
       for (var subGoal in subGoals) {
         DateTime subGoalDate = DateTime.parse(subGoal['date']);
-        if (subGoalDate.isAtSameMomentAs(startOfWeek) || (subGoalDate.isBefore(endOfWeek) &&
-            subGoalDate.isAfter(startOfWeek)) ) {
+        if (subGoalDate.isAtSameMomentAs(startOfWeek) ||
+            (subGoalDate.isBefore(endOfWeek) &&
+                subGoalDate.isAfter(startOfWeek))) {
           SubGoal sub = SubGoal(
               gid: subGoal['gid'],
               id: goal['id'],
