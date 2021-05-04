@@ -29,18 +29,22 @@ class SubGoalWidgetState extends State<SubGoalWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Padding(padding: EdgeInsets.only(top: 1.0, bottom: 1.0)),
               Text(
-                widget.subgoal.timeFrame, style: TextStyle(fontSize: 15.0,),
+                widget.subgoal.timeFrame,
+                style: TextStyle(
+                  fontSize: 15.0,
+                ),
               ),
               Padding(padding: EdgeInsets.only(top: 1.0, bottom: 1.0)),
-              Text(widget.description, style: TextStyle(fontSize: 15.0,)),
+              Text(widget.description,
+                  style: TextStyle(
+                    fontSize: 15.0,
+                  )),
             ]),
             isThreeLine: true,
             trailing: Container(
-              height: 50,
-              width: 50,
-              child: TextButton(child: Text('Edit'), onPressed: () {
-
-            })),
+                height: 50,
+                width: 50,
+                child: TextButton(child: Text('Edit'), onPressed: () {})),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
