@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motivateme_mobile_app/edit_goal_page.dart';
 import 'package:motivateme_mobile_app/model/subgoal.dart';
 
 import 'model/goal.dart';
@@ -29,18 +30,34 @@ class SubGoalWidgetState extends State<SubGoalWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Padding(padding: EdgeInsets.only(top: 1.0, bottom: 1.0)),
               Text(
-                widget.subgoal.timeFrame, style: TextStyle(fontSize: 15.0,),
+                widget.subgoal.timeFrame,
+                style: TextStyle(
+                  fontSize: 15.0,
+                ),
               ),
               Padding(padding: EdgeInsets.only(top: 1.0, bottom: 1.0)),
-              Text(widget.description, style: TextStyle(fontSize: 15.0,)),
+              Text(widget.description,
+                  style: TextStyle(
+                    fontSize: 15.0,
+                  )),
             ]),
             isThreeLine: true,
             trailing: Container(
-              height: 50,
-              width: 50,
-              child: TextButton(child: Text('Edit'), onPressed: () {
-
-            })),
+                height: 50,
+                width: 50,
+                child: TextButton(
+                    child: Text('Edit'),
+                    onPressed: () {
+                      print(widget.title);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => EditGoalPage(
+                                    subGoal: widget.subgoal,
+                                    title: widget.title,
+                                    description: widget.description,
+                                  )));
+                    })),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
