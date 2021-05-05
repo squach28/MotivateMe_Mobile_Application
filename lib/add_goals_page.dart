@@ -25,6 +25,15 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
 
   final goalManager = GoalManager();
   final values = List.filled(7, false);
+  final Map<int, String> indexToDay = {
+    0: 'Sunday',
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wednesday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday'
+  }; 
 
   Map<String, bool> goalDays = {
     'Monday': false,
@@ -235,7 +244,13 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
             // else before you actually flip the value,
             // it's up to your app's needs.
             values[index] = !values[index];
+            this.goalDays[indexToDay[index]] = values[index];
           });
+
+          for(var thing in this.goalDays.entries) {
+            print(thing.key + ' ' + thing.value.toString());
+          }
+
         },
         values: values,
       ),
