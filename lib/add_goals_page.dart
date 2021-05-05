@@ -275,12 +275,17 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
     ]);
   }
 
-  void _validateInputs() {
+  void _validateInputs() async {
     if (_formKey.currentState.validate()) {
+      var goalTitles = await goalManager.retrieveGoalTitles();
+      if (goalTitles.contains(_goalTitleController.text)) {
+        _goalExistsDialog();
+        return;
+      }
+
       for (var entry in goalDays.entries) {
         if (entry.value == true) {
           _addGoal();
-          //TODO refresh home page
           Navigator.pop(context, true);
           return;
         }
@@ -339,6 +344,33 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
             child: ListBody(
               children: <Widget>[
                 Text('Please select a day'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _goalExistsDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Goal with that title already exists'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Please choose a different name for your goal'),
               ],
             ),
           ),

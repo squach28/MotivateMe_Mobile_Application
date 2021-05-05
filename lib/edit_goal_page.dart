@@ -9,9 +9,12 @@ import 'model/subgoal.dart';
 import 'service/goal_manager.dart';
 
 class EditGoalPage extends StatefulWidget {
-  // final SubGoal subGoal;
-  // final String title;
-  EditGoalPage({Key key}) : super(key: key);
+
+  final SubGoal subGoal;
+  final String title;
+  final String description;
+  EditGoalPage({Key key, this.subGoal, this.title, this.description})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _EditGoalPageState();
 }
@@ -118,6 +121,7 @@ class _EditGoalPageState extends State<EditGoalPage> {
       ),
     );
   }
+
 
   Widget _editGoalForm() {
     final timeFormat = DateFormat("HH:mm");
