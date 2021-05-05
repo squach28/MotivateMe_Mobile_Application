@@ -447,7 +447,6 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     codeDialog = valueText;
                     goalManager.setCommentForSubGoal(subGoal, codeDialog);
-                    goalManager.sampleQuery(subGoal);
                     Navigator.pop(context);
                   });
                 },

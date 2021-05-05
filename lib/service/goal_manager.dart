@@ -429,15 +429,18 @@ class GoalManager {
     return subGoalsForWeek;
   }
 
-  Future<void> sampleQuery(SubGoal subGoal) async {
+  Future<List<String>> retrieveGoalTitles() async {
     final Future<Database> database =
         openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
     final Database db = await database;
-    String formattedGoalTitle = subGoal.title.replaceAll(' ', '_');
-    var subGoals = await db.query(formattedGoalTitle);
-    for (var subGoal in subGoals) {
-      print('completed?');
-      print(subGoal['completed'].toString());
+    List<String> goalTitles = [];
+    String retrieveGoalNamesQuery = 'SELECT title FROM Goals';
+    List<Map<String, Object>> goals = await db.rawQuery(retrieveGoalNamesQuery);
+    for (var goal in goals) {
+      for (var title in goal.values) {
+        goalTitles.add(title);
+      }
     }
+    return goalTitles;
   }
 }
