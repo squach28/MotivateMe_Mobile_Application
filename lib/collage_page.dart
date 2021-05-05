@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:motivateme_mobile_app/service/goal_manager.dart';
 
+import 'model/subgoal.dart';
+
 class CollagePage extends StatefulWidget {
   @override
   CollagePageState createState() => CollagePageState();
@@ -23,12 +25,40 @@ class CollagePageState extends State<CollagePage> {
         DateFormat.yMd().format(endOfWeek);
   }
 
+  Widget completedGoalCard(String filePath, String goalTitle) {
+    return Card(
+        elevation: 2.5,
+        child: Container(
+            child: Padding(
+                padding: EdgeInsets.all(25.0),
+                child: Column(children: [
+                  Image.file(File(filePath)),
+                  Padding(padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
+                  Text('You completed ' + goalTitle + ' this week!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18.0))
+                ]))));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         body: SafeArea(
             child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment
+                  .centerRight, // 10% of the width, so there are ten blinds.
+              colors: [
+                const Color(0xffB7F8DB),
+                const Color(0xff50A7C2)
+              ], // red to yellow
+              tileMode:
+                  TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          ),
           child: FutureBuilder(
               future: goalManager.retrieveSubGoalsForWeek(DateTime.now()),
               builder: (context, snapshot) {
@@ -47,44 +77,34 @@ class CollagePageState extends State<CollagePage> {
                       } else if (goal.completed && goal.pathToPicture != null) {
                         print('goal completed + path to picture not null');
                         File(goal.pathToPicture).exists().then((value) {
-                          print('value: ' + value.toString());
                           if (value) {
-                            images.add(Image.file(File(goal.pathToPicture)));
-                            images.add(Text(
-                                'You completed ' + subGoal.key + ' this week!',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18.0)));
+                            // images.add(Image.file(File(goal.pathToPicture)));
+                            // images.add(Text(
+                            //     'You completed ' + subGoal.key + ' this week!',
+                            //     textAlign: TextAlign.center,
+                            //     style: TextStyle(fontSize: 18.0)));
+                            images.add(CompletedGoalCard(
+                                goalTitle: subGoal.key,
+                                pathToPicture: goal.pathToPicture));
                             completedGoalsToDisplay.add(Column(
                               children: images,
                             ));
                           } else {
-                            completedGoalsToDisplay.add(Text(
-                                'You completed ' + goal.title + ' this week!',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 18.0)));
+                            completedGoalsToDisplay.add(CompletedGoalCard(
+                              goalTitle: goal.title,
+                            ));
                           }
                         });
                       } else if (goal.completed) {
-                        completedGoalsToDisplay.add(Text(
-                            'You completed ' + goal.title + ' this week!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18.0)));
+                        completedGoalsToDisplay.add(CompletedGoalCard(
+                          goalTitle: goal.title,
+                        ));
                       } else if (!goal.completed && goal.comment != null) {
-                        incompleteGoalsToDisplay.add(Text(
-                            "You didn't complete " +
-                                goal.title +
-                                ' due to ' +
-                                goal.comment +
-                                ' this week.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18.0)));
+                        incompleteGoalsToDisplay.add(IncompleteGoalCard(
+                            goalTitle: goal.title, goalComment: goal.comment));
                       } else {
-                        incompleteGoalsToDisplay.add(Text(
-                            "You weren't able to complete " +
-                                goal.title +
-                                ' this week.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18.0)));
+                        incompleteGoalsToDisplay
+                            .add(IncompleteGoalCard(goalTitle: goal.title));
                       }
                     }
                   }
@@ -138,13 +158,14 @@ class CollagePageState extends State<CollagePage> {
                                                 .elementAt(index),
                                             Padding(
                                                 padding: EdgeInsets.only(
-                                                    bottom: 50.0)),
+                                                    bottom: 20.0)),
                                           ],
                                         ),
                                       ],
                                     );
                                   },
                                 ),
+                                Padding(padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
                                 incompleteGoalsToDisplay.length == 0
                                     ? Container(height: 0, width: 0)
                                     : Text(
@@ -176,7 +197,7 @@ class CollagePageState extends State<CollagePage> {
                                     );
                                   },
                                 ),
-                                incompleteGoalsToDisplay.length == 0
+                               /* incompleteGoalsToDisplay.length == 0
                                     ? Container(height: 0, width: 0)
                                     : Center(
                                         child: Text(
@@ -185,9 +206,9 @@ class CollagePageState extends State<CollagePage> {
                                             overflow: TextOverflow.clip,
                                             style: TextStyle(
                                                 fontSize: 25.0,
-                                                fontWeight: FontWeight.bold))),
+                                                fontWeight: FontWeight.bold)) ),*/
                               ]));
-                        } else if(snapshot.connectionState == ConnectionState.waiting) {
+                        } else {
                           return Center(child: CircularProgressIndicator());
                         }
                       });
@@ -196,5 +217,64 @@ class CollagePageState extends State<CollagePage> {
                 }
               }),
         )));
+  }
+}
+
+class CompletedGoalCard extends StatelessWidget {
+  final String goalTitle;
+  final String pathToPicture;
+
+  CompletedGoalCard({Key key, this.goalTitle, this.pathToPicture})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        elevation: 2.5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Container(
+            child: Padding(
+                padding: EdgeInsets.all(25.0),
+                child: Column(children: [
+                  pathToPicture == null
+                      ? Image.network(
+                          'https://brobible.com/wp-content/uploads/2019/11/istock-153696622.jpg')
+                      : Image.file(File(pathToPicture)),
+                  Padding(padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
+                  Text('You completed ' + goalTitle + ' this week!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18.0))
+                ]))));
+  }
+}
+
+class IncompleteGoalCard extends StatelessWidget {
+  final String goalTitle;
+  final String goalComment;
+
+  IncompleteGoalCard({Key key, this.goalTitle, this.goalComment})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        elevation: 2.5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Container(
+            child: Padding(
+                padding: EdgeInsets.all(25.0),
+                child: Column(children: [
+                  Image.network(
+                      'https://i.pinimg.com/originals/ec/6f/d9/ec6fd9522192b95eaba1318d79c9d6ae.jpg'),
+                  Padding(padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
+                  Text(
+                      this.goalComment == null ? "You didn't complete " + this.goalTitle + ' this week.' : "You didn't complete " + this.goalTitle + " this week due to " + this.goalComment + ".",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18.0))
+                ]))));
   }
 }

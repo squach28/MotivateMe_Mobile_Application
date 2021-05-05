@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:motivateme_mobile_app/edit_goal_page.dart';
 import 'package:motivateme_mobile_app/model/subgoal.dart';
 
 import 'model/goal.dart';
@@ -44,7 +45,20 @@ class SubGoalWidgetState extends State<SubGoalWidget> {
             trailing: Container(
                 height: 50,
                 width: 50,
-                child: TextButton(child: Text('Edit'), onPressed: () {})),
+                child: TextButton(
+                    child: Text('Edit'),
+                    onPressed: () {
+                      print(widget.title);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => EditGoalPage(
+                                    subGoal: widget.subgoal,
+                                    title: widget.title,
+                                    description: widget.description,
+                                  )));
+                    })),
+
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

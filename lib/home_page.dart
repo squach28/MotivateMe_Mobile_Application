@@ -272,6 +272,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )),
             ),
+            Padding(padding: EdgeInsets.only(top: 20.0)),
+            Text('Your goals for today!',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                )),
+            Padding(padding: EdgeInsets.only(bottom: 10.0)),
             FutureBuilder<List<SubGoal>>(
                 future: Future.delayed(Duration(milliseconds: 500),
                     goalManager.retrieveSubGoalsForToday),
@@ -288,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (BuildContext context, int index) {
                         print(index.toString() +
                             " " +
-                            subGoals.elementAt(index).hashCode.toString());
+                            subGoals.elementAt(index).startDate.toString());
                         return Dismissible(
                           child: SubGoalWidget(
                               subgoal: subGoals.elementAt(index),
@@ -301,7 +308,6 @@ class _HomePageState extends State<HomePage> {
                               padding: EdgeInsets.only(left: 60.0),
                               alignment: Alignment.centerLeft,
                               color: Colors.green,
-
                               child: Icon(Icons.check,
                                   color: Colors.white, size: 50)),
                           secondaryBackground: Container(
@@ -441,7 +447,6 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     codeDialog = valueText;
                     goalManager.setCommentForSubGoal(subGoal, codeDialog);
-                    goalManager.sampleQuery(subGoal);
                     Navigator.pop(context);
                   });
                 },
