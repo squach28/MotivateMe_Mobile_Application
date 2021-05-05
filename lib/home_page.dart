@@ -257,10 +257,12 @@ class _HomePageState extends State<HomePage> {
                           );
                         });
                   },
-                  child: new Text(
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
                     'Inspire Me',
-                    style: new TextStyle(fontSize: 16.0, color: Colors.black),
-                  ),
+                    style: TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
+                  )),
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Color(0xfff5855b)),
