@@ -8,6 +8,7 @@ import 'model/subgoal.dart';
 import 'service/goal_manager.dart';
 
 class EditGoalPage extends StatefulWidget {
+
   final SubGoal subGoal;
   final String title;
   final String description;
@@ -84,7 +85,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
                     child: _editGoalForm(),
                   ),
                   SizedBox(height: 40.0),
-                  initialDayPicker(widget.subGoal.goalDays),
                   SizedBox(
                     width: 300.0,
                     height: 40.0,
@@ -120,22 +120,10 @@ class _EditGoalPageState extends State<EditGoalPage> {
     );
   }
 
-  Widget initialDayPicker(Map<String, bool> goalDays) {
-    SelectWeekDays selectWeekDays = SelectWeekDays(
-      onSelect: (values) {
-        print(values);
-        values["Monday"] = true;
-      },
-    );
-    selectWeekDays.onSelect(goalDays);
-    return selectWeekDays;
-  }
 
   Widget _editGoalForm() {
     final timeFormat = DateFormat("HH:mm");
     final dateFormat = DateFormat("MM/dd/yyyy");
-    _goalTitleController.text = widget.title;
-    _goalDescriptionController.text = widget.description;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       TextFormField(
         validator: validateGoalTitle,
@@ -159,7 +147,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(child: Text("Start Date: ")),
           Flexible(
             child: DateTimeField(
-              initialValue: widget.subGoal.startDate,
               format: dateFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
@@ -177,7 +164,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(child: Text("End Date: ")),
           Flexible(
             child: DateTimeField(
-              initialValue: widget.subGoal.endDate,
               format: dateFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
@@ -203,7 +189,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(child: Text("Start Time: ")),
           Flexible(
             child: DateTimeField(
-              initialValue: widget.subGoal.startTime,
               format: timeFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
@@ -221,7 +206,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(child: Text("End Time: ")),
           Flexible(
             child: DateTimeField(
-              initialValue: widget.subGoal.endTime,
               format: timeFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(

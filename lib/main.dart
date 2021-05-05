@@ -43,7 +43,9 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            primaryColor: Color(0xff5480c1)),
+            primaryColor: Color(0xff5480c1),
+            fontFamily: 'Montserrat'),
+
         // 2
         home: FutureBuilder(
           future: authService.checkUserSession(),

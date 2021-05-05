@@ -58,6 +58,7 @@ class SubGoalWidgetState extends State<SubGoalWidget> {
                                     description: widget.description,
                                   )));
                     })),
+
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
