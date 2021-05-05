@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:motivateme_mobile_app/model/goal.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:weekday_selector/weekday_selector.dart';
 import 'service/goal_manager.dart';
 
 class AddGoalsPage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
   DateTime endTime;
 
   final goalManager = GoalManager();
+  final values = List.filled(7, false);
 
   Map<String, bool> goalDays = {
     'Monday': false,
@@ -222,31 +224,20 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
       Padding(
         padding: const EdgeInsets.all(10.0),
       ),
-      Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: SelectWeekDays(
-          border: false,
-          boxDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30.0),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              colors: [const Color(0xFFE55CE4), const Color(0xFFBB75FB)],
-              tileMode:
-                  TileMode.repeated, // repeats the gradient over the canvas
-            ),
-          ),
-          onSelect: (values) {
-            // <== Callback to handle the selected days
-            print(values);
-            for (var entry in goalDays.entries) {
-              goalDays[entry.key] = values.contains(entry.key);
-            }
-
-            for (var entry in goalDays.entries) {
-              print(entry);
-            }
-          },
-        ),
+      WeekdaySelector(
+        onChanged: (int day) {
+          setState(() {
+            // Use module % 7 as Sunday's index in the array is 0 and
+            // DateTime.sunday constant integer value is 7.
+            final index = day % 7;
+            // We "flip" the value in this example, but you may also
+            // perform validation, a DB write, an HTTP call or anything
+            // else before you actually flip the value,
+            // it's up to your app's needs.
+            values[index] = !values[index];
+          });
+        },
+        values: values,
       ),
       Padding(
         padding: const EdgeInsets.all(10.0),
