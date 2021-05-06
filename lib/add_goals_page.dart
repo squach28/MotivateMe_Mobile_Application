@@ -234,6 +234,16 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
         padding: const EdgeInsets.all(10.0),
       ),
       WeekdaySelector(
+        firstDayOfWeek: DateTime.sunday,
+        shortWeekdays: [
+          'Sun',
+          'Mon',
+          'Tue',
+          'Wed',
+          'Thu',
+          'Fri',
+          'Sat',
+        ],
         onChanged: (int day) {
           setState(() {
             // Use module % 7 as Sunday's index in the array is 0 and
