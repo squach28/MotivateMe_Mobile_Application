@@ -41,14 +41,22 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: 'MotivateMe',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity,
-        primaryColor: Color(0xff5480c1)),
+        theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            primaryColor: Color(0xff5480c1),
+            fontFamily: 'Montserrat'),
+
         // 2
         home: FutureBuilder(
           future: authService.checkUserSession(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data == true) {
+                Amplify.Auth.fetchUserAttributes().then((value) {
+                  for (var attribute in value) {
+                    print(attribute.userAttributeKey + ' ' + attribute.value);
+                  }
+                });
                 return NavigationPage();
               } else {
                 return LoginPage();
@@ -57,16 +65,7 @@ class _MyAppState extends State<MyApp> {
               return Scaffold(body: CircularProgressIndicator());
             }
           },
-        )
-        // home: Navigator(
-        //   pages: [
-        //     MaterialPage(child: HomePage()),
-        //     MaterialPage(child: SignUpPage()),
-        //     MaterialPage(child: LoginPage())
-        //   ],
-        //   onPopPage: (route, result) => route.didPop(result),
-        // ),
-        );
+        ));
   }
 
   void _configureAmplify() async {
