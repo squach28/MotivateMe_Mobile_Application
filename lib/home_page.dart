@@ -301,7 +301,9 @@ class _HomePageState extends State<HomePage> {
                               subgoal: subGoals.elementAt(index),
                               title: subGoals.elementAt(index).title,
                               description:
-                                  subGoals.elementAt(index).description),
+                                  subGoals.elementAt(index).description
+                                ),
+                              
                           background: Container(
                               height: 50,
                               width: 50,

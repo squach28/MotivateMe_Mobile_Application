@@ -62,10 +62,18 @@ class _EditGoalPageState extends State<EditGoalPage> {
   @override
   void initState() {
     super.initState();
+    this.startDate = widget.subGoal.startDate;
+    this.endDate = widget.subGoal.endDate;
+    this.startTime = widget.subGoal.startTime;
+    this.endTime = widget.subGoal.endTime;
     for (var entry in widget.subGoal.goalDays.entries) {
       goalDays[entry.key] = entry.value;
       this.values[dayToIndex[entry.key]] = entry.value;
     }
+    print('setting state: ' + this.startDate.toString());
+    print('setting state: ' + this.endDate.toString());
+    print('setting state: ' + this.startTime.toString());
+    print('setting state: ' + this.endTime.toString());
 
   }
 
@@ -321,7 +329,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
       for (var entry in goalDays.entries) {
         if (entry.value == true) {
           _addGoal();
-          //TODO refresh home page
           Navigator.pop(context, true);
           return;
         }
@@ -351,9 +358,19 @@ class _EditGoalPageState extends State<EditGoalPage> {
   void _addGoal() async {
     final goalTitle = _goalTitleController.text.trim();
     final goalDescription = _goalDescriptionController.text.trim();
-    print('goal: $goalTitle');
 
-    int goalID = await goalManager.retrieveNumberOfGoals() + 1;
+    int goalID = widget.subGoal.id;
+
+    Map<String, bool> formattedGoalDays = {
+    'Monday': this.goalDays['monday'],
+    'Tuesday': this.goalDays['tuesday'],
+    'Wednesday': this.goalDays['wednesday'],
+    'Thursday': this.goalDays['thursday'],
+    'Friday': this.goalDays['friday'],
+    'Saturday': this.goalDays['saturday'],
+    'Sunday': this.goalDays['sunday'],
+    };
+
     Goal goal = Goal(
       id: goalID,
       title: goalTitle,
@@ -362,10 +379,13 @@ class _EditGoalPageState extends State<EditGoalPage> {
       endDate: this.endDate,
       startTime: this.startTime,
       endTime: this.endTime,
-      goalDays: goalDays,
+      goalDays: formattedGoalDays,
       isComplete: false,
     );
-    await goalManager.insertGoal(goal);
+
+    print('start date: ' + goal.startDate.toString());
+    print('end date: ' + goal.endDate.toString());
+    await goalManager.updateGoal(goal);
     print('success!');
   }
 
