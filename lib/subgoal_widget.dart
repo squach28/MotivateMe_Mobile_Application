@@ -7,7 +7,8 @@ class SubGoalWidget extends StatefulWidget {
   final SubGoal subgoal;
   final String title;
   final String description;
-  SubGoalWidget({Key key, this.subgoal, this.title, this.description})
+  final Function callback;
+  SubGoalWidget({Key key, this.subgoal, this.title, this.description, this.callback})
       : super(key: key);
 
   @override
@@ -15,6 +16,7 @@ class SubGoalWidget extends StatefulWidget {
 }
 
 class SubGoalWidgetState extends State<SubGoalWidget> {
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -59,6 +61,7 @@ class SubGoalWidgetState extends State<SubGoalWidget> {
                                       setState(() {
 
                                       });
+                                      widget.callback(true);
 
                                     }
                                   }); 

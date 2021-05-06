@@ -27,6 +27,8 @@ class _EditGoalPageState extends State<EditGoalPage> {
   DateTime endDate;
   DateTime startTime;
   DateTime endTime;
+  
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final goalManager = GoalManager();
   final values = List.filled(7, false);
@@ -80,6 +82,7 @@ class _EditGoalPageState extends State<EditGoalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('Edit Goal'),
         centerTitle: true,
