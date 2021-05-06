@@ -9,7 +9,6 @@ import 'model/subgoal.dart';
 import 'service/goal_manager.dart';
 
 class EditGoalPage extends StatefulWidget {
-
   final SubGoal subGoal;
   final String title;
   final String description;
@@ -31,16 +30,44 @@ class _EditGoalPageState extends State<EditGoalPage> {
 
   final goalManager = GoalManager();
   final values = List.filled(7, false);
+  final Map<int, String> indexToDay = {
+    0: 'sunday',
+    1: 'monday',
+    2: 'tuesday',
+    3: 'wednesday',
+    4: 'thursday',
+    5: 'friday',
+    6: 'saturday'
+  };
+  final Map<String, int> dayToIndex = {
+    'sunday': 0,
+    'monday': 1,
+    'tuesday': 2,
+    'wednesday': 3,
+    'thursday': 4,
+    'friday': 5,
+    'saturday': 6,
+  };
 
   Map<String, bool> goalDays = {
-    'Monday': false,
-    'Tuesday': false,
-    'Wednesday': false,
-    'Thursday': false,
-    'Friday': false,
-    'Saturday': false,
-    'Sunday': false,
+    'monday': false,
+    'tuesday': false,
+    'wednesday': false,
+    'thursday': false,
+    'friday': false,
+    'saturday': false,
+    'sunday': false,
   };
+
+  @override
+  void initState() {
+    super.initState();
+    for (var entry in widget.subGoal.goalDays.entries) {
+      goalDays[entry.key] = entry.value;
+      this.values[dayToIndex[entry.key]] = entry.value;
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,10 +149,11 @@ class _EditGoalPageState extends State<EditGoalPage> {
     );
   }
 
-
   Widget _editGoalForm() {
     final timeFormat = DateFormat("HH:mm");
     final dateFormat = DateFormat("MM/dd/yyyy");
+    _goalTitleController.text = widget.subGoal.title;
+    _goalDescriptionController.text = widget.subGoal.description;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       TextFormField(
         validator: validateGoalTitle,
@@ -150,11 +178,12 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(
             child: DateTimeField(
               format: dateFormat,
+              initialValue: widget.subGoal.startDate,
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
                     context: context,
-                    firstDate: DateTime.now(),
-                    initialDate: currentValue ?? DateTime.now(),
+                    firstDate: widget.subGoal.startDate,
+                    initialDate: currentValue ?? widget.subGoal.startDate,
                     lastDate: DateTime(2100));
                 setState(() {
                   this.startDate = time;
@@ -167,12 +196,12 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(
             child: DateTimeField(
               format: dateFormat,
+              initialValue: widget.subGoal.endDate,
               onShowPicker: (context, currentValue) async {
                 final time = await showDatePicker(
                     context: context,
                     firstDate: DateTime.now(),
-                    initialDate: currentValue ??
-                        DateTime.now().add(const Duration(days: 7)),
+                    initialDate: currentValue ?? widget.subGoal.endDate,
                     lastDate: DateTime(2100));
                 setState(() {
                   this.endDate = time;
@@ -192,11 +221,12 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(
             child: DateTimeField(
               format: timeFormat,
+              initialValue: widget.subGoal.startTime,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                   context: context,
-                  initialTime:
-                      TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                  initialTime: TimeOfDay.fromDateTime(
+                      currentValue ?? widget.subGoal.startTime),
                 );
                 setState(() {
                   this.startTime = DateTimeField.convert(time);
@@ -209,11 +239,12 @@ class _EditGoalPageState extends State<EditGoalPage> {
           Flexible(
             child: DateTimeField(
               format: timeFormat,
+              initialValue: widget.subGoal.endTime,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                   context: context,
-                  initialTime:
-                      TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                  initialTime: TimeOfDay.fromDateTime(
+                      currentValue ?? widget.subGoal.endTime),
                 );
 
                 setState(() {
@@ -251,7 +282,11 @@ class _EditGoalPageState extends State<EditGoalPage> {
             // else before you actually flip the value,
             // it's up to your app's needs.
             values[index] = !values[index];
+            this.goalDays[indexToDay[index]] = values[index];
           });
+          for(var entry in this.goalDays.entries) {
+            print(entry.key + ' ' + entry.value.toString());
+          }
         },
         values: values,
       ),
