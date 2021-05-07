@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
           child: OutlinedButton(
             child: new Text(
               'Login',
-              style: new TextStyle(fontSize: 17.0, color: Colors.black),
+              style: new TextStyle(fontSize: 17.0, color: Colors.white),
             ),
             onPressed: _validateInputs,
             style: ButtonStyle(

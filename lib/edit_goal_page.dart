@@ -27,7 +27,7 @@ class _EditGoalPageState extends State<EditGoalPage> {
   DateTime endDate;
   DateTime startTime;
   DateTime endTime;
-  
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final goalManager = GoalManager();
@@ -64,6 +64,8 @@ class _EditGoalPageState extends State<EditGoalPage> {
   @override
   void initState() {
     super.initState();
+    _goalTitleController.text = widget.subGoal.title;
+    _goalDescriptionController.text = widget.subGoal.description;
     this.startDate = widget.subGoal.startDate;
     this.endDate = widget.subGoal.endDate;
     this.startTime = widget.subGoal.startTime;
@@ -76,7 +78,6 @@ class _EditGoalPageState extends State<EditGoalPage> {
     print('setting state: ' + this.endDate.toString());
     print('setting state: ' + this.startTime.toString());
     print('setting state: ' + this.endTime.toString());
-
   }
 
   @override
@@ -84,7 +85,16 @@ class _EditGoalPageState extends State<EditGoalPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Edit Goal'),
+        iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            onPressed: () {
+              confirmedDelete();
+            },
+            icon: Icon(Icons.delete),
+            color: Colors.grey[800],
+          )
+        ],
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -100,6 +110,7 @@ class _EditGoalPageState extends State<EditGoalPage> {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Container(
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
@@ -113,55 +124,48 @@ class _EditGoalPageState extends State<EditGoalPage> {
                   TileMode.repeated, // repeats the gradient over the canvas
             ),
           ),
-          child: Center(
-            child: Container(
-                child: Stack(children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Column(children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(bottom: 30.0),
-                    child: Text('Edit Goal',
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                  Form(
-                    key: _formKey,
-                    autovalidateMode: _autoValidate,
-                    child: _editGoalForm(),
-                  ),
-                  SizedBox(height: 40.0),
-                  SizedBox(
-                    width: 300.0,
-                    height: 40.0,
-                    child: OutlinedButton(
-                      child: new Text(
-                        'Save',
-                        style:
-                            new TextStyle(fontSize: 17.0, color: Colors.black),
-                      ),
-                      onPressed: _validateInputs,
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.tealAccent),
-                        elevation: MaterialStateProperty.all<double>(10.0),
-                        side: MaterialStateProperty.all<BorderSide>(
-                          BorderSide(width: 3.0, color: Colors.black),
-                        ),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32.0),
-                            side: BorderSide(width: 3, color: Colors.black),
-                          ),
+          child: Container(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(left: 10.0, right: 10.0),
+              child: Column(children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 30.0)),
+                Container(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  child: Text('Edit Goal',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                Form(
+                  key: _formKey,
+                  autovalidateMode: _autoValidate,
+                  child: _editGoalForm(),
+                ),
+                SizedBox(height: 40.0),
+                SizedBox(
+                  width: 300.0,
+                  height: 40.0,
+                  child: OutlinedButton(
+                    child: new Text(
+                      'Save',
+                      style: new TextStyle(fontSize: 17.0, color: Colors.white),
+                    ),
+                    onPressed: _validateInputs,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).primaryColor),
+                      elevation: MaterialStateProperty.all<double>(10.0),
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32.0),
                         ),
                       ),
                     ),
                   ),
-                ]),
-              ),
-            ])),
+                ),
+              ]),
+            ),
           ),
         ),
       ),
@@ -169,10 +173,8 @@ class _EditGoalPageState extends State<EditGoalPage> {
   }
 
   Widget _editGoalForm() {
-    final timeFormat = DateFormat("HH:mm");
+    final timeFormat = DateFormat("hh:mm a");
     final dateFormat = DateFormat("MM/dd/yyyy");
-    _goalTitleController.text = widget.subGoal.title;
-    _goalDescriptionController.text = widget.subGoal.description;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       TextFormField(
         validator: validateGoalTitle,
@@ -193,9 +195,12 @@ class _EditGoalPageState extends State<EditGoalPage> {
       ),
       Row(
         children: [
-          Flexible(child: Text("Start Date: ")),
           Flexible(
             child: DateTimeField(
+              decoration: InputDecoration(
+                  labelText: "Start Date",
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 1.0))),
               format: dateFormat,
               initialValue: widget.subGoal.startDate,
               onShowPicker: (context, currentValue) async {
@@ -211,9 +216,15 @@ class _EditGoalPageState extends State<EditGoalPage> {
               },
             ),
           ),
-          Flexible(child: Text("End Date: ")),
+          SizedBox(
+            width: 20,
+          ),
           Flexible(
             child: DateTimeField(
+              decoration: InputDecoration(
+                  labelText: "End Date",
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 1.0))),
               format: dateFormat,
               initialValue: widget.subGoal.endDate,
               onShowPicker: (context, currentValue) async {
@@ -236,9 +247,12 @@ class _EditGoalPageState extends State<EditGoalPage> {
       ),
       Row(
         children: [
-          Flexible(child: Text("Start Time: ")),
           Flexible(
             child: DateTimeField(
+              decoration: InputDecoration(
+                  labelText: "Start Time",
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 1.0))),
               format: timeFormat,
               initialValue: widget.subGoal.startTime,
               onShowPicker: (context, currentValue) async {
@@ -254,9 +268,15 @@ class _EditGoalPageState extends State<EditGoalPage> {
               },
             ),
           ),
-          Flexible(child: Text("End Time: ")),
+          SizedBox(
+            width: 20.0,
+          ),
           Flexible(
             child: DateTimeField(
+              decoration: InputDecoration(
+                  labelText: "End Time",
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 1.0))),
               format: timeFormat,
               initialValue: widget.subGoal.endTime,
               onShowPicker: (context, currentValue) async {
@@ -303,7 +323,7 @@ class _EditGoalPageState extends State<EditGoalPage> {
             values[index] = !values[index];
             this.goalDays[indexToDay[index]] = values[index];
           });
-          for(var entry in this.goalDays.entries) {
+          for (var entry in this.goalDays.entries) {
             print(entry.key + ' ' + entry.value.toString());
           }
         },
@@ -378,13 +398,13 @@ class _EditGoalPageState extends State<EditGoalPage> {
     int goalID = widget.subGoal.id;
 
     Map<String, bool> formattedGoalDays = {
-    'Monday': this.goalDays['monday'],
-    'Tuesday': this.goalDays['tuesday'],
-    'Wednesday': this.goalDays['wednesday'],
-    'Thursday': this.goalDays['thursday'],
-    'Friday': this.goalDays['friday'],
-    'Saturday': this.goalDays['saturday'],
-    'Sunday': this.goalDays['sunday'],
+      'Monday': this.goalDays['monday'],
+      'Tuesday': this.goalDays['tuesday'],
+      'Wednesday': this.goalDays['wednesday'],
+      'Thursday': this.goalDays['thursday'],
+      'Friday': this.goalDays['friday'],
+      'Saturday': this.goalDays['saturday'],
+      'Sunday': this.goalDays['sunday'],
     };
 
     Goal goal = Goal(
@@ -420,6 +440,32 @@ class _EditGoalPageState extends State<EditGoalPage> {
             ),
           ),
           actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> confirmedDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure you want to delete this goal?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             TextButton(
               child: Text('OK'),
               onPressed: () {

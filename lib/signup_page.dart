@@ -191,7 +191,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: OutlinedButton(
           child: new Text(
             'Sign Up',
-            style: new TextStyle(fontSize: 17.0, color: Colors.black),
+            style: new TextStyle(fontSize: 17.0, color: Colors.white),
           ),
           onPressed: _validateInputs,
           style: ButtonStyle(

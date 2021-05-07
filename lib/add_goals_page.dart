@@ -48,7 +48,7 @@ class _AddGoalsPageState extends State<AddGoalsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: const Text('Add New Goal'),
+        iconTheme: IconThemeData(color: Colors.black),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
