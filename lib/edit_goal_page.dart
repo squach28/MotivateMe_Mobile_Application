@@ -89,7 +89,11 @@ class _EditGoalPageState extends State<EditGoalPage> {
         actions: [
           IconButton(
             onPressed: () {
-              confirmedDelete();
+              confirmedDelete().then((value) {
+                if(value) {
+                  Navigator.pop(context, true);
+                }
+              });
             },
             icon: Icon(Icons.delete),
             color: Colors.grey[800],
@@ -452,8 +456,8 @@ class _EditGoalPageState extends State<EditGoalPage> {
     );
   }
 
-  Future<void> confirmedDelete() async {
-    return showDialog<void>(
+  Future<bool> confirmedDelete() async {
+    return showDialog<bool>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
@@ -463,13 +467,14 @@ class _EditGoalPageState extends State<EditGoalPage> {
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context, false);
               },
             ),
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
+                goalManager.deleteGoal(widget.subGoal);
+                Navigator.pop(context, true);
               },
             ),
           ],
