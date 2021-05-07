@@ -117,8 +117,16 @@ class _EditGoalPageState extends State<EditGoalPage> {
             child: Container(
                 child: Stack(children: [
               SingleChildScrollView(
-                padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
+                padding: EdgeInsets.only(left: 10.0, right: 10.0),
                 child: Column(children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(bottom: 30.0),
+                    child: Text('Edit Goal',
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                   Form(
                     key: _formKey,
                     autovalidateMode: _autoValidate,
@@ -300,6 +308,11 @@ class _EditGoalPageState extends State<EditGoalPage> {
           }
         },
         values: values,
+        selectedFillColor: Theme.of(context).primaryColor,
+        selectedShape: RoundedRectangleBorder(),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(),
+        ),
       ),
       Padding(
         padding: const EdgeInsets.all(10.0),
