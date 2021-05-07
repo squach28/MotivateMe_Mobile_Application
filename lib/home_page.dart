@@ -26,6 +26,14 @@ class _HomePageState extends State<HomePage> {
 
   final GoalManager goalManager = GoalManager();
 
+  callback(newValue) {
+    if(newValue == true) {
+      setState(() {
+
+      });
+    }
+  }
+
   Future<void> removeSubGoal(
       List<SubGoal> subGoals, int index, bool completed) async {
     Future.delayed(Duration(milliseconds: 500)).then((_) {
@@ -301,7 +309,10 @@ class _HomePageState extends State<HomePage> {
                               subgoal: subGoals.elementAt(index),
                               title: subGoals.elementAt(index).title,
                               description:
-                                  subGoals.elementAt(index).description),
+                                  subGoals.elementAt(index).description,
+                                  callback: this.callback
+                                ),
+                              
                           background: Container(
                               height: 50,
                               width: 50,
