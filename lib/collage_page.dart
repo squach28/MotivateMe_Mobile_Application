@@ -125,13 +125,16 @@ class CollagePageState extends State<CollagePage> {
                                         top: 10.0, bottom: 10.0)),
                                 completedGoalsToDisplay.length == 0 &&
                                         incompleteGoalsToDisplay.length == 0
-                                    ? Text(
+                                    ? Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.height,
+                                      child: Text(
                                         'Nothing to see here 	╮(￣ω￣;)╭',
                                         style: TextStyle(
                                             fontSize: 25.0,
                                             fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.center,
-                                      )
+                                      ))
                                     : Container(height: 0, width: 0),
                                 completedGoalsToDisplay.length == 0
                                     ? Container(height: 0, width: 0)

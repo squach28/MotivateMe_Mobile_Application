@@ -443,4 +443,16 @@ class GoalManager {
     }
     return goalTitles;
   }
+
+  Future<void> updateGoal(Goal goal) async {
+    final Future<Database> database =
+        openDatabase(join(await getDatabasesPath(), 'motivate_me.db'));
+    final Database db = await database;
+    db.update('Goals', goal.formatForDatabase(),
+        where: 'id = ?', whereArgs: [goal.id]);
+    String formattedGoalTitle = goal.title.toString().replaceAll(' ', '_');
+    db.execute('DROP TABLE IF EXISTS ' + formattedGoalTitle);
+    createGoalTable(goal);
+    initializeGoalDates(goal);
+  }
 }
