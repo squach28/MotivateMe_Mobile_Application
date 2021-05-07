@@ -27,10 +27,8 @@ class _HomePageState extends State<HomePage> {
   final GoalManager goalManager = GoalManager();
 
   callback(newValue) {
-    if(newValue == true) {
-      setState(() {
-
-      });
+    if (newValue == true) {
+      setState(() {});
     }
   }
 
@@ -86,6 +84,19 @@ class _HomePageState extends State<HomePage> {
           child: Center(
               child: Column(children: [
             Padding(padding: EdgeInsets.only(top: 55.0)),
+            Container(
+              alignment: Alignment.centerLeft,
+              width: 58.75,
+              height: 62.75,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage('icon/MotivateMe.png'),
+                fit: BoxFit.fill,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(top: 10.0, bottom: 10.0)),
             FutureBuilder(
                 future: Amplify.Auth.fetchUserAttributes(),
                 builder: (context, snapshot) {
@@ -266,11 +277,14 @@ class _HomePageState extends State<HomePage> {
                         });
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                    'Inspire Me',
-                    style: TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
-                  )),
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        'Inspire Me',
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      )),
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Color(0xfff5855b)),
@@ -312,9 +326,7 @@ class _HomePageState extends State<HomePage> {
                               title: subGoals.elementAt(index).title,
                               description:
                                   subGoals.elementAt(index).description,
-                                  callback: this.callback
-                                ),
-                              
+                              callback: this.callback),
                           background: Container(
                               height: 50,
                               width: 50,

@@ -61,6 +61,7 @@ flutter:
   uses-material-design: true
   assets:
    - icon/MotivateMe.png
+   - icon/MotivateMeFullLogo.png
   fonts:
     - family: Montserrat
       fonts:
