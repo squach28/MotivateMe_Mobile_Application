@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                 height: 62.75,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('icon/MotivateMe.png'),
+                    image: AssetImage('icon/motivatemelogo.png'),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.circular(10.0),

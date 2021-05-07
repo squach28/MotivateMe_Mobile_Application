@@ -62,6 +62,7 @@ flutter:
   assets:
    - icon/MotivateMe.png
    - icon/MotivateMeFullLogo.png
+   - icon/motivatemelogo.png
   fonts:
     - family: Montserrat
       fonts:
