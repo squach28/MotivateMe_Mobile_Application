@@ -1,6 +1,6 @@
 # MotivateMe Mobile Application
 
-Mobile application that motivates users to achieve their goals. Users will take pictures when they achieve their goals and a collage of their pictures will be shown to encourage them.
+MotivateMe is a mobile application that pushes users to achieve their goals. Users will take pictures when they achieve their goals and a collage of their pictures will be shown to encourage them. Other functions include an inspire me button that shows an uplifting image to the user and a calendar that allows users to track their goals.
 
 ## Getting Started
 
