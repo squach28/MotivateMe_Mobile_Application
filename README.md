@@ -4,15 +4,17 @@ Mobile application that motivates users to achieve their goals. Users will take 
 
 ## Getting Started
 
-Ensure that Flutter is running the latest version
+1. To run this application, Flutter is required. Flutter can be installed [here](https://flutter.dev/docs/get-started/install) by following the instructions based on your operating system.   
+
+2. Ensure that Flutter is running the latest version by running the following command
 ```bash
 flutter upgrade
 ```
 
-Retrieve all the dependencies that are required for the project to run
+3. Retrieve all the dependencies that are required for the project to run
 ```bash 
 flutter pub get
 ```
 
-The application is run through main.dart through your IDE. Ensure that a proper mobile device is used when running the project.
+4. The application is run through main.dart through your IDE. Ensure that a proper mobile device (emulator or physical device) is used when running the project.
 
